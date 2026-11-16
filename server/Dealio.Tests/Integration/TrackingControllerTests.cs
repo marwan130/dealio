@@ -51,11 +51,11 @@ public class TrackingControllerTests : TestBase
     public async Task GetTrackings_WithAuth_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var response = await Client.GetAsync("/v1/tracking");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -125,7 +125,7 @@ public class TrackingControllerTests : TestBase
     public async Task GetTrackingById_WithValidId_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var productId = await CreateTestProductAsync();
@@ -141,7 +141,7 @@ public class TrackingControllerTests : TestBase
         var trackingId = createResult.GetProperty("data").GetProperty("trackingId").GetGuid();
         var response = await Client.GetAsync($"/v1/tracking/{trackingId}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -152,7 +152,7 @@ public class TrackingControllerTests : TestBase
     public async Task GetTrackingById_WithInvalidId_ReturnsNotFound()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var invalidId = Guid.NewGuid();
         var response = await Client.GetAsync($"/v1/tracking/{invalidId}");
@@ -163,7 +163,7 @@ public class TrackingControllerTests : TestBase
     public async Task CreateTracking_WithValidData_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var productId = await CreateTestProductAsync();
@@ -176,7 +176,7 @@ public class TrackingControllerTests : TestBase
         };
         var response = await Client.PostAsJsonAsync("/v1/tracking", request);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -200,7 +200,7 @@ public class TrackingControllerTests : TestBase
     public async Task UpdateTracking_WithValidData_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var productId = await CreateTestProductAsync();
@@ -223,7 +223,7 @@ public class TrackingControllerTests : TestBase
         };
         var response = await Client.PutAsJsonAsync($"/v1/tracking/{trackingId}", updateRequest);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -236,7 +236,7 @@ public class TrackingControllerTests : TestBase
     public async Task DeleteTracking_WithValidId_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var productId = await CreateTestProductAsync();

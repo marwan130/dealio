@@ -1,4 +1,5 @@
 namespace Dealio.Domain.Enums;
+
 public enum ScraperType
 {
     Html = 0,

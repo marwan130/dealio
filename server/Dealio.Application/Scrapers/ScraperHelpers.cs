@@ -363,55 +363,55 @@ public static class ScraperHelpers
 
     public static string InferStoreName(string url)
     {
-        if (url.Contains("amazon.eg",             StringComparison.OrdinalIgnoreCase)) return "Amazon Egypt";
-        if (url.Contains("amazon.sa",             StringComparison.OrdinalIgnoreCase)) return "Amazon Saudi Arabia";
-        if (url.Contains("amazon.ae",             StringComparison.OrdinalIgnoreCase)) return "Amazon UAE";
-        if (url.Contains("noon.com/egypt",        StringComparison.OrdinalIgnoreCase)) return "Noon Egypt";
-        if (url.Contains("noon.com/saudi",        StringComparison.OrdinalIgnoreCase)) return "Noon Saudi Arabia";
-        if (url.Contains("noon.com/uae",          StringComparison.OrdinalIgnoreCase)) return "Noon UAE";
-        if (url.Contains("jumia.com.eg",          StringComparison.OrdinalIgnoreCase)) return "Jumia Egypt";
-        if (url.Contains("jumia.com.sa",          StringComparison.OrdinalIgnoreCase)) return "Jumia Saudi Arabia";
-        if (url.Contains("namshi.com",            StringComparison.OrdinalIgnoreCase)) return "Namshi";
-        if (url.Contains("carrefouregypt.com",    StringComparison.OrdinalIgnoreCase)) return "Carrefour Egypt";
-        if (url.Contains("carrefourksa.com",      StringComparison.OrdinalIgnoreCase)) return "Carrefour KSA";
-        if (url.Contains("carrefouruae.com",      StringComparison.OrdinalIgnoreCase)) return "Carrefour UAE";
-        if (url.Contains("ikea.com/eg",           StringComparison.OrdinalIgnoreCase)) return "IKEA Egypt";
-        if (url.Contains("ikea.com/sa",           StringComparison.OrdinalIgnoreCase)) return "IKEA Saudi Arabia";
-        if (url.Contains("ikea.com/ae",           StringComparison.OrdinalIgnoreCase)) return "IKEA UAE";
-        if (url.Contains("homzmart.com",          StringComparison.OrdinalIgnoreCase)) return "Homzmart";
-        if (url.Contains("homecentre.com/sa",     StringComparison.OrdinalIgnoreCase)) return "Home Centre KSA";
-        if (url.Contains("homecentre.com/ae",     StringComparison.OrdinalIgnoreCase)) return "Home Centre UAE";
-        if (url.Contains("ubuy.com.eg",           StringComparison.OrdinalIgnoreCase)) return "Ubuy Egypt";
-        if (url.Contains("ubuy.com.sa",           StringComparison.OrdinalIgnoreCase)) return "Ubuy Saudi Arabia";
-        if (url.Contains("ubuy.ae",               StringComparison.OrdinalIgnoreCase)) return "Ubuy UAE";
-        if (url.Contains("ubuy.com.kw",           StringComparison.OrdinalIgnoreCase)) return "Ubuy Kuwait";
-        if (url.Contains("ubuy.com",              StringComparison.OrdinalIgnoreCase)) return "Ubuy";
-        if (url.Contains("2b.com.eg",             StringComparison.OrdinalIgnoreCase)) return "2B Egypt";
-        if (url.Contains("sharafdg.com",          StringComparison.OrdinalIgnoreCase)) return "Sharaf DG";
-        if (url.Contains("geekay.com",            StringComparison.OrdinalIgnoreCase)) return "Geekay UAE";
-        if (url.Contains("faces.eg",              StringComparison.OrdinalIgnoreCase)) return "Faces Egypt";
-        if (url.Contains("faces.ae",              StringComparison.OrdinalIgnoreCase)) return "Faces UAE";
-        if (url.Contains("faces.com",             StringComparison.OrdinalIgnoreCase)) return "Faces KSA";
-        if (url.Contains("watsons.ae",            StringComparison.OrdinalIgnoreCase)) return "Watsons UAE";
-        if (url.Contains("watsons.sa",            StringComparison.OrdinalIgnoreCase)) return "Watsons KSA";
-        if (url.Contains("goldenscent.com",       StringComparison.OrdinalIgnoreCase)) return "Golden Scent";
-        if (url.Contains("niceonesa.com",         StringComparison.OrdinalIgnoreCase)) return "Nice One";
-        if (url.Contains("jarir.com",             StringComparison.OrdinalIgnoreCase)) return "Jarir Bookstore";
-        if (url.Contains("extra.com",             StringComparison.OrdinalIgnoreCase)) return "eXtra";
-        if (url.Contains("btech.com",             StringComparison.OrdinalIgnoreCase)) return "B.TECH";
-        if (url.Contains("jumbo.ae",              StringComparison.OrdinalIgnoreCase)) return "Jumbo Electronics";
-        if (url.Contains("emaxonline.com",        StringComparison.OrdinalIgnoreCase)) return "Emax";
-        if (url.Contains("sssports.com",          StringComparison.OrdinalIgnoreCase)) return "Sun & Sand Sports";
-        if (url.Contains("decathlon.ae",          StringComparison.OrdinalIgnoreCase)) return "Decathlon UAE";
+        if (url.Contains("amazon.eg", StringComparison.OrdinalIgnoreCase)) return "Amazon Egypt";
+        if (url.Contains("amazon.sa", StringComparison.OrdinalIgnoreCase)) return "Amazon Saudi Arabia";
+        if (url.Contains("amazon.ae", StringComparison.OrdinalIgnoreCase)) return "Amazon UAE";
+        if (url.Contains("noon.com/egypt", StringComparison.OrdinalIgnoreCase)) return "Noon Egypt";
+        if (url.Contains("noon.com/saudi", StringComparison.OrdinalIgnoreCase)) return "Noon Saudi Arabia";
+        if (url.Contains("noon.com/uae", StringComparison.OrdinalIgnoreCase)) return "Noon UAE";
+        if (url.Contains("jumia.com.eg", StringComparison.OrdinalIgnoreCase)) return "Jumia Egypt";
+        if (url.Contains("jumia.com.sa", StringComparison.OrdinalIgnoreCase)) return "Jumia Saudi Arabia";
+        if (url.Contains("namshi.com", StringComparison.OrdinalIgnoreCase)) return "Namshi";
+        if (url.Contains("carrefouregypt.com", StringComparison.OrdinalIgnoreCase)) return "Carrefour Egypt";
+        if (url.Contains("carrefourksa.com", StringComparison.OrdinalIgnoreCase)) return "Carrefour KSA";
+        if (url.Contains("carrefouruae.com", StringComparison.OrdinalIgnoreCase)) return "Carrefour UAE";
+        if (url.Contains("ikea.com/eg", StringComparison.OrdinalIgnoreCase)) return "IKEA Egypt";
+        if (url.Contains("ikea.com/sa", StringComparison.OrdinalIgnoreCase)) return "IKEA Saudi Arabia";
+        if (url.Contains("ikea.com/ae", StringComparison.OrdinalIgnoreCase)) return "IKEA UAE";
+        if (url.Contains("homzmart.com", StringComparison.OrdinalIgnoreCase)) return "Homzmart";
+        if (url.Contains("homecentre.com/sa", StringComparison.OrdinalIgnoreCase)) return "Home Centre KSA";
+        if (url.Contains("homecentre.com/ae", StringComparison.OrdinalIgnoreCase)) return "Home Centre UAE";
+        if (url.Contains("ubuy.com.eg", StringComparison.OrdinalIgnoreCase)) return "Ubuy Egypt";
+        if (url.Contains("ubuy.com.sa", StringComparison.OrdinalIgnoreCase)) return "Ubuy Saudi Arabia";
+        if (url.Contains("ubuy.ae", StringComparison.OrdinalIgnoreCase)) return "Ubuy UAE";
+        if (url.Contains("ubuy.com.kw", StringComparison.OrdinalIgnoreCase)) return "Ubuy Kuwait";
+        if (url.Contains("ubuy.com", StringComparison.OrdinalIgnoreCase)) return "Ubuy";
+        if (url.Contains("2b.com.eg", StringComparison.OrdinalIgnoreCase)) return "2B Egypt";
+        if (url.Contains("sharafdg.com", StringComparison.OrdinalIgnoreCase)) return "Sharaf DG";
+        if (url.Contains("geekay.com", StringComparison.OrdinalIgnoreCase)) return "Geekay UAE";
+        if (url.Contains("faces.eg", StringComparison.OrdinalIgnoreCase)) return "Faces Egypt";
+        if (url.Contains("faces.ae", StringComparison.OrdinalIgnoreCase)) return "Faces UAE";
+        if (url.Contains("faces.com", StringComparison.OrdinalIgnoreCase)) return "Faces KSA";
+        if (url.Contains("watsons.ae", StringComparison.OrdinalIgnoreCase)) return "Watsons UAE";
+        if (url.Contains("watsons.sa", StringComparison.OrdinalIgnoreCase)) return "Watsons KSA";
+        if (url.Contains("goldenscent.com", StringComparison.OrdinalIgnoreCase)) return "Golden Scent";
+        if (url.Contains("niceonesa.com", StringComparison.OrdinalIgnoreCase)) return "Nice One";
+        if (url.Contains("jarir.com", StringComparison.OrdinalIgnoreCase)) return "Jarir Bookstore";
+        if (url.Contains("extra.com", StringComparison.OrdinalIgnoreCase)) return "eXtra";
+        if (url.Contains("btech.com", StringComparison.OrdinalIgnoreCase)) return "B.TECH";
+        if (url.Contains("jumbo.ae", StringComparison.OrdinalIgnoreCase)) return "Jumbo Electronics";
+        if (url.Contains("emaxonline.com", StringComparison.OrdinalIgnoreCase)) return "Emax";
+        if (url.Contains("sssports.com", StringComparison.OrdinalIgnoreCase)) return "Sun & Sand Sports";
+        if (url.Contains("decathlon.ae", StringComparison.OrdinalIgnoreCase)) return "Decathlon UAE";
         return "Online Store";
     }
 
     public static string InferCurrencyCode(string url)
     {
-        if (url.Contains("amazon.sa",      StringComparison.OrdinalIgnoreCase)
+        if (url.Contains("amazon.sa", StringComparison.OrdinalIgnoreCase)
          || url.Contains("noon.com/saudi", StringComparison.OrdinalIgnoreCase)) return "SAR";
-        if (url.Contains("amazon.ae",      StringComparison.OrdinalIgnoreCase)
-         || url.Contains("noon.com/uae",   StringComparison.OrdinalIgnoreCase)) return "AED";
+        if (url.Contains("amazon.ae", StringComparison.OrdinalIgnoreCase)
+         || url.Contains("noon.com/uae", StringComparison.OrdinalIgnoreCase)) return "AED";
         return "EGP";
     }
 
@@ -419,15 +419,15 @@ public static class ScraperHelpers
     {
         var h = $"{name} {url}".ToLowerInvariant();
         if (ContainsAny(h, "iphone", "samsung galaxy", "smartphone", "mobile phone", "cell phone")) return "Mobile Phones";
-        if (ContainsAny(h, "laptop", "notebook", "macbook", "thinkpad"))             return "Laptops";
-        if (ContainsAny(h, "tablet", "ipad"))                                         return "Tablets";
-        if (ContainsAny(h, "headphone", "earbud", "airpods", "speaker"))             return "Audio";
-        if (ContainsAny(h, "tv", "television", "monitor", "display"))                return "TVs & Monitors";
-        if (ContainsAny(h, "watch", "smartwatch"))                                   return "Wearables";
+        if (ContainsAny(h, "laptop", "notebook", "macbook", "thinkpad")) return "Laptops";
+        if (ContainsAny(h, "tablet", "ipad")) return "Tablets";
+        if (ContainsAny(h, "headphone", "earbud", "airpods", "speaker")) return "Audio";
+        if (ContainsAny(h, "tv", "television", "monitor", "display")) return "TVs & Monitors";
+        if (ContainsAny(h, "watch", "smartwatch")) return "Wearables";
         if (ContainsAny(h, "shoe", "shirt", "dress", "jeans", "jacket", "fashion")) return "Fashion";
         if (ContainsAny(h, "fridge", "refrigerator", "washer", "microwave", "air fryer", "vacuum")) return "Home Appliances";
-        if (ContainsAny(h, "sofa", "chair", "table", "bed", "furniture"))           return "Furniture";
-        if (ContainsAny(h, "makeup", "perfume", "skincare", "beauty"))              return "Beauty";
+        if (ContainsAny(h, "sofa", "chair", "table", "bed", "furniture")) return "Furniture";
+        if (ContainsAny(h, "makeup", "perfume", "skincare", "beauty")) return "Beauty";
         return "General";
     }
 
@@ -441,7 +441,7 @@ public static class ScraperHelpers
             try
             {
                 using var json = JsonDocument.Parse(body);
-                var product    = FindProductObject(json.RootElement);
+                var product = FindProductObject(json.RootElement);
                 if (product.HasValue) return MapStructuredProduct(product.Value);
             }
             catch (JsonException) { continue; }
@@ -477,7 +477,7 @@ public static class ScraperHelpers
         return t.ValueKind switch
         {
             JsonValueKind.String => string.Equals(t.GetString(), "Product", StringComparison.OrdinalIgnoreCase),
-            JsonValueKind.Array  => t.EnumerateArray().Any(x =>
+            JsonValueKind.Array => t.EnumerateArray().Any(x =>
                 x.ValueKind == JsonValueKind.String &&
                 string.Equals(x.GetString(), "Product", StringComparison.OrdinalIgnoreCase)),
             _ => false
@@ -486,7 +486,7 @@ public static class ScraperHelpers
 
     private static StructuredProduct MapStructuredProduct(JsonElement product)
     {
-        var offer    = product.TryGetProperty("offers", out var offers) ? FirstObject(offers) : null;
+        var offer = product.TryGetProperty("offers", out var offers) ? FirstObject(offers) : null;
         var priceStr = offer.HasValue ? GetJsonString(offer.Value, "price", "lowPrice", "highPrice") : null;
         decimal.TryParse(priceStr?.Replace(",", ""), NumberStyles.Any, CultureInfo.InvariantCulture, out var price);
         return new StructuredProduct(

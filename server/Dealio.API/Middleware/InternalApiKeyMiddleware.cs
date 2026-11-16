@@ -6,11 +6,11 @@ using System.Text;
 public class InternalApiKeyMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IConfiguration  _config;
+    private readonly IConfiguration _config;
 
     public InternalApiKeyMiddleware(RequestDelegate next, IConfiguration config)
     {
-        _next   = next;
+        _next = next;
         _config = config;
     }
 

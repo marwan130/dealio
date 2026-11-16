@@ -45,13 +45,13 @@ public class ProductRepository : IProductRepository
         if (filter.MaxPrice.HasValue)
         {
             var maxPrice = filter.MaxPrice.Value;
-            query = query.Where(p => p.Listings.Any(l => l.IsActive && 
+            query = query.Where(p => p.Listings.Any(l => l.IsActive &&
                 l.PriceHistories.OrderByDescending(ph => ph.RecordedAt).Select(ph => (decimal?)ph.Price).FirstOrDefault() <= maxPrice));
         }
 
         var total = await query.CountAsync();
 
-        // Random feed: a client-supplied seed produces one stable shuffled
+        // Random feed: a client supplied seed produces one stable shuffled
         // order for the whole filtered set, so successive pages continue
         // the same browsing sequence instead of re-rolling per request.
         if (filter.SortBy == "random")

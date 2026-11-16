@@ -6,8 +6,8 @@ using Dealio.Application.DTOs.Notifications;
 public interface INotificationService
 {
     Task<PagedResult<NotificationResponse>> GetByUserIdAsync(Guid userId, PaginationRequest pagination);
-    Task<NotificationResponse>              GetByIdAsync(long notificationId, Guid userId);
-    Task<int>                               GetUnreadCountAsync(Guid userId);
-    Task                                    MarkAllAsReadAsync(Guid userId);
-    Task                                    MarkAsReadAsync(long notificationId, Guid userId);
+    Task<NotificationResponse> GetByIdAsync(long notificationId, Guid userId);
+    Task<int> GetUnreadCountAsync(Guid userId);
+    Task MarkAllAsReadAsync(Guid userId);
+    Task MarkAsReadAsync(long notificationId, Guid userId);
 }

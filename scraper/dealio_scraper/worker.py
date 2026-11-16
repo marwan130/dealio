@@ -45,7 +45,11 @@ def _failure_code(exc: Exception) -> str:
 
 
 def _is_retryable_failure(failure_code: str) -> bool:
-    if failure_code in {"invalid_or_non_public_url", "http_status:404", "price_out_of_range"}:
+    if failure_code in {
+        "invalid_or_non_public_url",
+        "http_status:404",
+        "price_out_of_range",
+    }:
         return False
     if failure_code.startswith("http_status:"):
         try:
@@ -75,7 +79,9 @@ def _header_retry_count(headers: object) -> int:
         return 0
 
 
-async def _handle(message: AbstractIncomingMessage, exchange, retry_exchange, dead_exchange) -> None:
+async def _handle(
+    message: AbstractIncomingMessage, exchange, retry_exchange, dead_exchange
+) -> None:
     try:
         envelope = json.loads(message.body)
         if envelope.get("schemaVersion") != 1:
@@ -90,9 +96,17 @@ async def _handle(message: AbstractIncomingMessage, exchange, retry_exchange, de
         correlation_id = str(envelope.get("correlationId") or uuid4())
         try:
             extraction = await extract_product(url)
-            if not price_in_range(extraction.price, payload.get("minPrice"), payload.get("maxPrice")):
+            if not price_in_range(
+                extraction.price, payload.get("minPrice"), payload.get("maxPrice")
+            ):
                 raise ValueError("price_out_of_range")
-            result = {"jobId": str(job_id), "listingId": payload.get("listingId"), "searchSessionId": payload.get("searchSessionId"), "outcome": "completed", "extraction": as_payload(extraction)}
+            result = {
+                "jobId": str(job_id),
+                "listingId": payload.get("listingId"),
+                "searchSessionId": payload.get("searchSessionId"),
+                "outcome": "completed",
+                "extraction": as_payload(extraction),
+            }
             routing_key = "scrape.result.completed.v1"
         except Exception as exc:  # noqa: BLE001 - any failure must become a structured failure result (classified below), never crash the worker loop
             failure_code = _failure_code(exc)
@@ -110,13 +124,21 @@ async def _handle(message: AbstractIncomingMessage, exchange, retry_exchange, de
                         content_type=message.content_type or "application/json",
                         correlation_id=message.correlation_id,
                         message_id=message.message_id,
-                        expiration=timedelta(milliseconds=delay_ms + random.randint(0, RETRY_JITTER_MS[retry_count])),
+                        expiration=timedelta(
+                            milliseconds=delay_ms
+                            + random.randint(0, RETRY_JITTER_MS[retry_count])
+                        ),
                     ),
                     f"scrape.retry.{delay_ms}ms.v1",
                     mandatory=True,
                 )
                 await message.ack()
-                logger.info("Retrying scrape job %s after %sms (%s)", job_id, delay_ms, failure_code)
+                logger.info(
+                    "Retrying scrape job %s after %sms (%s)",
+                    job_id,
+                    delay_ms,
+                    failure_code,
+                )
                 return
 
             logger.warning("Scrape job %s failed (%s)", job_id, failure_code)
@@ -130,7 +152,9 @@ async def _handle(message: AbstractIncomingMessage, exchange, retry_exchange, de
             routing_key = "scrape.result.failed.v1"
 
         result["workerStartedAtUtc"] = worker_started.isoformat()
-        result["durationMs"] = max(0, int((time.monotonic() - started_monotonic) * 1000))
+        result["durationMs"] = max(
+            0, int((time.monotonic() - started_monotonic) * 1000)
+        )
 
         response = {
             "schemaVersion": 1,
@@ -196,11 +220,23 @@ async def run() -> None:
     async with connection:
         channel = await connection.channel(publisher_confirms=True)
         await channel.set_qos(prefetch_count=2)
-        work_exchange = await channel.declare_exchange(WORK_EXCHANGE, ExchangeType.TOPIC, durable=True)
-        result_exchange = await channel.declare_exchange(RESULT_EXCHANGE, ExchangeType.TOPIC, durable=True)
-        retry_exchange = await channel.declare_exchange(RETRY_EXCHANGE, ExchangeType.DIRECT, durable=True)
-        dead_exchange = await channel.declare_exchange("dealio.dead.v1", ExchangeType.TOPIC, durable=True)
-        dead_queue = await channel.declare_queue("scrape.jobs.dead.v1", durable=True, arguments={"x-max-length": 10_000, "x-overflow": "reject-publish"})
+        work_exchange = await channel.declare_exchange(
+            WORK_EXCHANGE, ExchangeType.TOPIC, durable=True
+        )
+        result_exchange = await channel.declare_exchange(
+            RESULT_EXCHANGE, ExchangeType.TOPIC, durable=True
+        )
+        retry_exchange = await channel.declare_exchange(
+            RETRY_EXCHANGE, ExchangeType.DIRECT, durable=True
+        )
+        dead_exchange = await channel.declare_exchange(
+            "dealio.dead.v1", ExchangeType.TOPIC, durable=True
+        )
+        dead_queue = await channel.declare_queue(
+            "scrape.jobs.dead.v1",
+            durable=True,
+            arguments={"x-max-length": 10_000, "x-overflow": "reject-publish"},
+        )
         await dead_queue.bind(dead_exchange, "scrape.job.requested.v1")
         await dead_queue.bind(dead_exchange, "scrape.job.processing-failed.v1")
         for delay_ms, jitter_ms in zip(RETRY_DELAYS_MS, RETRY_JITTER_MS, strict=True):
@@ -220,12 +256,20 @@ async def run() -> None:
         queue = await channel.declare_queue(
             QUEUE,
             durable=True,
-            arguments={"x-dead-letter-exchange": "dealio.dead.v1", "x-dead-letter-routing-key": "scrape.job.requested.v1", "x-max-length": 10_000, "x-overflow": "reject-publish"},
+            arguments={
+                "x-dead-letter-exchange": "dealio.dead.v1",
+                "x-dead-letter-routing-key": "scrape.job.requested.v1",
+                "x-max-length": 10_000,
+                "x-overflow": "reject-publish",
+            },
         )
         await queue.bind(work_exchange, ROUTING_KEY)
         logger.info("Scrapling consumer ready on %s", QUEUE)
         await queue.consume(
-            lambda message: _handle(message, result_exchange, retry_exchange, dead_exchange), no_ack=False
+            lambda message: _handle(
+                message, result_exchange, retry_exchange, dead_exchange
+            ),
+            no_ack=False,
         )
         await asyncio.Future()
 

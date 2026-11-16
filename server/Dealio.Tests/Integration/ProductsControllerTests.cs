@@ -202,8 +202,8 @@ public class ProductsControllerTests : TestBase
         var verifyDb = verifyScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var listing = await verifyDb.StoreProductListings.SingleAsync(item => item.ProductId == productId);
         listing.HasVerifiedPrice.Should().BeFalse();
-        // Unverified candidates carry snippet-mined prices that are not page
-        // observations; the seeded price must not enter history until the tracker
+        // Unverified candidates carry snippet mined prices that are not page
+        // observations,  the seeded price must not enter history until the tracker
         // records its first real scrape.
         (await verifyDb.PriceHistories.CountAsync(item => item.ListingId == listing.ListingId)).Should().Be(0);
 
@@ -242,11 +242,11 @@ public class ProductsControllerTests : TestBase
     public async Task GetProducts_WithAuth_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var response = await Client.GetAsync("/v1/products");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -256,7 +256,7 @@ public class ProductsControllerTests : TestBase
     public async Task GetProductById_WithValidId_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var createRequest = new CreateProductRequest
         {
@@ -270,7 +270,7 @@ public class ProductsControllerTests : TestBase
         var productId = createResult.GetProperty("data").GetProperty("productId").GetGuid();
         var response = await Client.GetAsync($"/v1/products/{productId}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -281,7 +281,7 @@ public class ProductsControllerTests : TestBase
     public async Task GetProductById_WithInvalidId_ReturnsNotFound()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var invalidId = Guid.NewGuid();
         var response = await Client.GetAsync($"/v1/products/{invalidId}");
@@ -292,7 +292,7 @@ public class ProductsControllerTests : TestBase
     public async Task CreateProduct_WithValidData_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var request = new CreateProductRequest
@@ -303,7 +303,7 @@ public class ProductsControllerTests : TestBase
         };
         var response = await Client.PostAsJsonAsync("/v1/products", request);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -327,7 +327,7 @@ public class ProductsControllerTests : TestBase
     public async Task UpdateProduct_WithValidData_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var createRequest = new CreateProductRequest
         {
@@ -347,7 +347,7 @@ public class ProductsControllerTests : TestBase
         };
         var response = await Client.PutAsJsonAsync($"/v1/products/{productId}", updateRequest);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -358,7 +358,7 @@ public class ProductsControllerTests : TestBase
     public async Task DeleteProduct_WithValidId_ReturnsSuccess()
     {
         var token = await GetAuthTokenAsync();
-        Client.DefaultRequestHeaders.Authorization = 
+        Client.DefaultRequestHeaders.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         var createRequest = new CreateProductRequest
         {

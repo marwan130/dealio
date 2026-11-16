@@ -12,7 +12,7 @@ public class CategoryService : ICategoryService
     private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(10);
 
     private readonly ICategoryRepository _categoryRepository;
-    private readonly ICacheService?       _cache;
+    private readonly ICacheService? _cache;
 
     public CategoryService(ICategoryRepository categoryRepository, ICacheService? cache = null)
     {
@@ -91,6 +91,6 @@ public class CategoryService : ICategoryService
     private static CategoryResponse MapToResponse(Category category) => new()
     {
         CategoryId = category.CategoryId,
-        Name       = category.Name
+        Name = category.Name
     };
 }

@@ -9,26 +9,26 @@ using Dealio.Infrastructure.Persistence;
 public class RefreshTokenStore : IRefreshTokenStore
 {
     private readonly ApplicationDbContext _context;
-    private readonly ISecureTokenService  _secureTokenService;
-    private readonly TimeSpan             _expiry;
+    private readonly ISecureTokenService _secureTokenService;
+    private readonly TimeSpan _expiry;
 
     public RefreshTokenStore(
         ApplicationDbContext context,
-        ISecureTokenService  secureTokenService,
-        IConfiguration       config)
+        ISecureTokenService secureTokenService,
+        IConfiguration config)
     {
-        _context            = context;
+        _context = context;
         _secureTokenService = secureTokenService;
-        _expiry             = TimeSpan.FromDays(int.Parse(config["Jwt:RefreshTokenExpiryDays"] ?? "7"));
+        _expiry = TimeSpan.FromDays(int.Parse(config["Jwt:RefreshTokenExpiryDays"] ?? "7"));
     }
 
     public virtual void Save(string refreshToken, Guid userId)
     {
         _context.RefreshTokens.Add(new RefreshToken
         {
-            Id        = Guid.NewGuid(),
-            Token     = _secureTokenService.HashToken(refreshToken),
-            UserId    = userId,
+            Id = Guid.NewGuid(),
+            Token = _secureTokenService.HashToken(refreshToken),
+            UserId = userId,
             ExpiresAt = DateTime.UtcNow.Add(_expiry),
             CreatedAt = DateTime.UtcNow
         });

@@ -15,10 +15,10 @@ public class NotificationService : INotificationService
         => _notificationRepository = notificationRepository;
 
     public async Task<PagedResult<NotificationResponse>> GetByUserIdAsync(
-        Guid              userId,
+        Guid userId,
         PaginationRequest pagination)
     {
-        var all   = (await _notificationRepository.GetByUserIdAsync(userId)).ToList();
+        var all = (await _notificationRepository.GetByUserIdAsync(userId)).ToList();
         var paged = all.Skip(pagination.Page * pagination.Size).Take(pagination.Size);
 
         return PagedResult<NotificationResponse>.From(
@@ -57,22 +57,22 @@ public class NotificationService : INotificationService
     private static NotificationResponse MapToResponse(Notification notification) => new()
     {
         NotificationId = notification.NotificationId,
-        ProductId      = notification.Tracking?.ProductId,
-        TrackingId     = notification.TrackingId,
-        ListingId      = notification.PriceHistory?.ListingId ?? notification.Tracking?.ListingId,
-        ProductName    = notification.Tracking?.Product?.Name        ?? string.Empty,
-        StoreName      = notification.PriceHistory?.Listing?.Store?.Name ?? notification.Tracking?.Listing?.Store?.Name ?? string.Empty,
+        ProductId = notification.Tracking?.ProductId,
+        TrackingId = notification.TrackingId,
+        ListingId = notification.PriceHistory?.ListingId ?? notification.Tracking?.ListingId,
+        ProductName = notification.Tracking?.Product?.Name ?? string.Empty,
+        StoreName = notification.PriceHistory?.Listing?.Store?.Name ?? notification.Tracking?.Listing?.Store?.Name ?? string.Empty,
         TriggeredPrice = notification.TriggeredPrice,
         ConvertedTriggeredPrice = notification.ConvertedTriggeredPrice,
         ConversionRate = notification.ConversionRate,
         RateUpdatedAtUtc = notification.RateUpdatedAtUtc,
         TriggeredCurrencyCode = notification.PriceHistory?.CurrencyCode ?? string.Empty,
         TargetCurrencyCode = notification.Tracking?.CurrencyCode ?? string.Empty,
-        TargetPrice    = notification.TargetPrice,
-        CurrencyCode   = notification.Tracking?.CurrencyCode         ?? string.Empty,
-        Channel        = notification.Channel,
-        Status         = notification.Status,
-        IsRead         = notification.IsRead,
-        SentAt         = notification.SentAt
+        TargetPrice = notification.TargetPrice,
+        CurrencyCode = notification.Tracking?.CurrencyCode ?? string.Empty,
+        Channel = notification.Channel,
+        Status = notification.Status,
+        IsRead = notification.IsRead,
+        SentAt = notification.SentAt
     };
 }

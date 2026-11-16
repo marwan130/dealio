@@ -32,7 +32,7 @@ public class UserService : IUserService
         var user = await _userRepository.GetByIdAsync(userId)
             ?? throw new NotFoundException(nameof(User), userId);
 
-        user.Name  = request.Name;
+        user.Name = request.Name;
         user.Phone = request.Phone;
 
         await _userRepository.UpdateAsync(user);
@@ -91,12 +91,12 @@ public class UserService : IUserService
 
     private static UserResponse MapToResponse(User user) => new()
     {
-        UserId    = user.UserId,
-        Name      = user.Name,
-        Email     = user.Email,
-        Phone     = user.Phone,
-        Role      = user.Role.ToString(),
-        IsActive  = user.IsActive,
+        UserId = user.UserId,
+        Name = user.Name,
+        Email = user.Email,
+        Phone = user.Phone,
+        Role = user.Role.ToString(),
+        IsActive = user.IsActive,
         IsTrackingPaused = user.IsTrackingPaused,
         DeletionScheduledAtUtc = user.DeletionScheduledAtUtc,
         EmailVerified = user.EmailVerified,

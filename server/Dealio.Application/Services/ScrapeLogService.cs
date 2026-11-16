@@ -15,21 +15,21 @@ public class ScrapeLogService : IScrapeLogService
 
     public async Task<PagedResult<ScrapeLog>> GetAllAsync(PaginationRequest pagination)
     {
-        var all   = (await _scrapeLogRepository.GetAllAsync()).ToList();
+        var all = (await _scrapeLogRepository.GetAllAsync()).ToList();
         var paged = all.Skip(pagination.Page * pagination.Size).Take(pagination.Size);
         return PagedResult<ScrapeLog>.From(paged, pagination.Page, pagination.Size, all.Count);
     }
 
     public async Task<PagedResult<ScrapeLog>> GetByStoreIdAsync(Guid storeId, PaginationRequest pagination)
     {
-        var all   = (await _scrapeLogRepository.GetByStoreIdAsync(storeId)).ToList();
+        var all = (await _scrapeLogRepository.GetByStoreIdAsync(storeId)).ToList();
         var paged = all.Skip(pagination.Page * pagination.Size).Take(pagination.Size);
         return PagedResult<ScrapeLog>.From(paged, pagination.Page, pagination.Size, all.Count);
     }
 
     public async Task<PagedResult<ScrapeLog>> GetByStatusAsync(ScrapeStatus status, PaginationRequest pagination)
     {
-        var all   = (await _scrapeLogRepository.GetByStatusAsync(status)).ToList();
+        var all = (await _scrapeLogRepository.GetByStatusAsync(status)).ToList();
         var paged = all.Skip(pagination.Page * pagination.Size).Take(pagination.Size);
         return PagedResult<ScrapeLog>.From(paged, pagination.Page, pagination.Size, all.Count);
     }

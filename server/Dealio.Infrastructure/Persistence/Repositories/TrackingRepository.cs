@@ -44,7 +44,7 @@ public class TrackingRepository : ITrackingRepository
     public async Task<bool> ExistsAsync(Guid userId, Guid productId, Guid? listingId)
         => await _context.UserProductTrackings
                          .AnyAsync(t =>
-                             t.UserId    == userId    &&
+                             t.UserId == userId &&
                              t.ProductId == productId &&
                              t.ListingId == listingId);
 

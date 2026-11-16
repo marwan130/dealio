@@ -80,8 +80,12 @@ public sealed class OperationsController(
     {
         var factory = new ConnectionFactory
         {
-            HostName = options.Host, Port = options.Port, UserName = options.User, Password = options.Password,
-            RequestedConnectionTimeout = TimeSpan.FromSeconds(2), ClientProvidedName = "dealio-operations"
+            HostName = options.Host,
+            Port = options.Port,
+            UserName = options.User,
+            Password = options.Password,
+            RequestedConnectionTimeout = TimeSpan.FromSeconds(2),
+            ClientProvidedName = "dealio-operations"
         };
         await using var connection = await factory.CreateConnectionAsync(ct);
         await using var channel = await connection.CreateChannelAsync(cancellationToken: ct);
@@ -183,21 +187,32 @@ public sealed class OperationsController(
                 return Conflict(ApiResponse<object>.Fail("STORE_CURRENCY_MISMATCH", "The store is configured with a different currency."));
             store ??= new Store
             {
-                StoreId = Guid.NewGuid(), Name = candidate.StoreName, BaseUrl = baseUrl,
-                Country = country, CurrencyCode = currency, IsActive = true
+                StoreId = Guid.NewGuid(),
+                Name = candidate.StoreName,
+                BaseUrl = baseUrl,
+                Country = country,
+                CurrencyCode = currency,
+                IsActive = true
             };
             if (db.Entry(store).State == EntityState.Detached) db.Stores.Add(store);
             var now = DateTime.UtcNow;
             var listing = new StoreProductListing
             {
-                ListingId = Guid.NewGuid(), ProductId = productId, StoreId = store.StoreId,
-                ProductUrl = candidate.ProductUrl, IsActive = candidate.InStock != false, LastScrapedAt = now
+                ListingId = Guid.NewGuid(),
+                ProductId = productId,
+                StoreId = store.StoreId,
+                ProductUrl = candidate.ProductUrl,
+                IsActive = candidate.InStock != false,
+                LastScrapedAt = now
             };
             db.StoreProductListings.Add(listing);
             db.PriceHistories.Add(new PriceHistory
             {
-                ListingId = listing.ListingId, Price = candidate.Price, CurrencyCode = currency,
-                RecordedAt = now, ScrapedAt = now
+                ListingId = listing.ListingId,
+                Price = candidate.Price,
+                CurrencyCode = currency,
+                RecordedAt = now,
+                ScrapedAt = now
             });
         }
 
@@ -206,8 +221,11 @@ public sealed class OperationsController(
             .MaxAsync(item => (int?)item.Sequence, ct) ?? 0;
         db.ProductSearchSessionEvents.Add(new ProductSearchSessionEvent
         {
-            SessionId = sessionId, Sequence = lastSequence + 1, EventType = "matchReviewResolved",
-            Payload = JsonSerializer.Serialize(decision, JsonOptions), OccurredAtUtc = decision.ResolvedAtUtc
+            SessionId = sessionId,
+            Sequence = lastSequence + 1,
+            EventType = "matchReviewResolved",
+            Payload = JsonSerializer.Serialize(decision, JsonOptions),
+            OccurredAtUtc = decision.ResolvedAtUtc
         });
         session.UpdatedAtUtc = decision.ResolvedAtUtc;
         await db.SaveChangesAsync(ct);
@@ -243,8 +261,13 @@ public sealed class OperationsController(
             .OrderBy(store => store.Name)
             .Select(store => new
             {
-                store.StoreId, store.Name, store.Country, store.CurrencyCode, store.IsActive,
-                store.ConsecutiveScrapeFailures, store.AutoSuspendedUntilUtc
+                store.StoreId,
+                store.Name,
+                store.Country,
+                store.CurrencyCode,
+                store.IsActive,
+                store.ConsecutiveScrapeFailures,
+                store.AutoSuspendedUntilUtc
             })
             .Take(500)
             .ToListAsync(ct);

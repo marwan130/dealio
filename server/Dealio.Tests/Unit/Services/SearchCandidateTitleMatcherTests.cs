@@ -23,7 +23,7 @@ public sealed class SearchCandidateTitleMatcherTests
     }
 
     // Real-world "airpods pro 2" result set: marketplace pages flood the query
-    // with cases, covers, service plans and generics; none are the product.
+    // with cases, covers, service plans and generics,  none are the product.
     [Theory]
     [InlineData("Dado AirPods Pro 2 2nd Generation Case Cover with Keychain, Soft Silicone Skin Case Cover (Army Green)")]
     [InlineData("Easuny for AirPods Pro 2 Case Cover 2022 - Full Body Protective")]

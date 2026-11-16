@@ -147,7 +147,7 @@ public sealed class ProductSearchServiceTests
     public async Task SearchProgressively_KeepsCandidateWhoseConvertedPriceFitsBelowMinimum()
     {
         var candidate = Candidate(isVerified: false);
-        // An AED 2,500 offer is ~EGP 34,000; a raw numeric check would drop it
+        // An AED 2,500 offer is ~EGP 34,000,  a raw numeric check would drop it
         // against an EGP-10,000 minimum.
         candidate.Currency = "AED";
         candidate.Price = 2500m;

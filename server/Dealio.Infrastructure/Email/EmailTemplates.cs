@@ -4,13 +4,13 @@ using Dealio.Application;
 public static class EmailTemplates
 {
     public static string PriceDropAlert(
-        string  productName,
+        string productName,
         string? variantSku,
-        string  storeName,
+        string storeName,
         decimal triggeredPrice,
         decimal targetPrice,
-        string  currencyCode,
-        string  productUrl)
+        string currencyCode,
+        string productUrl)
     {
         var variantLine = variantSku is not null
             ? $"<p><strong>Variant:</strong> {variantSku}</p>"

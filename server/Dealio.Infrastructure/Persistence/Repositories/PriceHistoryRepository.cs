@@ -127,15 +127,15 @@ public class PriceHistoryRepository : IPriceHistoryRepository
                 var previous = pair[1];
                 return new RecentPriceDropResponse
                 {
-                    ListingId     = latest.ListingId,
-                    ProductId     = latest.Listing.ProductId,
-                    ProductName   = latest.Listing.Product.Name,
-                    StoreName     = latest.Listing.Store.Name,
+                    ListingId = latest.ListingId,
+                    ProductId = latest.Listing.ProductId,
+                    ProductName = latest.Listing.Product.Name,
+                    StoreName = latest.Listing.Store.Name,
                     PreviousPrice = previous.Price,
-                    CurrentPrice  = latest.Price,
-                    DropPercent   = previous.Price <= 0 ? 0 : Math.Round((previous.Price - latest.Price) / previous.Price * 100, 2),
-                    CurrencyCode  = latest.CurrencyCode,
-                    RecordedAt    = latest.RecordedAt
+                    CurrentPrice = latest.Price,
+                    DropPercent = previous.Price <= 0 ? 0 : Math.Round((previous.Price - latest.Price) / previous.Price * 100, 2),
+                    CurrencyCode = latest.CurrencyCode,
+                    RecordedAt = latest.RecordedAt
                 };
             })
             .OrderByDescending(drop => drop.RecordedAt)

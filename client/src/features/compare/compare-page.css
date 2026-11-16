@@ -1,0 +1,529 @@
+/* Compare page: local layout additions that don't belong to the legacy
+   global sheets. Logical properties for clean RTL mirroring. */
+
+.compare-heading-side {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* The "0 of 3" limit reads as a real platform pill, not bare small text
+   (legacy dealio-app-web.css 1724 styles it as plain muted text). */
+.page-wrap[data-page="compare"] .compare-limit {
+  padding: 6px 13px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Empty state: the compare page renders the shared EmptyState component,
+   so its container inherits the notifications page's exact recipe
+   (solid surface-container panel, dashed --line hairline, 14px corners,
+   amber icon tile, Anton title) straight from the global sheets. Only
+   the glyph inside the tile is tuned here (coral, like the tile's dot). */
+.page-wrap[data-page="compare"] .empty-ring .glyph {
+  width: 20px;
+  height: 20px;
+  color: #e05347;
+}
+
+/* The desktop clamp's leftover height reads as a void at tablet and as
+   an orphan strip below the frame on phones. The single rule above now
+   sizes the frame to the remaining viewport at every band. */
+
+/* Anton ships a single 400 weight. The legacy sheet forces 800, which
+   browsers fake with synthetic bolding, and at phone sizes that reads
+   as a blurry double struck edge. Render Anton at its real weight. */
+.page-wrap[data-page="compare"] .page-heading h1 {
+  font-weight: 400 !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+/* Phone rhythm: the heading stack tightens so the empty state doesn't
+   drift far down the page. */
+@media (max-width: 560px) {
+  .page-wrap[data-page="compare"] .page-heading {
+    row-gap: 8px;
+  }
+
+  .compare-heading-side {
+    gap: 10px;
+  }
+}
+
+/* =====================================================================
+   Spec-sheet comparison (GSMArena pattern): rows are attributes, columns
+   are products. One table carries the product header cards, grouped
+   attribute rows, and the trailing "add a product" column. The legacy
+   sheet pins overflow: hidden on the wrap, which would clip the scroll
+   and any sticky cells. Both are declared again here with !important.
+   ===================================================================== */
+
+/* The wrap shares the notifications page's frame recipe (notice-list:
+   1px var(--line), var(--radius-md) corners, surface-container paper,
+   hairline row separators) so both pages read as the same component
+   family. */
+.page-wrap[data-page="compare"] .compare-table-wrap {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--surface-container) !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+/* Wide screens fit every column, so the wrap must not create its own
+   scrollport. The page scrolls naturally instead, and the soft outer
+   corners come from the corner cells (no clip needed). */
+@media (min-width: 1051px) {
+  .page-wrap[data-page="compare"] .compare-table-wrap {
+    overflow: visible !important;
+  }
+
+  .page-wrap[data-page="compare"] .compare-table--spec thead th:first-child {
+    border-start-start-radius: var(--radius-md) !important;
+  }
+
+  .page-wrap[data-page="compare"] .compare-table--spec thead th:last-child {
+    border-start-end-radius: var(--radius-md) !important;
+  }
+
+  .page-wrap[data-page="compare"]
+    .compare-table--spec
+    tbody
+    tr:last-child
+    > th:first-child,
+  .page-wrap[data-page="compare"]
+    .compare-table--spec
+    tbody
+    tr:last-child
+    > td:first-child {
+    border-end-start-radius: var(--radius-md) !important;
+  }
+
+  .page-wrap[data-page="compare"]
+    .compare-table--spec
+    tbody
+    tr:last-child
+    > td:last-child {
+    border-end-end-radius: var(--radius-md) !important;
+  }
+}
+
+/* Scrollport affordance: below the desktop fit the table scrolls
+   sideways. An edge fade at the scrollport's inline end tells the eye
+   the sliced column continues instead of ending mid glyph. */
+@media (max-width: 1050px) {
+  .page-wrap[data-page="compare"] .compare-table-wrap {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 36px),
+      rgb(0 0 0 / 15%)
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 36px),
+      rgb(0 0 0 / 15%)
+    );
+  }
+
+  .compare-swipe-hint {
+    margin: 8px 2px 0;
+    color: var(--text-muted);
+    font-size: 11.5px;
+  }
+}
+
+/* The hint is meaningless when nothing scrolls. Phones (≤760) always
+   overflow the 720px table, wider scrollports only nudge a few px. */
+@media (min-width: 761px) {
+  .compare-swipe-hint {
+    display: none;
+  }
+}
+
+.compare-table--spec {
+  width: 100%;
+  /* Fixed layout: every product column shares the same width (the
+     GSMArena behavior). Auto layout let a long product name stretch
+     its column to 452px while its neighbor sat at 241px, so the trend
+     charts ended unevenly. A min-width keeps the phone scrollport
+     usable. */
+  table-layout: fixed;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface-container);
+}
+
+/* The attribute label column keeps a set width,  the product columns
+   split the rest equally. */
+.compare-table--spec th:first-child {
+  width: 170px;
+}
+
+/* Rows carry the notifications page's rhythm: 16px side padding, a 14px
+   vertical beat, and 1px hairline separators. */
+.compare-table--spec td,
+.compare-table--spec th {
+  padding: 14px 16px;
+  border: 0;
+  border-block-end: 1px solid var(--line);
+  background: var(--surface-container);
+  text-align: start;
+  vertical-align: middle;
+  font: inherit;
+}
+
+/* Product column header cards: image, name, best price, offers meta,
+   remove control. The same content a product card carries, but as the
+   table's sticky first row. The page scoped selectors outrank the
+   legacy dark theme th groups at equal strength. */
+.page-wrap[data-page="compare"] .compare-table--spec thead th {
+  padding: 0;
+  border-block-end: 2px solid var(--text) !important;
+}
+
+.compare-head-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 14px 14px;
+  text-align: center;
+}
+
+.compare-head-image {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 110px;
+}
+
+/* Imageless products get the same Anton monogram the dashboard's
+   recent drops card uses. No bare void where the picture would be. */
+.compare-head-thumb-fallback {
+  display: grid;
+  place-items: center;
+  /* Matches the photo tile's rendered footprint (~106px) so a monogram
+     column and a photo column don't read as unequal headers. */
+  width: 106px;
+  height: 106px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-family: Anton, Impact, sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  user-select: none;
+}
+
+.compare-head-image .product-image {
+  /* Both header tiles share a fixed square footprint so a monogram
+     column and a photo column read as equal siblings. Contain, not
+     cover. Cropping a product photo loses information. */
+  width: 106px;
+  height: 106px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+
+.compare-head-image img {
+  width: 106px;
+  height: 106px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+
+.compare-head-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.compare-head-name:hover {
+  color: var(--brand);
+}
+
+.compare-head-card small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* Remove control: a 1px ring pill button, the same chip family as the
+   notifications page's icon tiles and pill chips. */
+.compare-head-remove {
+  position: absolute;
+  inset-block-start: 8px;
+  /* The card edge is the column divider. At 8px the × read as column
+     two's control. The 16px inset matches the card's own padding. */
+  inset-inline-end: 16px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.compare-head-remove:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.compare-head-remove .glyph {
+  width: 14px;
+  height: 14px;
+}
+
+/* Group bands: a full width bar that separates Pricing from Details
+   from Price trend, like the spec groups on a spec sheet. */
+.compare-table--spec .compare-group-row th {
+  padding: 9px 16px;
+  background: var(--surface-muted) !important;
+  color: var(--text) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* The AI specs band carries its honesty note inline. The band's small
+   caps stay the voice, the note drops to sentence case in muted ink. */
+.compare-table--spec .compare-group-row .compare-group-note {
+  margin-inline-start: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text-muted) !important;
+}
+
+/* Attribute label column: quiet, always readable while the product
+   cells scroll past on small screens. The notice h3 voice (13px).
+   !important on the paper beats the legacy dark theme th group
+   (b.css 2271) so the label column carries the same row surface as the
+   value cells instead of a stray tinted band. */
+.page-wrap[data-page="compare"] .compare-table--spec tbody th[scope="row"] {
+  color: var(--text-muted) !important;
+  font-size: 13px;
+  font-weight: 650;
+  min-width: 150px;
+  background: var(--surface-container) !important;
+  /* Legacy th nowrap makes long labels ("Lowest verified offer")
+     overflow the fixed 170px column into the value cells. */
+  white-space: normal !important;
+}
+
+.compare-table--spec tbody td .price-display {
+  font-size: 16px;
+}
+
+/* In the narrow chart header the period dropdown's legacy select chrome
+   (b.css paints `.range-select` as a native select: chevron background,
+   8px/32px padding, border) ghosts a second control beside the real
+   themed dropdown trigger. Strip it, the trigger carries its own. */
+.page-wrap[data-page="compare"]
+  .compare-table--spec
+  .custom-dropdown.range-select {
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  border-radius: 4px !important;
+}
+
+/* In a narrow column the chart header ("Price history · AED" + period
+   dropdown) must wrap to two tidy rows instead of clipping the control. */
+.compare-table--spec .compare-history-head {
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.compare-table--spec .compare-history-head strong {
+  font-size: 13px;
+}
+
+/* The cheapest column's price cell carries a comic pill chip (the
+   notifications family's chip shape) so the "best" answer reads before
+   the numbers do. */
+.compare-best-chip {
+  display: inline-block;
+  margin-inline-start: 8px;
+  /* The chip sat ~5px above the converted caption under the price ,  a
+     cramped pairing. Drop it below the caption line instead. */
+  margin-block-start: 6px;
+  vertical-align: middle;
+  padding: 3px 10px;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: var(--brand);
+  color: #202020;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Trailing "add a product" column: an empty dashed slot, exactly like a
+   spec sheet waiting for its next column. */
+.compare-table--spec .compare-add-col,
+.compare-table--spec .compare-add-cell {
+  border-block-end: 1px dashed var(--line-strong);
+  background: transparent !important;
+}
+
+/* The empty slot column stays visibly "next up" through the body rows:
+   a faint lane tint under the dashed header slot. */
+.compare-table--spec td.compare-add-cell {
+  background: color-mix(
+    in srgb,
+    var(--surface-muted) 45%,
+    transparent
+  ) !important;
+  padding-inline-end: 18px;
+}
+
+.compare-table--spec .compare-add-col {
+  padding-inline-end: 18px;
+}
+
+.compare-add-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 210px;
+  padding: 16px;
+  border: 2px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.compare-add-tile .glyph {
+  width: 20px;
+  height: 20px;
+}
+
+.compare-add-tile:hover,
+.compare-add-tile:focus-visible {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* Loading state: one header card row of boxes above the table skeleton. */
+.compare-skeleton-head {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-block-end: 14px;
+}
+
+.compare-skeleton-head .skeleton-box {
+  height: 170px;
+}
+
+/* Narrow screens: the label column sticks while product columns scroll
+   horizontally, so attribute names never slide out of view. */
+@media (max-width: 1050px) {
+  .page-wrap[data-page="compare"] .compare-table--spec tbody th[scope="row"] {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 2;
+    background: var(--surface-container) !important;
+    /* The rail edge: the same 1px hairline the rows use, so the stuck
+       column reads as part of the same frame while columns slide under. */
+    border-inline-end: 1px solid var(--line);
+  }
+
+  .page-wrap[data-page="compare"] .compare-table--spec .compare-group-row th {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 2;
+    background: var(--surface-muted) !important;
+    border-inline-end: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 560px) {
+  .compare-table--spec td,
+  .compare-table--spec th {
+    padding: 11px 12px;
+  }
+
+  /* The 170px label column ate a third of a phone's scrollport ,  the
+     first product card started past the midline and looked off-balance.
+     Labels wrap onto two lines instead. */
+  .compare-table--spec th:first-child {
+    width: 118px;
+  }
+
+  .page-wrap[data-page="compare"] .compare-table--spec tbody th[scope="row"] {
+    min-width: 0;
+  }
+
+  /* The header card must stay compact on phones: drop the offers meta
+     line (the offers row already reports it) and shrink the picture. */
+  .compare-head-card {
+    padding: 10px 10px 12px;
+    gap: 6px;
+  }
+
+  .compare-head-card small {
+    display: none;
+  }
+
+  .compare-head-name {
+    font-size: 12.5px;
+  }
+
+  .compare-head-image,
+  .compare-head-image img,
+  .compare-head-image .product-image {
+    min-height: 64px;
+    max-width: 100px;
+    max-height: 64px;
+  }
+
+  .compare-head-thumb-fallback {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+
+  .compare-add-tile {
+    min-height: 120px;
+  }
+}

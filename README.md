@@ -7,9 +7,6 @@ Dealio is a product discovery and automatic price tracking application. The repo
 - [Server and API](docs/SERVER.md)
 - [Client](docs/CLIENT.md)
 - [Scraping workflow and message contracts](docs/SCRAPER.md)
-- [Architecture and contracts](docs/ARCHITECTURE.md)
-- [User guide](docs/USER-GUIDE.md)
-- [Operations and recovery](docs/OPERATIONS.md)
 - [Local quality and security tools](docs/LOCAL-QUALITY-TOOLS.md)
 - [Contribution guide](docs/CONTRIBUTING.md)
 

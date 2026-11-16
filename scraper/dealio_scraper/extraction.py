@@ -35,7 +35,12 @@ async def _fetch_page(url: str, timeout_seconds: int):
 
 def _validate_url(url: str):
     parsed = urlsplit(url)
-    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+    if (
+        parsed.scheme != "https"
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+    ):
         raise ValueError("unsupported_url")
     try:
         literal_ip = ipaddress.ip_address(parsed.hostname)
@@ -48,34 +53,38 @@ def _validate_url(url: str):
 
 _STORE_SELECTORS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "jumia": (
-        ('[data-testid="price"]::text', '.-fs24::text'),
-        ('h1::text', 'meta[property="og:title"]::attr(content)'),
+        ('[data-testid="price"]::text', ".-fs24::text"),
+        ("h1::text", 'meta[property="og:title"]::attr(content)'),
     ),
     "noon": (
-        ('[data-qa="product-price"]::text', '[data-testid="product-price"]::text', '.priceNow::text'),
-        ('h1::text', 'meta[property="og:title"]::attr(content)'),
+        (
+            '[data-qa="product-price"]::text',
+            '[data-testid="product-price"]::text',
+            ".priceNow::text",
+        ),
+        ("h1::text", 'meta[property="og:title"]::attr(content)'),
     ),
     "amazon": (
         (
-            '#corePrice_feature_div .a-offscreen::text',
-            '#price_inside_buybox::text',
-            '#corePriceDisplay_desktop_feature_div .a-price .a-offscreen::text',
-            '#corePriceDisplay_mobile_feature_div .a-price .a-offscreen::text',
-            '#apex_desktop .a-price .a-offscreen::text',
-            '.a-price .a-offscreen::text',
+            "#corePrice_feature_div .a-offscreen::text",
+            "#price_inside_buybox::text",
+            "#corePriceDisplay_desktop_feature_div .a-price .a-offscreen::text",
+            "#corePriceDisplay_mobile_feature_div .a-price .a-offscreen::text",
+            "#apex_desktop .a-price .a-offscreen::text",
+            ".a-price .a-offscreen::text",
         ),
-        ('#productTitle::text', 'meta[property="og:title"]::attr(content)'),
+        ("#productTitle::text", 'meta[property="og:title"]::attr(content)'),
     ),
     "namshi": (
-        ('[data-testid="price"]::text', '.product-price::text'),
-        ('h1::text', 'meta[property="og:title"]::attr(content)'),
+        ('[data-testid="price"]::text', ".product-price::text"),
+        ("h1::text", 'meta[property="og:title"]::attr(content)'),
     ),
     "2b": (
-        ('.price-including-tax .price::text', '.price-with-relation .price::text'),
-        ('.page-title .base::text', 'h1::text'),
+        (".price-including-tax .price::text", ".price-with-relation .price::text"),
+        (".page-title .base::text", "h1::text"),
     ),
     "ubuy": (
-        ('.product-price::text', '[class*="product-price"]::text'),
+        (".product-price::text", '[class*="product-price"]::text'),
         ('h1[class*="product"]::text',),
     ),
 }
@@ -92,7 +101,17 @@ _STORE_HOSTS = {
 
 def _store_for_host(host: str | None) -> str | None:
     normalized = (host or "").casefold().removeprefix("www.")
-    return next((store for store, domains in _STORE_HOSTS.items() if any(normalized == domain or normalized.endswith(f".{domain}") for domain in domains)), None)
+    return next(
+        (
+            store
+            for store, domains in _STORE_HOSTS.items()
+            if any(
+                normalized == domain or normalized.endswith(f".{domain}")
+                for domain in domains
+            )
+        ),
+        None,
+    )
 
 
 def _first_selector_text(page, selectors: tuple[str, ...]) -> str | None:
@@ -101,7 +120,9 @@ def _first_selector_text(page, selectors: tuple[str, ...]) -> str | None:
             values = page.css(selector).getall()
         except (AttributeError, TypeError, ValueError):
             continue
-        value = next((item for item in values if isinstance(item, str) and item.strip()), None)
+        value = next(
+            (item for item in values if isinstance(item, str) and item.strip()), None
+        )
         if value:
             return value.strip()
     return None
@@ -122,24 +143,36 @@ def _join_selector_text(page, selectors: tuple[str, ...]) -> str | None:
 
 
 _STORE_AVAILABILITY_TEXT_SELECTORS: dict[str, tuple[str, ...]] = {
-    "amazon": ('#availability ::text', '#outOfStock ::text', '#buybox-error-message ::text'),
+    "amazon": (
+        "#availability ::text",
+        "#outOfStock ::text",
+        "#buybox-error-message ::text",
+    ),
 }
 
 
-def _extract_store_availability(page, store: str | None, price: str | None) -> str | None:
-    raw = _first_selector_text(page, (
-        'meta[property="product:availability"]::attr(content)',
-        'meta[property="og:availability"]::attr(content)',
-        '[itemprop="availability"]::attr(content)',
-        '[itemprop="availability"]::attr(href)',
-    ))
+def _extract_store_availability(
+    page, store: str | None, price: str | None
+) -> str | None:
+    raw = _first_selector_text(
+        page,
+        (
+            'meta[property="product:availability"]::attr(content)',
+            'meta[property="og:availability"]::attr(content)',
+            '[itemprop="availability"]::attr(content)',
+            '[itemprop="availability"]::attr(href)',
+        ),
+    )
     if raw:
         return _normalize_availability(raw)
     if price is not None:
         return None
-    return _normalize_availability(_join_selector_text(
-        page, _STORE_AVAILABILITY_TEXT_SELECTORS.get(store or "", ())
-    ))
+    return _normalize_availability(
+        _join_selector_text(
+            page, _STORE_AVAILABILITY_TEXT_SELECTORS.get(store or "", ())
+        )
+    )
+
 
 _AVAILABILITY_ALIASES = {
     "instock": "InStock",
@@ -156,7 +189,13 @@ _AVAILABILITY_ALIASES = {
     "discontinued": "OutOfStock",
 }
 
-_OUT_OF_STOCK_TEXT_MARKERS = ("out of stock", "currently unavailable", "sold out", "نفدت الكمية", "غير متوفر")
+_OUT_OF_STOCK_TEXT_MARKERS = (
+    "out of stock",
+    "currently unavailable",
+    "sold out",
+    "نفدت الكمية",
+    "غير متوفر",
+)
 _IN_STOCK_TEXT_MARKERS = ("in stock", "متوفر")
 
 
@@ -184,30 +223,54 @@ def _extract_store_page(page, url: str | None) -> Extraction:
         title_selectors: tuple[str, ...] = ()
     else:
         price_selectors, title_selectors = _STORE_SELECTORS[store]
-    raw_price = _first_selector_text(page, (
-        'meta[property="product:price:amount"]::attr(content)',
-        'meta[itemprop="price"]::attr(content)',
-        '[itemprop="price"]::attr(content)',
-        *price_selectors,
-    ))
-    title = _first_selector_text(page, (
-        'meta[property="og:title"]::attr(content)',
-        'meta[name="twitter:title"]::attr(content)',
-        *title_selectors,
-    ))
-    raw_currency = _first_selector_text(page, (
-        'meta[property="product:price:currency"]::attr(content)',
-        'meta[itemprop="priceCurrency"]::attr(content)',
-        '[itemprop="priceCurrency"]::attr(content)',
-    ))
+    raw_price = _first_selector_text(
+        page,
+        (
+            'meta[property="product:price:amount"]::attr(content)',
+            'meta[itemprop="price"]::attr(content)',
+            '[itemprop="price"]::attr(content)',
+            *price_selectors,
+        ),
+    )
+    title = _first_selector_text(
+        page,
+        (
+            'meta[property="og:title"]::attr(content)',
+            'meta[name="twitter:title"]::attr(content)',
+            *title_selectors,
+        ),
+    )
+    raw_currency = _first_selector_text(
+        page,
+        (
+            'meta[property="product:price:currency"]::attr(content)',
+            'meta[itemprop="priceCurrency"]::attr(content)',
+            '[itemprop="priceCurrency"]::attr(content)',
+        ),
+    )
     if not raw_currency:
-        currency_match = re.search(r"(?<![A-Z])(?:EGP|SAR|AED|BHD|JOD|KWD|OMR|QAR|TRY|USD|EUR|GBP)(?![A-Z])", raw_price or "", re.IGNORECASE)
+        currency_match = re.search(
+            r"(?<![A-Z])(?:EGP|SAR|AED|BHD|JOD|KWD|OMR|QAR|TRY|USD|EUR|GBP)(?![A-Z])",
+            raw_price or "",
+            re.IGNORECASE,
+        )
         raw_currency = currency_match.group(0) if currency_match else None
     # Remove localized currency text before parsing the amount.
-    price_text = re.sub(r"(?<![A-Z])(?:EGP|SAR|AED|BHD|JOD|KWD|OMR|QAR|TRY|USD|EUR|GBP)(?![A-Z])", "", raw_price or "", flags=re.IGNORECASE)
+    price_text = re.sub(
+        r"(?<![A-Z])(?:EGP|SAR|AED|BHD|JOD|KWD|OMR|QAR|TRY|USD|EUR|GBP)(?![A-Z])",
+        "",
+        raw_price or "",
+        flags=re.IGNORECASE,
+    )
     number = re.search(r"(?<![\w])\d[\d,.]*(?:[.,]\d{1,2})?", price_text)
     price = _valid_price(number.group(0)) if number else None
-    currency = raw_currency.strip().upper() if raw_currency and len(raw_currency.strip()) == 3 and raw_currency.strip().isalpha() else None
+    currency = (
+        raw_currency.strip().upper()
+        if raw_currency
+        and len(raw_currency.strip()) == 3
+        and raw_currency.strip().isalpha()
+        else None
+    )
     availability = _extract_store_availability(page, store, price)
     return Extraction(
         title,
@@ -215,7 +278,9 @@ def _extract_store_page(page, url: str | None) -> Extraction:
         currency,
         None,
         availability,
-        f"{store or 'generic'}-selectors" if any((title, price, currency, availability)) else None,
+        f"{store or 'generic'}-selectors"
+        if any((title, price, currency, availability))
+        else None,
     )
 
 
@@ -244,13 +309,15 @@ def _extract_page(page, url: str | None = None) -> Extraction:
         if extraction.availability is None and extraction.price is None
         else None
     )
-    used_store_fallback = any((
-        extraction.price is None and store_extraction.price is not None,
-        extraction.currency is None and store_extraction.currency is not None,
-        extraction.title is None and store_extraction.title is not None,
-        store_availability is not None,
-        extraction.image_url is None and store_extraction.image_url is not None,
-    ))
+    used_store_fallback = any(
+        (
+            extraction.price is None and store_extraction.price is not None,
+            extraction.currency is None and store_extraction.currency is not None,
+            extraction.title is None and store_extraction.title is not None,
+            store_availability is not None,
+            extraction.image_url is None and store_extraction.image_url is not None,
+        )
+    )
     extraction = replace(
         extraction,
         title=extraction.title or store_extraction.title,
@@ -260,7 +327,9 @@ def _extract_page(page, url: str | None = None) -> Extraction:
         image_url=extraction.image_url or store_extraction.image_url,
         extraction_method=(
             f"{extraction.extraction_method}+{store_extraction.extraction_method}"
-            if used_store_fallback and extraction.extraction_method and store_extraction.extraction_method
+            if used_store_fallback
+            and extraction.extraction_method
+            and store_extraction.extraction_method
             else extraction.extraction_method or store_extraction.extraction_method
         ),
     )
@@ -272,19 +341,22 @@ def _extract_page(page, url: str | None = None) -> Extraction:
 
 
 def _extract_page_image(page, page_url: str | None) -> str | None:
-    raw_image = _first_selector_text(page, (
-        'meta[property="og:image"]::attr(content)',
-        'meta[property="og:image:secure_url"]::attr(content)',
-        'meta[name="twitter:image"]::attr(content)',
-        'link[rel="image_src"]::attr(href)',
-        '[itemprop="image"]::attr(content)',
-        '[itemprop="image"]::attr(src)',
-        '#landingImage::attr(data-old-hires)',
-        '#landingImage::attr(data-a-dynamic-image)',
-        '#landingImage::attr(src)',
-        '#imgBlkFront::attr(src)',
-        'img[data-testid*="product"]::attr(src)',
-    ))
+    raw_image = _first_selector_text(
+        page,
+        (
+            'meta[property="og:image"]::attr(content)',
+            'meta[property="og:image:secure_url"]::attr(content)',
+            'meta[name="twitter:image"]::attr(content)',
+            'link[rel="image_src"]::attr(href)',
+            '[itemprop="image"]::attr(content)',
+            '[itemprop="image"]::attr(src)',
+            "#landingImage::attr(data-old-hires)",
+            "#landingImage::attr(data-a-dynamic-image)",
+            "#landingImage::attr(src)",
+            "#imgBlkFront::attr(src)",
+            'img[data-testid*="product"]::attr(src)',
+        ),
+    )
     if not raw_image:
         return None
     if raw_image.lstrip().startswith("{"):
@@ -294,7 +366,9 @@ def _extract_page_image(page, page_url: str | None) -> str | None:
     image_url = urljoin(page_url or "", raw_image)
     parsed = urlsplit(image_url)
     if parsed.scheme == "http" and parsed.hostname:
-        image_url = urlunsplit(("https", parsed.netloc, parsed.path, parsed.query, parsed.fragment))
+        image_url = urlunsplit(
+            ("https", parsed.netloc, parsed.path, parsed.query, parsed.fragment)
+        )
         parsed = urlsplit(image_url)
     if parsed.scheme != "https" or not parsed.hostname or _is_junk_image(image_url):
         return None
@@ -312,10 +386,16 @@ def _largest_dynamic_image(raw: str | None) -> str | None:
         return None
     best_url, best_area = None, -1
     for candidate_url, size in entries.items():
-        if not isinstance(candidate_url, str) or not candidate_url.startswith("https://"):
+        if not isinstance(candidate_url, str) or not candidate_url.startswith(
+            "https://"
+        ):
             continue
         area = 0
-        if isinstance(size, list) and len(size) == 2 and all(isinstance(n, (int, float)) for n in size):
+        if (
+            isinstance(size, list)
+            and len(size) == 2
+            and all(isinstance(n, (int, float)) for n in size)
+        ):
             area = size[0] * size[1]
         if area > best_area:
             best_url, best_area = candidate_url, area
@@ -337,7 +417,9 @@ def _best_product_image(value: Any) -> str | None:
     if isinstance(value, str) and value.strip():
         return value.strip()
     if isinstance(value, list):
-        candidates = [item.strip() for item in value if isinstance(item, str) and item.strip()]
+        candidates = [
+            item.strip() for item in value if isinstance(item, str) and item.strip()
+        ]
         if not candidates:
             return None
         return max(candidates, key=_amazon_image_score)
@@ -345,18 +427,66 @@ def _best_product_image(value: Any) -> str | None:
 
 
 _JUNK_IMAGE_MARKERS = (
-    "fls-", "uedata", "nav-sprite", "/gno/", "sprite", "opengraph/common",
-    "beacon", "clear.gif", "blank.gif", "transparent.gif", "1x1",
-    "data:image", "logo", "placeholder", "favicon", "sponsored-ads", "icons/",
-    "banner", "social", "share", "facebook", "instagram", "whatsapp",
-    "payment-icons", "rating-stars", "google-",
-    "payment", "paypal", "visa", "mastercard", "mada-card", "amex", "unionpay",
-    "tabby", "tamara", "valu-", "fawry", "instapay", "paymob", "weaccept",
-    "trustpilot", "star-rating", "wishlist", "app-store", "google-play",
-    "cookie", "newsletter", "breadcrumb", "checkout-icon",
+    "fls-",
+    "uedata",
+    "nav-sprite",
+    "/gno/",
+    "sprite",
+    "opengraph/common",
+    "beacon",
+    "clear.gif",
+    "blank.gif",
+    "transparent.gif",
+    "1x1",
+    "data:image",
+    "logo",
+    "placeholder",
+    "favicon",
+    "sponsored-ads",
+    "icons/",
+    "banner",
+    "social",
+    "share",
+    "facebook",
+    "instagram",
+    "whatsapp",
+    "payment-icons",
+    "rating-stars",
+    "google-",
+    "payment",
+    "paypal",
+    "visa",
+    "mastercard",
+    "mada-card",
+    "amex",
+    "unionpay",
+    "tabby",
+    "tamara",
+    "valu-",
+    "fawry",
+    "instapay",
+    "paymob",
+    "weaccept",
+    "trustpilot",
+    "star-rating",
+    "wishlist",
+    "app-store",
+    "google-play",
+    "cookie",
+    "newsletter",
+    "breadcrumb",
+    "checkout-icon",
     "/images/G/",
-    "sash", "avatars", "personalization", "aplus-media", "grey-pixel",
-    "transparent-pixel", "loading-4x", "iconfarm", ".svg", "homepage",
+    "sash",
+    "avatars",
+    "personalization",
+    "aplus-media",
+    "grey-pixel",
+    "transparent-pixel",
+    "loading-4x",
+    "iconfarm",
+    ".svg",
+    "homepage",
 )
 
 
@@ -365,7 +495,9 @@ def _is_junk_image(image_url: str) -> bool:
     return any(marker in lowered for marker in _JUNK_IMAGE_MARKERS)
 
 
-def _extract_product(product: dict[str, Any], offer: dict[str, Any], page_url: str | None = None) -> Extraction:
+def _extract_product(
+    product: dict[str, Any], offer: dict[str, Any], page_url: str | None = None
+) -> Extraction:
     raw_image = product.get("image")
     image_url = _best_product_image(raw_image)
     if image_url and page_url:
@@ -382,10 +514,16 @@ def _extract_product(product: dict[str, Any], offer: dict[str, Any], page_url: s
         else None
     )
 
-    availability = _normalize_availability(offer.get("availability") if isinstance(offer.get("availability"), str) else None)
+    availability = _normalize_availability(
+        offer.get("availability")
+        if isinstance(offer.get("availability"), str)
+        else None
+    )
 
     title = _first_text(product.get("name"))
-    method = "json-ld" if any((title, price, currency, image_url, availability)) else None
+    method = (
+        "json-ld" if any((title, price, currency, image_url, availability)) else None
+    )
     return Extraction(title, price, currency, image_url, availability, method)
 
 
@@ -406,7 +544,10 @@ def _products(value: Any):
     elif isinstance(value, dict):
         kind = value.get("@type")
         kinds = kind if isinstance(kind, list) else [kind]
-        if any(isinstance(k, str) and k.casefold() in ("product", "productgroup") for k in kinds):
+        if any(
+            isinstance(k, str) and k.casefold() in ("product", "productgroup")
+            for k in kinds
+        ):
             yield value
             variants = value.get("hasVariant")
             if isinstance(variants, (list, dict)):
@@ -431,7 +572,10 @@ def _first_text(value: Any) -> str | None:
     if isinstance(value, str) and value.strip():
         return value.strip()
     if isinstance(value, list):
-        return next((item.strip() for item in value if isinstance(item, str) and item.strip()), None)
+        return next(
+            (item.strip() for item in value if isinstance(item, str) and item.strip()),
+            None,
+        )
     if isinstance(value, dict):
         return _first_text(value.get("url")) or _first_text(value.get("contentUrl"))
     return None
@@ -467,7 +611,9 @@ async def extract_product(url: str, timeout_seconds: int = 25) -> Extraction:
         addresses = await asyncio.get_running_loop().getaddrinfo(
             parsed.hostname, parsed.port or 443, type=socket.SOCK_STREAM
         )
-        if not addresses or any(not ipaddress.ip_address(item[4][0]).is_global for item in addresses):
+        if not addresses or any(
+            not ipaddress.ip_address(item[4][0]).is_global for item in addresses
+        ):
             raise ValueError("non_public_host")
 
     page = await _fetch_page(url, timeout_seconds)
@@ -485,7 +631,9 @@ def as_payload(extraction: Extraction) -> dict[str, Any]:
     }
 
 
-def price_in_range(price: str | None, min_price: Any = None, max_price: Any = None) -> bool:
+def price_in_range(
+    price: str | None, min_price: Any = None, max_price: Any = None
+) -> bool:
     if min_price is None and max_price is None:
         return True
     if price is None:

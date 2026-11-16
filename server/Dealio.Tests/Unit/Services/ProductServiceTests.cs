@@ -165,7 +165,7 @@ public class ProductServiceTests
         savedProduct.Listings.Should().ContainSingle();
         savedProduct.Listings.First().ProductUrl.Should().Be(url);
         savedProduct.Listings.First().HasVerifiedPrice.Should().BeFalse();
-        // Snippet prices are not page observations; discovery-derived amount can be
+        // Snippet prices are not page observations,  discovery derived amount can be
         // an installment or savings figure, so history stays empty until the tracker
         // records its first real page scrape.
         savedProduct.Listings.First().PriceHistories.Should().BeEmpty();

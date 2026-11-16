@@ -30,7 +30,7 @@ public class InternalListingsController : ControllerBase
         [FromQuery] int size = 100)
     {
         IEnumerable<ScrapeListingResponse> result;
-        
+
         if (!string.IsNullOrWhiteSpace(query) || categoryId.HasValue || storeId.HasValue || minPrice.HasValue || maxPrice.HasValue || !string.IsNullOrEmpty(currencyCode))
         {
             result = await _listingService.GetActiveForScrapingFilteredAsync(query, categoryId, storeId, minPrice, maxPrice, currencyCode, page, size);
@@ -39,7 +39,7 @@ public class InternalListingsController : ControllerBase
         {
             result = await _listingService.GetActiveForScrapingAsync(page, size);
         }
-        
+
         return Ok(ApiResponse<IEnumerable<ScrapeListingResponse>>.Ok(result));
     }
 }

@@ -22,14 +22,19 @@ public sealed class ActiveOfferRefreshJobTests : TestBase
         var product = new Product { Name = "Suspension test product" };
         var store = new Store
         {
-            Name = "Suspended Store", BaseUrl = "https://suspended.example", Country = "EG",
-            CurrencyCode = currency.Code, ConsecutiveScrapeFailures = StoreScrapeHealthPolicy.FailureThreshold,
+            Name = "Suspended Store",
+            BaseUrl = "https://suspended.example",
+            Country = "EG",
+            CurrencyCode = currency.Code,
+            ConsecutiveScrapeFailures = StoreScrapeHealthPolicy.FailureThreshold,
             AutoSuspendedUntilUtc = DateTime.UtcNow.AddHours(1)
         };
         var listing = new StoreProductListing
         {
-            Product = product, Store = store,
-            ProductUrl = "https://suspended.example/item", LastScrapedAt = DateTime.UtcNow.AddHours(-8)
+            Product = product,
+            Store = store,
+            ProductUrl = "https://suspended.example/item",
+            LastScrapedAt = DateTime.UtcNow.AddHours(-8)
         };
         db.AddRange(currency, user, product, store, listing,
             new UserProductTracking { User = user, Product = product, Listing = listing, TargetPrice = 100, CurrencyCode = currency.Code });
@@ -66,18 +71,25 @@ public sealed class ActiveOfferRefreshJobTests : TestBase
         var storeThree = new Store { Name = "Store Three", BaseUrl = "https://three.example", Country = "EG", CurrencyCode = currency.Code };
         var activeListing = new StoreProductListing
         {
-            Product = product, Store = storeOne,
-            ProductUrl = "https://one.example/item", LastScrapedAt = DateTime.UtcNow.AddHours(-8)
+            Product = product,
+            Store = storeOne,
+            ProductUrl = "https://one.example/item",
+            LastScrapedAt = DateTime.UtcNow.AddHours(-8)
         };
         var excludedListing = new StoreProductListing
         {
-            Product = product, Store = storeTwo,
-            ProductUrl = "https://two.example/item", IsExcluded = true, LastScrapedAt = DateTime.UtcNow.AddHours(-8)
+            Product = product,
+            Store = storeTwo,
+            ProductUrl = "https://two.example/item",
+            IsExcluded = true,
+            LastScrapedAt = DateTime.UtcNow.AddHours(-8)
         };
         var pausedListing = new StoreProductListing
         {
-            Product = product, Store = storeThree,
-            ProductUrl = "https://three.example/item", LastScrapedAt = DateTime.UtcNow.AddHours(-8)
+            Product = product,
+            Store = storeThree,
+            ProductUrl = "https://three.example/item",
+            LastScrapedAt = DateTime.UtcNow.AddHours(-8)
         };
 
         db.AddRange(currency, activeUser, pausedUser, product,

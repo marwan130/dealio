@@ -261,8 +261,11 @@ public sealed class RabbitMqOutboxWorker(
                     {
                         db.PriceHistories.Add(new PriceHistory
                         {
-                            ListingId = listing.ListingId, Price = price, CurrencyCode = currency,
-                            RecordedAt = DateTime.UtcNow, ScrapedAt = envelope.OccurredAtUtc
+                            ListingId = listing.ListingId,
+                            Price = price,
+                            CurrencyCode = currency,
+                            RecordedAt = DateTime.UtcNow,
+                            ScrapedAt = envelope.OccurredAtUtc
                         });
                     }
                     if (decision == PriceObservationDecision.Accept) listing.HasVerifiedPrice = true;
@@ -283,7 +286,7 @@ public sealed class RabbitMqOutboxWorker(
         else throw new InvalidDataException("Scrape result has an unsupported outcome.");
 
         var completedAtUtc = DateTime.UtcNow;
-        var autoSuspended = StoreScrapeHealthPolicy.RecordResult(            listing.Store, succeeded: outcome == "completed", nowUtc: completedAtUtc);
+        var autoSuspended = StoreScrapeHealthPolicy.RecordResult(listing.Store, succeeded: outcome == "completed", nowUtc: completedAtUtc);
         if (autoSuspended)
             logger.LogWarning("Store {StoreId} was temporarily suspended after {FailureCount} consecutive scrape failures until {SuspendedUntilUtc}",
                 listing.StoreId, listing.Store.ConsecutiveScrapeFailures, listing.Store.AutoSuspendedUntilUtc);
@@ -415,7 +418,7 @@ public sealed class RabbitMqOutboxWorker(
                 && Dealio.Application.Scrapers.ScraperHelpers.IsWithinPriceRange(price, payload.MinPrice, payload.MaxPrice)
                 && Uri.TryCreate(payload.Url, UriKind.Absolute, out var uri)
                 // Scraped pages can embed a real product's data (JSON-LD) inside a
-                // category or marketing page; only URLs that are product pages
+                // category or marketing page,  only URLs that are product pages
                 // themselves may reach a verified result.
                 && Dealio.Application.Scrapers.ScraperHelpers.IsProductDetailUrl(payload.Url))
             {
@@ -479,7 +482,7 @@ public sealed class RabbitMqOutboxWorker(
                 && !imageUri.Host.EndsWith(".internal", StringComparison.OrdinalIgnoreCase)
                 && !Dealio.Application.Scrapers.ScraperHelpers.IsJunkImageUrl(imageUri.ToString())
                 ? imageUri.ToString() : string.Empty;
-            // An explicitly sold-out page is worth streaming even without a price or
+            // An explicitly sold out page is worth streaming even without a price or
             // image: the user still gets the product with its "out of stock" state,
             // and the tracker picks up the price on the next scrape if it returns.
             if ((hasPrice || imageUrl.Length > 0 || partialInStock is false)
@@ -579,8 +582,8 @@ public sealed class RabbitMqOutboxWorker(
 
     // Availability arrives as the schema.org JSON-LD tail (InStock, SoldOut,
     // OutOfStock, ...). Tri-state keeps "unknown" distinct from "in stock": a null
-    // stays "availability unknown" on the card, an explicit sold-out variant maps
-    // to false and still streams as an out-of-stock candidate without a price.
+    // stays "availability unknown" on the card, an explicit sold out variant maps
+    // to false and still streams as an out of stock candidate without a price.
     private static bool? MapAvailability(string? availability) => availability?.Trim() switch
     {
         "InStock" or "LimitedAvailability" or "PreOrder" => true,
@@ -627,13 +630,21 @@ public sealed class RabbitMqOutboxWorker(
 
         var listing = new StoreProductListing
         {
-            ListingId = Guid.NewGuid(), ProductId = productId, StoreId = store.StoreId,
-            ProductUrl = candidate.ProductUrl, IsActive = candidate.InStock != false, LastScrapedAt = now
+            ListingId = Guid.NewGuid(),
+            ProductId = productId,
+            StoreId = store.StoreId,
+            ProductUrl = candidate.ProductUrl,
+            IsActive = candidate.InStock != false,
+            LastScrapedAt = now
         };
         db.StoreProductListings.Add(listing);
         db.PriceHistories.Add(new PriceHistory
         {
-            ListingId = listing.ListingId, Price = candidate.Price, CurrencyCode = currency, RecordedAt = now, ScrapedAt = now
+            ListingId = listing.ListingId,
+            Price = candidate.Price,
+            CurrencyCode = currency,
+            RecordedAt = now,
+            ScrapedAt = now
         });
         return true;
     }

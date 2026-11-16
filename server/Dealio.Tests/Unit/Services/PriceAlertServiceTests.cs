@@ -149,9 +149,17 @@ public class PriceAlertServiceTests
             Listing = new StoreProductListing { ListingId = listingId, ProductId = product.ProductId, Product = product, Store = store, IsActive = true };
             Tracking = new UserProductTracking
             {
-                TrackingId = trackingId, UserId = userId, ProductId = product.ProductId,
-                ListingId = listingId, TargetPrice = target, CurrencyCode = targetCurrency,
-                NotifyEmail = true, NotifyFurtherDecreaseEmail = true, Product = product, Listing = Listing, IsActive = true
+                TrackingId = trackingId,
+                UserId = userId,
+                ProductId = product.ProductId,
+                ListingId = listingId,
+                TargetPrice = target,
+                CurrencyCode = targetCurrency,
+                NotifyEmail = true,
+                NotifyFurtherDecreaseEmail = true,
+                Product = product,
+                Listing = Listing,
+                IsActive = true
             };
 
             var trackings = new Mock<ITrackingRepository>();

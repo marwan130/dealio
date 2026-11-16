@@ -15,31 +15,31 @@ using Dealio.Domain.Markets;
 
 public class ProductSearchService : IProductSearchService
 {
-    private static readonly TimeSpan RedisCacheTtl  = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan RedisCacheTtl = TimeSpan.FromMinutes(5);
 
-    private readonly ILogger<ProductSearchService>  _logger;
-    private readonly ICategoryRepository            _categoryRepository;
-    private readonly IStoreRepository               _storeRepository;
-    private readonly IListingRepository             _listingRepository;
-    private readonly ICacheService?                 _cache;
-    private readonly ICurrencyConversionService?    _currencyConversion;
+    private readonly ILogger<ProductSearchService> _logger;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IStoreRepository _storeRepository;
+    private readonly IListingRepository _listingRepository;
+    private readonly ICacheService? _cache;
+    private readonly ICurrencyConversionService? _currencyConversion;
     private readonly IEnumerable<IProductDiscoveryProvider> _discoveryProviders;
 
     public ProductSearchService(
-        ILogger<ProductSearchService>  logger,
-        ICategoryRepository            categoryRepository,
-        IStoreRepository               storeRepository,
-        IListingRepository             listingRepository,
-        ICacheService?                 cache = null,
-        ICurrencyConversionService?    currencyConversion = null,
+        ILogger<ProductSearchService> logger,
+        ICategoryRepository categoryRepository,
+        IStoreRepository storeRepository,
+        IListingRepository listingRepository,
+        ICacheService? cache = null,
+        ICurrencyConversionService? currencyConversion = null,
         IEnumerable<IProductDiscoveryProvider>? discoveryProviders = null)
     {
-        _logger                 = logger;
-        _categoryRepository     = categoryRepository;
-        _storeRepository        = storeRepository;
-        _listingRepository      = listingRepository;
-        _cache                  = cache;
-        _currencyConversion     = currencyConversion;
+        _logger = logger;
+        _categoryRepository = categoryRepository;
+        _storeRepository = storeRepository;
+        _listingRepository = listingRepository;
+        _cache = cache;
+        _currencyConversion = currencyConversion;
         _discoveryProviders = discoveryProviders ?? [];
     }
 
@@ -221,17 +221,17 @@ public class ProductSearchService : IProductSearchService
     private static IEnumerable<ProductSearchResult> SortResults(IEnumerable<ProductSearchResult> results, string? sortBy)
         => sortBy switch
         {
-            "price_asc"  => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price),
+            "price_asc" => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price),
             "price_desc" => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenByDescending(r => r.Price),
-            "verified"   => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price),
-            "store"      => results.OrderBy(r => r.StoreName).ThenBy(r => r.Name),
-            "name"       => results.OrderBy(r => r.Name),
-            _            => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price)
+            "verified" => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price),
+            "store" => results.OrderBy(r => r.StoreName).ThenBy(r => r.Name),
+            "name" => results.OrderBy(r => r.Name),
+            _ => results.OrderBy(r => r.Currency, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Price <= 0 ? decimal.MaxValue : r.Price)
         };
 
     private static string BuildQueryCacheKey(string query, ProductFilterRequest filter)
     {
-        var raw  = $"q={query.ToLowerInvariant()}"
+        var raw = $"q={query.ToLowerInvariant()}"
                  + $"|store={filter.StoreId?.ToString() ?? string.Empty}"
                  + $"|brand={filter.Brand ?? string.Empty}"
                  + $"|min={filter.MinPrice?.ToString() ?? string.Empty}"
@@ -303,7 +303,7 @@ public class ProductSearchService : IProductSearchService
         var passing = new List<ProductSearchResult>();
         for (var i = 0; i < priced.Count; i++)
         {
-            // One converted value per input, in order; a missing one means the
+            // One converted value per input, in order,  a missing one means the
             // rate lookup failed, so the candidate stays rather than vanishing.
             var converted = items is { Count: var count } && count == priced.Count
                 ? items[i].ConvertedAmount

@@ -1,6 +1,6 @@
 # Client
 
-The client is a React 19 and TypeScript single-page application built with Vite. Its main entry is `src/App.tsx`; design tokens and responsive components are in `src/styles.css`.
+The client is a React 19 and TypeScript single-page application built with Vite. Its main entry is `src/App.tsx`; design tokens and responsive components live in the stylesheets in `public/` (`dealio-app-web.css`, `dealio-app-web-b.css`, `dealio-guest-panel.css`), loaded by `index.html`.
 
 ## Current screens and flows
 
@@ -22,11 +22,4 @@ The API URL is `VITE_API_URL`; leave it empty in local Compose so nginx proxies 
 npm --prefix client ci
 npm --prefix client run dev
 npm --prefix client run build
-npm --prefix client test
 ```
-
-The production bundle is built into `client/dist` and served by the Compose nginx frontend. SPA fallback supports direct navigation to application routes.
-
-## Known gaps
-
-Search results remain explicitly unverified until a scraper confirms them. English and Arabic translations cover the primary application copy, while some secondary and operational messages remain hardcoded; Arabic sets document direction, but full RTL layout parity has not been verified in a real browser. A static contrast check passed for the documented color pairs. A complete axe-core run, screen-reader review, keyboard journey review, and critical browser-driven journey suite remain outstanding.

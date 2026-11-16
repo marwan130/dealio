@@ -11,20 +11,20 @@ using Dealio.Domain.Exceptions;
 public class PriceHistoryService : IPriceHistoryService
 {
     private readonly IPriceHistoryRepository _priceHistoryRepository;
-    private readonly IListingRepository      _listingRepository;
+    private readonly IListingRepository _listingRepository;
 
     public PriceHistoryService(
         IPriceHistoryRepository priceHistoryRepository,
-        IListingRepository      listingRepository)
+        IListingRepository listingRepository)
     {
         _priceHistoryRepository = priceHistoryRepository;
-        _listingRepository      = listingRepository;
+        _listingRepository = listingRepository;
     }
 
     public async Task<PagedResult<PriceRecordResponse>> GetByListingIdAsync(
-        Guid                     listingId,
+        Guid listingId,
         PriceHistoryFilterRequest filter,
-        PaginationRequest         pagination)
+        PaginationRequest pagination)
     {
         pagination.Page = Math.Max(0, pagination.Page);
         pagination.Size = Math.Clamp(pagination.Size, 1, 200);
@@ -56,27 +56,27 @@ public class PriceHistoryService : IPriceHistoryService
         if (records.Count == 0)
             throw new NotFoundException("No price history found for this listing in the given period.");
 
-        var prices     = records.Select(r => r.Price).ToList();
+        var prices = records.Select(r => r.Price).ToList();
         var dataPoints = records.Select(r => new PriceDataPoint
         {
             RecordedAt = r.RecordedAt,
-            Price      = r.Price
+            Price = r.Price
         });
 
         return new PriceTrendResponse
         {
-            ListingId      = listingId,
-            ProductName    = listing.Product?.Name ?? string.Empty,
-            StoreName      = listing.Store?.Name   ?? string.Empty,
-            From           = filter.From ?? records.Min(r => r.RecordedAt),
-            To             = filter.To   ?? records.Max(r => r.RecordedAt),
-            LowestPrice    = prices.Min(),
-            HighestPrice   = prices.Max(),
-            AveragePrice   = Math.Round(prices.Average(), 2),
-            CurrentPrice   = prices.Last(),
+            ListingId = listingId,
+            ProductName = listing.Product?.Name ?? string.Empty,
+            StoreName = listing.Store?.Name ?? string.Empty,
+            From = filter.From ?? records.Min(r => r.RecordedAt),
+            To = filter.To ?? records.Max(r => r.RecordedAt),
+            LowestPrice = prices.Min(),
+            HighestPrice = prices.Max(),
+            AveragePrice = Math.Round(prices.Average(), 2),
+            CurrentPrice = prices.Last(),
             PriceDropCount = CountPriceDrops(prices),
-            Trend          = DetermineTrend(prices),
-            DataPoints     = dataPoints
+            Trend = DetermineTrend(prices),
+            DataPoints = dataPoints
         };
     }
 
@@ -91,9 +91,9 @@ public class PriceHistoryService : IPriceHistoryService
 
         return diff switch
         {
-            >  2 => PriceTrend.Rising,
+            > 2 => PriceTrend.Rising,
             < -2 => PriceTrend.Declining,
-            _    => PriceTrend.Stable
+            _ => PriceTrend.Stable
         };
     }
 
@@ -107,12 +107,12 @@ public class PriceHistoryService : IPriceHistoryService
 
     private static PriceRecordResponse MapToResponse(PriceHistory record) => new()
     {
-        Id           = record.Id,
-        ListingId    = record.ListingId,
-        Price        = record.Price,
+        Id = record.Id,
+        ListingId = record.ListingId,
+        Price = record.Price,
         CurrencyCode = record.CurrencyCode,
-        PriceInUsd   = record.PriceInUsd,
-        RecordedAt   = record.RecordedAt,
-        ScrapedAt    = record.ScrapedAt
+        PriceInUsd = record.PriceInUsd,
+        RecordedAt = record.RecordedAt,
+        ScrapedAt = record.ScrapedAt
     };
 }

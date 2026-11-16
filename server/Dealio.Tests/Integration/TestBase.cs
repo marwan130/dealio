@@ -119,7 +119,7 @@ public abstract class TestBase : IAsyncLifetime
         context.Users.RemoveRange(context.Users);
         context.UserProductTrackings.RemoveRange(context.UserProductTrackings);
         context.Notifications.RemoveRange(context.Notifications);
-        
+
         await context.SaveChangesAsync();
     }
 

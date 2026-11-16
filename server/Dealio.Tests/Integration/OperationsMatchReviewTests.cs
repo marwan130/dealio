@@ -20,7 +20,9 @@ public sealed class OperationsMatchReviewTests : TestBase
         const string email = "match-review-admin@example.com";
         await Client.PostAsJsonAsync("/v1/auth/register", new RegisterRequest
         {
-            Name = "Match Review Admin", Email = email, Password = "Test123!@#"
+            Name = "Match Review Admin",
+            Email = email,
+            Password = "Test123!@#"
         });
         await SetUserRoleAsync(email, UserRole.Admin);
         var response = await Client.PostAsJsonAsync("/v1/auth/login", new LoginRequest { Email = email, Password = "Test123!@#" });
@@ -83,11 +85,14 @@ public sealed class OperationsMatchReviewTests : TestBase
     {
         await Client.PostAsJsonAsync("/v1/auth/register", new RegisterRequest
         {
-            Name = "Regular User", Email = "match-review-user@example.com", Password = "Test123!@#"
+            Name = "Regular User",
+            Email = "match-review-user@example.com",
+            Password = "Test123!@#"
         });
         var response = await Client.PostAsJsonAsync("/v1/auth/login", new LoginRequest
         {
-            Email = "match-review-user@example.com", Password = "Test123!@#"
+            Email = "match-review-user@example.com",
+            Password = "Test123!@#"
         });
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
@@ -122,13 +127,22 @@ public sealed class OperationsMatchReviewTests : TestBase
         };
         var candidate = new ProductSearchResult
         {
-            Name = candidateName, Price = 14_999m, Currency = "EGP", StoreName = "shop.example.eg",
-            ProductUrl = url, MarketCode = "EG", Country = "EG", IsVerified = true, InStock = true
+            Name = candidateName,
+            Price = 14_999m,
+            Currency = "EGP",
+            StoreName = "shop.example.eg",
+            ProductUrl = url,
+            MarketCode = "EG",
+            Country = "EG",
+            IsVerified = true,
+            InStock = true
         };
         var review = new { sourceProductId = productId, candidate, reason = "title_or_variant_requires_operator_review" };
         var reviewEvent = new ProductSearchSessionEvent
         {
-            SessionId = sessionId, Sequence = 1, EventType = "matchReview",
+            SessionId = sessionId,
+            Sequence = 1,
+            EventType = "matchReview",
             Payload = JsonSerializer.Serialize(review, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
             OccurredAtUtc = DateTime.UtcNow
         };

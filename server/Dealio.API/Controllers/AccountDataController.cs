@@ -50,10 +50,17 @@ public sealed class AccountDataController(ApplicationDbContext db) : ControllerB
             .OrderBy(x => x.CreatedAt)
             .Select(x => new
             {
-                x.TrackingId, x.ProductId, ProductName = x.Product.Name,
-                x.ListingId, StoreName = x.Listing == null ? null : x.Listing.Store.Name,
+                x.TrackingId,
+                x.ProductId,
+                ProductName = x.Product.Name,
+                x.ListingId,
+                StoreName = x.Listing == null ? null : x.Listing.Store.Name,
                 StoreUrl = x.Listing == null ? null : x.Listing.ProductUrl,
-                x.TargetPrice, x.CurrencyCode, x.IsActive, x.NotifyEmail, x.NotifyFurtherDecreaseEmail,
+                x.TargetPrice,
+                x.CurrencyCode,
+                x.IsActive,
+                x.NotifyEmail,
+                x.NotifyFurtherDecreaseEmail,
                 x.CreatedAt
             }).ToListAsync(ct);
 

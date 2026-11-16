@@ -9,7 +9,7 @@ public class HangfireDashboardAuthorizationFilter : IDashboardAuthorizationFilte
     public bool Authorize(DashboardContext context)
     {
         var httpContext = context.GetHttpContext();
-        var config      = httpContext.RequestServices.GetRequiredService<IConfiguration>();
+        var config = httpContext.RequestServices.GetRequiredService<IConfiguration>();
         var expectedKey = config["Hangfire:DashboardApiKey"];
 
         if (string.IsNullOrWhiteSpace(expectedKey))

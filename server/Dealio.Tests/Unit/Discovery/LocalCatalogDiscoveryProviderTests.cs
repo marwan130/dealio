@@ -14,11 +14,15 @@ public sealed class LocalCatalogDiscoveryProviderTests
     {
         var offer = new StoreProductListing
         {
-            ListingId = Guid.NewGuid(), ProductId = Guid.NewGuid(), StoreId = Guid.NewGuid(),
-            ProductUrl = "https://www.amazon.eg/dp/B0ABC12345", IsActive = true,
+            ListingId = Guid.NewGuid(),
+            ProductId = Guid.NewGuid(),
+            StoreId = Guid.NewGuid(),
+            ProductUrl = "https://www.amazon.eg/dp/B0ABC12345",
+            IsActive = true,
             Product = new Product
             {
-                Name = "Samsung Galaxy A16 128GB", Description = "Phone",
+                Name = "Samsung Galaxy A16 128GB",
+                Description = "Phone",
                 Images = [new ProductImage { Url = "https://images.example/phone.jpg", IsPrimary = true }]
             },
             Store = new Store { Name = "Amazon Egypt", Country = "Egypt", CurrencyCode = "EGP", IsActive = true },
@@ -41,7 +45,9 @@ public sealed class LocalCatalogDiscoveryProviderTests
     {
         var offer = new StoreProductListing
         {
-            ListingId = Guid.NewGuid(), ProductUrl = "https://www.amazon.sa/dp/B0ABC12345", IsActive = true,
+            ListingId = Guid.NewGuid(),
+            ProductUrl = "https://www.amazon.sa/dp/B0ABC12345",
+            IsActive = true,
             Product = new Product { Name = "Samsung Galaxy A16" },
             Store = new Store { Name = "Amazon SA", Country = "Saudi Arabia", CurrencyCode = "SAR", IsActive = true },
             PriceHistories = [new PriceHistory { Price = 700, CurrencyCode = "SAR", RecordedAt = DateTime.UtcNow }]
@@ -61,7 +67,10 @@ public sealed class LocalCatalogDiscoveryProviderTests
     {
         var offer = new StoreProductListing
         {
-            ListingId = Guid.NewGuid(), ProductUrl = "https://www.amazon.eg/dp/B0ABC12345", IsActive = true, IsExcluded = true,
+            ListingId = Guid.NewGuid(),
+            ProductUrl = "https://www.amazon.eg/dp/B0ABC12345",
+            IsActive = true,
+            IsExcluded = true,
             Product = new Product { Name = "Samsung Galaxy A16" },
             Store = new Store { Name = "Amazon Egypt", Country = "Egypt", CurrencyCode = "EGP", IsActive = true },
             PriceHistories = [new PriceHistory { Price = 8_500, CurrencyCode = "EGP", RecordedAt = DateTime.UtcNow }]

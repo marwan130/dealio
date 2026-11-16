@@ -21,7 +21,7 @@ public sealed record ScrapeJobPayload(
     bool DeferVerification = false);
 /// <summary>
 /// The Python worker stamps envelope times with datetime.now(timezone.utc)
-/// .isoformat(), which ends in +00:00 rather than Z; System.Text.Json feeds
+/// .isoformat(), which ends in +00:00 rather than Z.  System.Text.Json feeds
 /// offsets through RoundtripKind, so they deserialize with Kind=Local and
 /// PostgreSQL timestamptz columns reject the write. Every envelope datetime
 /// therefore normalizes to UTC on the wire boundary itself.

@@ -34,8 +34,8 @@ public class CurrencyService : ICurrencyService
 
         var currency = new Currency
         {
-            Code   = request.Code.ToUpper(),
-            Name   = request.Name,
+            Code = request.Code.ToUpper(),
+            Name = request.Name,
             Symbol = request.Symbol
         };
 
@@ -53,8 +53,8 @@ public class CurrencyService : ICurrencyService
 
     private static CurrencyResponse MapToResponse(Currency currency) => new()
     {
-        Code   = currency.Code,
-        Name   = currency.Name,
+        Code = currency.Code,
+        Name = currency.Name,
         Symbol = currency.Symbol
     };
 }

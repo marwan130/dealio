@@ -98,7 +98,7 @@ public sealed class ProductImageResolver(
         Exception? failure = null;
         for (var attempt = 0; attempt < 2 && image is null; attempt++)
         {
-            if (attempt > 0) await Task.Delay(1500); 
+            if (attempt > 0) await Task.Delay(1500);
             try
             {
                 using var response = await SendFollowingRedirectsAsync(client, pageUrl);
@@ -126,7 +126,7 @@ public sealed class ProductImageResolver(
             logger?.LogDebug(failure, "Image resolve fetch failed for {Url}.", pageUrl);
         return image;
     }
-    
+
     private static async Task<HttpResponseMessage?> SendFollowingRedirectsAsync(HttpClient client, Uri pageUrl)
     {
         using var timeout = new CancellationTokenSource(FetchTimeout);

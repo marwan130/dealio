@@ -21,10 +21,10 @@ public class SmtpEmailSender : IEmailSender
 
     public async Task SendAsync(string to, string subject, string htmlBody)
     {
-        var from     = _config["Smtp:From"] ?? throw new InvalidOperationException("Smtp:From is not configured.");
+        var from = _config["Smtp:From"] ?? throw new InvalidOperationException("Smtp:From is not configured.");
         var fromName = _config["Smtp:FromName"] ?? ProductBrand.Name;
-        var host     = _config["Smtp:Host"] ?? throw new InvalidOperationException("Smtp:Host is not configured.");
-        var port     = _config["Smtp:Port"] ?? throw new InvalidOperationException("Smtp:Port is not configured.");
+        var host = _config["Smtp:Host"] ?? throw new InvalidOperationException("Smtp:Host is not configured.");
+        var port = _config["Smtp:Port"] ?? throw new InvalidOperationException("Smtp:Port is not configured.");
         var username = _config["Smtp:Username"] ?? throw new InvalidOperationException("Smtp:Username is not configured.");
         var password = _config["Smtp:Password"] ?? throw new InvalidOperationException("Smtp:Password is not configured.");
         var secureSocketOptions = GetSecureSocketOptions();
@@ -33,7 +33,7 @@ public class SmtpEmailSender : IEmailSender
         message.From.Add(new MailboxAddress(fromName, from));
         message.To.Add(MailboxAddress.Parse(to));
         message.Subject = subject;
-        message.Body    = new TextPart("html") { Text = htmlBody };
+        message.Body = new TextPart("html") { Text = htmlBody };
 
         using var client = new SmtpClient
         {

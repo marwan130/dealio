@@ -31,11 +31,17 @@ public sealed class LocalCatalogDiscoveryProvider(IListingRepository listings) :
                 return new ProductSearchResult
                 {
                     ProductId = listing.ProductId,
-                    Name = listing.Product.Name, Description = listing.Product.Description ?? string.Empty,
+                    Name = listing.Product.Name,
+                    Description = listing.Product.Description ?? string.Empty,
                     ImageUrl = listing.Product.Images.OrderByDescending(image => image.IsPrimary).FirstOrDefault()?.Url ?? string.Empty,
-                    Price = latest?.Price ?? 0, Currency = latest?.CurrencyCode ?? listing.Store.CurrencyCode ?? string.Empty,
-                    StoreName = listing.Store.Name, ProductUrl = listing.ProductUrl, MarketCode = marketInfo?.Code ?? string.Empty,
-                    Country = marketInfo?.Country ?? listing.Store.Country, DiscoveryProvider = Name, IsVerified = latest is not null
+                    Price = latest?.Price ?? 0,
+                    Currency = latest?.CurrencyCode ?? listing.Store.CurrencyCode ?? string.Empty,
+                    StoreName = listing.Store.Name,
+                    ProductUrl = listing.ProductUrl,
+                    MarketCode = marketInfo?.Code ?? string.Empty,
+                    Country = marketInfo?.Country ?? listing.Store.Country,
+                    DiscoveryProvider = Name,
+                    IsVerified = latest is not null
                 };
             })
             .Where(candidate => candidate.IsVerified && (string.IsNullOrWhiteSpace(market)

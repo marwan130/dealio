@@ -18,9 +18,9 @@ public class PriceHistoryController : ControllerBase
     [HttpGet("by-listing/{listingId:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetByListing(
-        Guid                          listingId,
+        Guid listingId,
         [FromQuery] PriceHistoryFilterRequest filter,
-        [FromQuery] PaginationRequest         pagination)
+        [FromQuery] PaginationRequest pagination)
     {
         var result = await _priceHistoryService.GetByListingIdAsync(listingId, filter, pagination);
         return Ok(ApiResponse<PagedResult<PriceRecordResponse>>.Ok(result));
@@ -37,7 +37,7 @@ public class PriceHistoryController : ControllerBase
     [HttpGet("trend/{listingId:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetTrend(
-        Guid                          listingId,
+        Guid listingId,
         [FromQuery] PriceHistoryFilterRequest filter)
     {
         var result = await _priceHistoryService.GetTrendAsync(listingId, filter);

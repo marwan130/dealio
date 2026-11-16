@@ -51,7 +51,9 @@ public sealed class UserServiceTests
         var userId = Guid.NewGuid();
         var user = new User
         {
-            UserId = userId, IsActive = false, IsTrackingPaused = true,
+            UserId = userId,
+            IsActive = false,
+            IsTrackingPaused = true,
             TrackingPausedBeforeDeletion = false,
             DeletionRequestedAtUtc = DateTime.UtcNow.AddHours(-1),
             DeletionScheduledAtUtc = DateTime.UtcNow.AddDays(29)

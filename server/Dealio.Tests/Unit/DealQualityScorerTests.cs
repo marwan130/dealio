@@ -25,8 +25,12 @@ public sealed class DealQualityScorerTests
         var listing = ListingWithObservations(6, 10);
         listing.PriceHistories.Add(new PriceHistory
         {
-            Id = 7, ListingId = listing.ListingId, Price = 70m, CurrencyCode = "EGP",
-            RecordedAt = DateTime.UtcNow, ScrapedAt = DateTime.UtcNow
+            Id = 7,
+            ListingId = listing.ListingId,
+            Price = 70m,
+            CurrencyCode = "EGP",
+            RecordedAt = DateTime.UtcNow,
+            ScrapedAt = DateTime.UtcNow
         });
 
         var assessment = DealQualityScorer.Assess(listing);
@@ -46,8 +50,12 @@ public sealed class DealQualityScorerTests
         var listing = ListingWithObservations(6, 10);
         listing.PriceHistories.Add(new PriceHistory
         {
-            Id = 99, ListingId = listing.ListingId, Price = 1m, CurrencyCode = "USD",
-            RecordedAt = DateTime.UtcNow.AddDays(-15), ScrapedAt = DateTime.UtcNow.AddDays(-15)
+            Id = 99,
+            ListingId = listing.ListingId,
+            Price = 1m,
+            CurrencyCode = "USD",
+            RecordedAt = DateTime.UtcNow.AddDays(-15),
+            ScrapedAt = DateTime.UtcNow.AddDays(-15)
         });
 
         var assessment = DealQualityScorer.Assess(listing);

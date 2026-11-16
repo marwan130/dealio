@@ -26,13 +26,13 @@ public class InternalScrapeLogsController : ControllerBase
 
         var scrapeLog = new ScrapeLog
         {
-            StoreId      = request.StoreId,
-            ListingId    = request.ListingId,
-            Status       = status,
+            StoreId = request.StoreId,
+            ListingId = request.ListingId,
+            Status = status,
             ErrorMessage = request.ErrorMessage,
             ItemsScraped = request.ItemsScraped,
-            StartedAt    = request.StartedAt,
-            FinishedAt   = request.FinishedAt
+            StartedAt = request.StartedAt,
+            FinishedAt = request.FinishedAt
         };
 
         var result = await _scrapeLogService.CreateAsync(scrapeLog);

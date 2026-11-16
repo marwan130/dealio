@@ -9,18 +9,18 @@ using Dealio.Domain.Exceptions;
 
 public class ListingService : IListingService
 {
-    private readonly IListingRepository        _listingRepository;
-    private readonly IProductRepository        _productRepository;
-    private readonly IStoreRepository          _storeRepository;
+    private readonly IListingRepository _listingRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IStoreRepository _storeRepository;
 
     public ListingService(
-        IListingRepository        listingRepository,
-        IProductRepository        productRepository,
-        IStoreRepository          storeRepository)
+        IListingRepository listingRepository,
+        IProductRepository productRepository,
+        IStoreRepository storeRepository)
     {
         _listingRepository = listingRepository;
         _productRepository = productRepository;
-        _storeRepository   = storeRepository;
+        _storeRepository = storeRepository;
     }
 
     public async Task<IEnumerable<ScrapeListingResponse>> GetActiveForScrapingAsync(int page = 0, int size = 100)
@@ -56,11 +56,11 @@ public class ListingService : IListingService
 
         var listing = new StoreProductListing
         {
-            ListingId  = Guid.NewGuid(),
-            ProductId  = request.ProductId,
-            StoreId    = request.StoreId,
+            ListingId = Guid.NewGuid(),
+            ProductId = request.ProductId,
+            StoreId = request.StoreId,
             ProductUrl = request.ProductUrl,
-            IsActive   = true
+            IsActive = true
         };
 
         await _listingRepository.AddAsync(listing);
@@ -73,7 +73,7 @@ public class ListingService : IListingService
             ?? throw new NotFoundException(nameof(StoreProductListing), listingId);
 
         listing.ProductUrl = request.ProductUrl;
-        listing.IsActive   = request.IsActive;
+        listing.IsActive = request.IsActive;
 
         await _listingRepository.UpdateAsync(listing);
         return MapToResponse(listing);
@@ -89,12 +89,12 @@ public class ListingService : IListingService
 
     private static ScrapeListingResponse MapToScrapeResponse(StoreProductListing listing) => new()
     {
-        ListingId    = listing.ListingId,
-        StoreId      = listing.StoreId,
-        StoreName    = listing.Store?.Name ?? string.Empty,
-        ProductUrl   = listing.ProductUrl,
+        ListingId = listing.ListingId,
+        StoreId = listing.StoreId,
+        StoreName = listing.Store?.Name ?? string.Empty,
+        ProductUrl = listing.ProductUrl,
         CurrencyCode = listing.Store?.CurrencyCode,
-        ScraperType  = listing.Store?.ScraperType.ToString() ?? "Html"
+        ScraperType = listing.Store?.ScraperType.ToString() ?? "Html"
     };
 
     private static ListingResponse MapToResponse(StoreProductListing listing)
@@ -102,21 +102,21 @@ public class ListingService : IListingService
         var latestPrice = listing.PriceHistories?.OrderByDescending(ph => ph.RecordedAt).FirstOrDefault();
         return new ListingResponse
         {
-            ListingId     = listing.ListingId,
-            ProductId     = listing.ProductId,
-            ProductName   = listing.Product?.Name  ?? string.Empty,
-            StoreId       = listing.StoreId,
-            StoreName     = listing.Store?.Name    ?? string.Empty,
+            ListingId = listing.ListingId,
+            ProductId = listing.ProductId,
+            ProductName = listing.Product?.Name ?? string.Empty,
+            StoreId = listing.StoreId,
+            StoreName = listing.Store?.Name ?? string.Empty,
             MarketCountry = listing.Store?.Country,
-            ProductUrl    = listing.ProductUrl,
-            IsActive      = listing.IsActive,
-            IsExcluded    = listing.IsExcluded,
+            ProductUrl = listing.ProductUrl,
+            IsActive = listing.IsActive,
+            IsExcluded = listing.IsExcluded,
             HasVerifiedPrice = listing.HasVerifiedPrice,
             LastScrapedAt = listing.LastScrapedAt,
-            CurrentPrice  = latestPrice?.Price,
-            CurrencyCode  = latestPrice?.CurrencyCode,
-            Currency      = latestPrice?.CurrencyCode,
-            DealQuality   = DealQualityScorer.Assess(listing)
+            CurrentPrice = latestPrice?.Price,
+            CurrencyCode = latestPrice?.CurrencyCode,
+            Currency = latestPrice?.CurrencyCode,
+            DealQuality = DealQualityScorer.Assess(listing)
         };
     }
 }

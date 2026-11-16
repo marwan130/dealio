@@ -216,7 +216,7 @@ public class ProductSearchController : ControllerBase
                 await Response.Body.FlushAsync(ct);
                 lastHeartbeat = DateTime.UtcNow;
             }
-            // Events flowing: poll promptly so streaming feels live; idle waits
+            // Events flowing: poll promptly so streaming feels live,  idle waits
             // stretch out to avoid hammering the events table while the session
             // is just waiting on providers or scrape verification.
             await Task.Delay(events.Count > 0 ? TimeSpan.FromMilliseconds(150) : TimeSpan.FromMilliseconds(500), ct);

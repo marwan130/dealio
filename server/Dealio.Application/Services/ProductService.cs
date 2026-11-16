@@ -11,31 +11,31 @@ using Dealio.Domain.Markets;
 
 public class ProductService : IProductService
 {
-    private readonly IProductRepository  _productRepository;
+    private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly ICurrencyRepository _currencyRepository;
-    private readonly IStoreRepository    _storeRepository;
-    private readonly IListingRepository   _listingRepository;
+    private readonly IStoreRepository _storeRepository;
+    private readonly IListingRepository _listingRepository;
 
     public ProductService(
-        IProductRepository  productRepository,
+        IProductRepository productRepository,
         ICategoryRepository categoryRepository,
         ICurrencyRepository currencyRepository,
-        IStoreRepository    storeRepository,
-        IListingRepository   listingRepository)
+        IStoreRepository storeRepository,
+        IListingRepository listingRepository)
     {
-        _productRepository  = productRepository;
+        _productRepository = productRepository;
         _categoryRepository = categoryRepository;
         _currencyRepository = currencyRepository;
-        _storeRepository    = storeRepository;
-        _listingRepository   = listingRepository;
+        _storeRepository = storeRepository;
+        _listingRepository = listingRepository;
     }
 
     public async Task<PagedResult<ProductSummaryResponse>> GetAllAsync(
         ProductFilterRequest filter,
-        PaginationRequest    pagination)
+        PaginationRequest pagination)
     {
-        var paged  = await _productRepository.GetAllAsync(filter, pagination);
+        var paged = await _productRepository.GetAllAsync(filter, pagination);
         var mapped = paged.Content.Select(MapToSummary);
         return PagedResult<ProductSummaryResponse>.From(mapped, paged.Page, paged.Size, paged.TotalElements);
     }
@@ -144,7 +144,7 @@ public class ProductService : IProductService
 
         // Price history stores only values extracted from the product page.
         // Unverified discovery results mine their price from search snippets, which
-        // is installment or savings text, not an observation; the tracker writes the
+        // is installment or savings text, not an observation,  the tracker writes the
         // first real page observation on the next scrape.
         if (searchResult.IsVerified)
             listing.PriceHistories.Add(new PriceHistory
@@ -259,12 +259,12 @@ public class ProductService : IProductService
 
         var product = new Product
         {
-            ProductId   = Guid.NewGuid(),
-            Name        = request.Name,
-            Brand       = request.Brand,
-            CategoryId  = request.CategoryId,
+            ProductId = Guid.NewGuid(),
+            Name = request.Name,
+            Brand = request.Brand,
+            CategoryId = request.CategoryId,
             Description = request.Description,
-            CreatedAt   = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         await _productRepository.AddAsync(product);
@@ -280,9 +280,9 @@ public class ProductService : IProductService
             _ = await _categoryRepository.GetByIdAsync(request.CategoryId.Value)
                 ?? throw new NotFoundException(nameof(Category), request.CategoryId.Value);
 
-        product.Name        = request.Name;
-        product.Brand       = request.Brand;
-        product.CategoryId  = request.CategoryId;
+        product.Name = request.Name;
+        product.Brand = request.Brand;
+        product.CategoryId = request.CategoryId;
         product.Description = request.Description;
 
         await _productRepository.UpdateAsync(product);
@@ -310,19 +310,19 @@ public class ProductService : IProductService
 
         return new ProductSummaryResponse
         {
-            ProductId           = product.ProductId,
-            Name                = product.Name,
-            Brand               = product.Brand,
-            Category            = product.Category?.Name,
-            PrimaryImage        = product.Images.FirstOrDefault(i => i.IsPrimary)?.Url
+            ProductId = product.ProductId,
+            Name = product.Name,
+            Brand = product.Brand,
+            Category = product.Category?.Name,
+            PrimaryImage = product.Images.FirstOrDefault(i => i.IsPrimary)?.Url
                                 ?? product.Images.FirstOrDefault()?.Url,
-            LowestPrice         = lowestPrice,
-            Currency            = currency,
-            CurrencyCode        = currency,
-            StoreCount          = activeListings.Count,
-            PreviousPrice       = previousPrice,
-            PreviousRecordedAt  = previousRecordedAt,
-            PriceChangePercent  = changePercent
+            LowestPrice = lowestPrice,
+            Currency = currency,
+            CurrencyCode = currency,
+            StoreCount = activeListings.Count,
+            PreviousPrice = previousPrice,
+            PreviousRecordedAt = previousRecordedAt,
+            PriceChangePercent = changePercent
         };
     }
 
@@ -332,17 +332,17 @@ public class ProductService : IProductService
         if (lowestPrice is null || currency is null)
             return (null, null, null);
 
-        // The house offer behind LowestPrice: the active, non-excluded
+        // The house offer behind LowestPrice: the active, non excluded
         // listing whose latest observation *is* that lowest price (most
         // observed one wins on ties). Previous = its immediately earlier
-        // observation, with a 24h–30d window so day-to-day re-scrapes of
+        // observation, with a 24h–30d window so day to day re-scrapes of
         // the same price don't mask the last real movement.
         var representative = activeListings
             .Where(l => !l.IsExcluded)
             .Select(l => new
             {
-                Listing      = l,
-                Latest       = l.PriceHistories.OrderByDescending(ph => ph.RecordedAt).FirstOrDefault(),
+                Listing = l,
+                Latest = l.PriceHistories.OrderByDescending(ph => ph.RecordedAt).FirstOrDefault(),
                 Observations = l.PriceHistories.Count
             })
             .Where(x => x.Latest != null
@@ -381,16 +381,16 @@ public class ProductService : IProductService
 
         return new ProductResponse
         {
-            ProductId    = product.ProductId,
-            Name         = product.Name,
-            Brand        = product.Brand,
-            Category     = product.Category?.Name,
-            Description  = product.Description,
+            ProductId = product.ProductId,
+            Name = product.Name,
+            Brand = product.Brand,
+            Category = product.Category?.Name,
+            Description = product.Description,
             PrimaryImage = product.Images.FirstOrDefault(i => i.IsPrimary)?.Url
                         ?? product.Images.FirstOrDefault()?.Url,
-            CreatedAt    = product.CreatedAt,
-            LowestPrice  = lowestPrice,
-            Currency     = currency,
+            CreatedAt = product.CreatedAt,
+            LowestPrice = lowestPrice,
+            Currency = currency,
             CurrencyCode = currency
         };
     }

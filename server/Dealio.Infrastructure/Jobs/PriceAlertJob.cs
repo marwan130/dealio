@@ -5,13 +5,13 @@ using Dealio.Application.Interfaces.Services;
 
 public class PriceAlertJob
 {
-    private readonly IPriceAlertService     _priceAlertService;
+    private readonly IPriceAlertService _priceAlertService;
     private readonly ILogger<PriceAlertJob> _logger;
 
     public PriceAlertJob(IPriceAlertService priceAlertService, ILogger<PriceAlertJob> logger)
     {
         _priceAlertService = priceAlertService;
-        _logger            = logger;
+        _logger = logger;
     }
 
     public async Task ExecuteAsync()

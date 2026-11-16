@@ -11,33 +11,33 @@ using Dealio.Domain.Enums;
 public class PriceAlertService : IPriceAlertService
 {
     private static readonly TimeSpan EmailCooldown = TimeSpan.FromHours(6);
-    private readonly ITrackingRepository     _trackingRepository;
+    private readonly ITrackingRepository _trackingRepository;
     private readonly IPriceHistoryRepository _priceHistoryRepository;
     private readonly INotificationRepository _notificationRepository;
-    private readonly IListingRepository      _listingRepository;
-    private readonly IUserRepository         _userRepository;
-    private readonly IEmailSender            _emailSender;
+    private readonly IListingRepository _listingRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IEmailSender _emailSender;
     private readonly ICurrencyConversionService _currencyConversionService;
     private readonly ILogger<PriceAlertService> _logger;
 
     public PriceAlertService(
-        ITrackingRepository     trackingRepository,
+        ITrackingRepository trackingRepository,
         IPriceHistoryRepository priceHistoryRepository,
         INotificationRepository notificationRepository,
-        IListingRepository      listingRepository,
-        IUserRepository         userRepository,
-        IEmailSender            emailSender,
+        IListingRepository listingRepository,
+        IUserRepository userRepository,
+        IEmailSender emailSender,
         ICurrencyConversionService currencyConversionService,
         ILogger<PriceAlertService> logger)
     {
-        _trackingRepository     = trackingRepository;
+        _trackingRepository = trackingRepository;
         _priceHistoryRepository = priceHistoryRepository;
         _notificationRepository = notificationRepository;
-        _listingRepository      = listingRepository;
-        _userRepository         = userRepository;
-        _emailSender            = emailSender;
+        _listingRepository = listingRepository;
+        _userRepository = userRepository;
+        _emailSender = emailSender;
         _currencyConversionService = currencyConversionService;
-        _logger                 = logger;
+        _logger = logger;
     }
 
     public async Task EvaluateAllActiveTrackingsAsync()
@@ -93,18 +93,18 @@ public class PriceAlertService : IPriceAlertService
 
             var notification = new Notification
             {
-                TrackingId     = tracking.TrackingId,
-                UserId         = tracking.UserId,
+                TrackingId = tracking.TrackingId,
+                UserId = tracking.UserId,
                 PriceHistoryId = latest.Id,
                 TriggeredPrice = latest.Price,
                 ConvertedTriggeredPrice = convertedPrice.Value,
                 ConversionRate = conversion.Items[0].ConversionRate,
                 RateUpdatedAtUtc = conversion.RateUpdatedAtUtc,
-                TargetPrice    = tracking.TargetPrice,
-                SentAt         = DateTime.UtcNow,
-                Channel        = NotificationChannel.Email,
-                EventType      = eventType,
-                Status         = NotificationStatus.Pending
+                TargetPrice = tracking.TargetPrice,
+                SentAt = DateTime.UtcNow,
+                Channel = NotificationChannel.Email,
+                EventType = eventType,
+                Status = NotificationStatus.Pending
             };
 
             await _notificationRepository.AddAsync(notification);
@@ -155,10 +155,10 @@ public class PriceAlertService : IPriceAlertService
 
     private async Task TrySendAlertEmailAsync(
         UserProductTracking tracking,
-        Notification        notification,
-        Guid                listingId,
-        string?             storeName,
-        string              triggeredCurrencyCode)
+        Notification notification,
+        Guid listingId,
+        string? storeName,
+        string triggeredCurrencyCode)
     {
         var user = await _userRepository.GetByIdAsync(tracking.UserId);
         if (user is null)
@@ -190,8 +190,8 @@ public class PriceAlertService : IPriceAlertService
         }
 
         var productName = tracking.Product?.Name ?? "your tracked product";
-        var subject     = $"Price alert: {productName} is now {notification.TriggeredPrice} {triggeredCurrencyCode}";
-        var body        = BuildAlertEmailBody(user.Name, productName, storeName, notification, triggeredCurrencyCode, tracking.CurrencyCode);
+        var subject = $"Price alert: {productName} is now {notification.TriggeredPrice} {triggeredCurrencyCode}";
+        var body = BuildAlertEmailBody(user.Name, productName, storeName, notification, triggeredCurrencyCode, tracking.CurrencyCode);
 
         try
         {
@@ -215,12 +215,12 @@ public class PriceAlertService : IPriceAlertService
     }
 
     private static string BuildAlertEmailBody(
-        string   userName,
-        string   productName,
-        string?  storeName,
+        string userName,
+        string productName,
+        string? storeName,
         Notification notification,
-        string   triggeredCurrencyCode,
-        string   targetCurrencyCode)
+        string triggeredCurrencyCode,
+        string targetCurrencyCode)
     {
         var safeUserName = System.Net.WebUtility.HtmlEncode(userName);
         var safeProductName = System.Net.WebUtility.HtmlEncode(productName);

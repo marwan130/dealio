@@ -17,7 +17,7 @@ public static class ProductPageImageMiner
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
     // JSON-LD "image" can be a bare string or the first entry of a string array
-    // meta patterns run before it so a well-placed og:image always wins.
+    // meta patterns run before it so a well placed og:image always wins.
     private static readonly Regex JsonLdImagePattern = new(
         @"""image""\s*:\s*(?:\[\s*)?""(?<url>https?:[^""]+)""",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -45,7 +45,7 @@ public static class ProductPageImageMiner
             || raw.StartsWith("blob:", StringComparison.OrdinalIgnoreCase)) return null;
 
         Uri candidate;
-        // Absolute or protocol-relative URLs resolve directly
+        // Absolute or protocol relative URLs resolve directly
         if (raw.StartsWith("//", StringComparison.Ordinal))
             candidate = new Uri("https:" + raw);
         else if (Uri.TryCreate(raw, UriKind.Absolute, out var absolute) && absolute is not null)

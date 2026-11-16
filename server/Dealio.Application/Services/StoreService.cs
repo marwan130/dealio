@@ -12,7 +12,7 @@ public class StoreService : IStoreService
     private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(10);
 
     private readonly IStoreRepository _storeRepository;
-    private readonly ICacheService?   _cache;
+    private readonly ICacheService? _cache;
 
     public StoreService(IStoreRepository storeRepository, ICacheService? cache = null)
     {
@@ -50,13 +50,13 @@ public class StoreService : IStoreService
     {
         var store = new Store
         {
-            StoreId      = Guid.NewGuid(),
-            Name         = request.Name,
-            BaseUrl      = request.BaseUrl,
-            Country      = request.Country,
+            StoreId = Guid.NewGuid(),
+            Name = request.Name,
+            BaseUrl = request.BaseUrl,
+            Country = request.Country,
             CurrencyCode = request.CurrencyCode,
-            IsActive     = true,
-            CreatedAt    = DateTime.UtcNow
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
         };
 
         await _storeRepository.AddAsync(store);
@@ -72,12 +72,12 @@ public class StoreService : IStoreService
         var store = await _storeRepository.GetByIdAsync(storeId)
             ?? throw new NotFoundException(nameof(Store), storeId);
 
-        store.Name         = request.Name;
-        store.BaseUrl      = request.BaseUrl;
-        store.Country      = request.Country;
+        store.Name = request.Name;
+        store.BaseUrl = request.BaseUrl;
+        store.Country = request.Country;
         store.CurrencyCode = request.CurrencyCode;
-        store.IsActive     = request.IsActive;
-        store.ScraperType  = request.ScraperType;
+        store.IsActive = request.IsActive;
+        store.ScraperType = request.ScraperType;
 
         await _storeRepository.UpdateAsync(store);
 
@@ -100,13 +100,13 @@ public class StoreService : IStoreService
 
     private static StoreResponse MapToResponse(Store store) => new()
     {
-        StoreId      = store.StoreId,
-        Name         = store.Name,
-        BaseUrl      = store.BaseUrl,
-        Country      = store.Country,
+        StoreId = store.StoreId,
+        Name = store.Name,
+        BaseUrl = store.BaseUrl,
+        Country = store.Country,
         CurrencyCode = store.CurrencyCode,
-        IsActive     = store.IsActive,
-        ScraperType  = store.ScraperType,
-        CreatedAt    = store.CreatedAt
+        IsActive = store.IsActive,
+        ScraperType = store.ScraperType,
+        CreatedAt = store.CreatedAt
     };
 }

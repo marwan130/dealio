@@ -6,7 +6,7 @@ The API is an ASP.NET Core 10 application using PostgreSQL and EF Core. Domain d
 
 - `Dealio.API`: HTTP endpoints, authentication, health checks, Hangfire recurring alert evaluation, RabbitMQ outbox publisher/result consumer.
 - `Dealio.Application`: product, tracking, notification, and authentication services, DTOs, validators, repository and queue interfaces.
-- `Dealio.Domain`: user, product, variant, store offer, price history, tracking, notification, and messaging entities.
+- `Dealio.Domain`: user, product, store offer, price history, tracking, notification, and messaging entities.
 - `Dealio.Infrastructure`: PostgreSQL repositories/migrations, JWT and refresh-token storage, SMTP email, and persistence configuration.
 - `Dealio.Tests`: unit tests plus PostgreSQL Testcontainers integration tests.
 
