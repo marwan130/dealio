@@ -7,22 +7,23 @@ public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-    public DbSet<User>                  Users                { get; set; }
-    public DbSet<Category>              Categories           { get; set; }
-    public DbSet<Currency>              Currencies           { get; set; }
-    public DbSet<Store>                 Stores               { get; set; }
-    public DbSet<Product>               Products             { get; set; }
-    public DbSet<ProductImage>          ProductImages        { get; set; }
-    public DbSet<StoreProductListing>   StoreProductListings { get; set; }
-    public DbSet<PriceHistory>          PriceHistories       { get; set; }
-    public DbSet<UserProductTracking>   UserProductTrackings { get; set; }
-    public DbSet<Notification>          Notifications        { get; set; }
-    public DbSet<ScrapeLog>             ScrapeLogs           { get; set; }
-    public DbSet<RefreshToken>          RefreshTokens        { get; set; }
-    public DbSet<OutboxMessage>          OutboxMessages        { get; set; }
-    public DbSet<InboxMessage>           InboxMessages         { get; set; }
-    public DbSet<ProductSearchSession>   ProductSearchSessions { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<StoreProductListing> StoreProductListings { get; set; }
+    public DbSet<PriceHistory> PriceHistories { get; set; }
+    public DbSet<UserProductTracking> UserProductTrackings { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ScrapeLog> ScrapeLogs { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public DbSet<InboxMessage> InboxMessages { get; set; }
+    public DbSet<ProductSearchSession> ProductSearchSessions { get; set; }
     public DbSet<ProductSearchSessionEvent> ProductSearchSessionEvents { get; set; }
+    public DbSet<ProductSpec> ProductSpecs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

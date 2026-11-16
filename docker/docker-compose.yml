@@ -154,6 +154,8 @@ services:
       ProductDiscovery__Tavily__ApiKey: ${TAVILY_API_KEY:-}
       ProductDiscovery__Tavily__MonthlyQuota: ${TAVILY_MONTHLY_QUOTA:-1000}
       ProductDiscovery__Tavily__MaxResults: ${TAVILY_MAX_RESULTS:-20}
+      AiSpecs__ApiKey: ${GEMINI_API_KEY:-}
+      AiSpecs__Model: ${GEMINI_MODEL:-gemini-2.0-flash}
       CurrencyRates__ApiKey: ${CURRENCY_API_KEY:-}
       CurrencyRates__RefreshMinutes: ${CURRENCY_RATE_REFRESH_MINUTES:-1440}
       RabbitMq__Enabled: "true"

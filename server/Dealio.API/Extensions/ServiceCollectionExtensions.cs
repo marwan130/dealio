@@ -30,19 +30,20 @@ using Dealio.Infrastructure.Caching;
 using Dealio.Infrastructure.Currencies;
 using Dealio.API.Infrastructure;
 using Dealio.Infrastructure.Search;
+using Dealio.Infrastructure.Research;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDatabase(
         this IServiceCollection services,
-        IConfiguration          config)
+        IConfiguration config)
     {
         var rawConnection = config.GetConnectionString("Default");
         var parsedConnection = ParseConnectionUri(rawConnection);
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(parsedConnection)
-                   .ConfigureWarnings(warnings => 
+                   .ConfigureWarnings(warnings =>
                        warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
         return services;
@@ -50,10 +51,10 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddRedis(
         this IServiceCollection services,
-        IConfiguration          config)
+        IConfiguration config)
     {
         var connectionString = config.GetConnectionString("Redis");
-        
+
         if (string.IsNullOrEmpty(connectionString))
         {
             return services;
@@ -63,8 +64,8 @@ public static class ServiceCollectionExtensions
         {
             var configuration = ConfigurationOptions.Parse(connectionString);
             configuration.AbortOnConnectFail = false;
-            configuration.ConnectRetry       = 3;
-            configuration.ConnectTimeout     = 3000;
+            configuration.ConnectRetry = 3;
+            configuration.ConnectTimeout = 3000;
             return ConnectionMultiplexer.Connect(configuration);
         });
 
@@ -75,21 +76,21 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddJwtAuthentication(
         this IServiceCollection services,
-        IConfiguration          config)
+        IConfiguration config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer           = true,
-                    ValidateAudience         = true,
-                    ValidateLifetime         = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew                = TimeSpan.Zero,
-                    ValidIssuer              = config["Jwt:Issuer"],
-                    ValidAudience            = config["Jwt:Audience"],
-                    IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Secret"]!))
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = config["Jwt:Issuer"],
+                    ValidAudience = config["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Secret"]!))
                 };
             });
 
@@ -108,19 +109,19 @@ public static class ServiceCollectionExtensions
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title       = $"{ProductBrand.Name} API",
-                Version     = "v1",
+                Title = $"{ProductBrand.Name} API",
+                Version = "v1",
                 Description = "REST API for tracking product prices across multiple stores"
             });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Name         = "Authorization",
-                Type         = SecuritySchemeType.Http,
-                Scheme       = "Bearer",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
                 BearerFormat = "JWT",
-                In           = ParameterLocation.Header,
-                Description  = "Enter your JWT token"
+                In = ParameterLocation.Header,
+                Description = "Enter your JWT token"
             });
 
             options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
@@ -134,7 +135,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddHangfireServices(
         this IServiceCollection services,
-        IConfiguration          config)
+        IConfiguration config)
     {
         var rawConnection = config.GetConnectionString("Default");
         var parsedConnection = ParseConnectionUri(rawConnection);
@@ -167,9 +168,9 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddCorsPolicy(
         this IServiceCollection services,
-        IConfiguration          config)
+        IConfiguration config)
     {
-        var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+        var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>()
                       ?? (string.IsNullOrWhiteSpace(config["Cors:AllowedOrigins"]) ? [] : [config["Cors:AllowedOrigins"]!]);
 
         services.AddCors(options =>
@@ -199,11 +200,11 @@ public static class ServiceCollectionExtensions
                     partitionKey: GetClientPartitionKey(context),
                     factory: _ => new TokenBucketRateLimiterOptions
                     {
-                        TokenLimit          = 600,
-                        TokensPerPeriod     = 600,
+                        TokenLimit = 600,
+                        TokensPerPeriod = 600,
                         ReplenishmentPeriod = TimeSpan.FromMinutes(1),
-                        QueueLimit          = 50,
-                        AutoReplenishment   = true
+                        QueueLimit = 50,
+                        AutoReplenishment = true
                     }));
 
             options.AddPolicy("auth", context =>
@@ -212,7 +213,7 @@ public static class ServiceCollectionExtensions
                     factory: _ => new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = 10,
-                        Window      = TimeSpan.FromMinutes(1)
+                        Window = TimeSpan.FromMinutes(1)
                     }));
 
             options.AddPolicy("search", context =>
@@ -220,10 +221,10 @@ public static class ServiceCollectionExtensions
                     partitionKey: GetClientPartitionKey(context),
                     factory: _ => new SlidingWindowRateLimiterOptions
                     {
-                        PermitLimit      = 90,
-                        Window           = TimeSpan.FromMinutes(1),
+                        PermitLimit = 90,
+                        Window = TimeSpan.FromMinutes(1),
                         SegmentsPerWindow = 6,
-                        QueueLimit       = 10
+                        QueueLimit = 10
                     }));
 
         });
@@ -239,21 +240,21 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<ApiRequestMetrics>();
-        services.AddScoped<IAuthService,           AuthService>();
+        services.AddScoped<IAuthService, AuthService>();
         var deletionGraceDays = configuration.GetValue<int?>("Accounts:DeletionGraceDays") ?? 30;
         services.AddScoped<IUserService>(provider => new UserService(
             provider.GetRequiredService<IUserRepository>(), deletionGraceDays));
-        services.AddScoped<ICategoryService,       CategoryService>();
-        services.AddScoped<ICurrencyService,       CurrencyService>();
-        services.AddScoped<IStoreService,          StoreService>();
-        services.AddScoped<IProductService,        ProductService>();
-        services.AddScoped<IListingService,        ListingService>();
-        services.AddScoped<IPriceHistoryService,   PriceHistoryService>();
-        services.AddScoped<ITrackingService,       TrackingService>();
-        services.AddScoped<INotificationService,   NotificationService>();
-        services.AddScoped<IScrapeLogService,      ScrapeLogService>();
-        services.AddScoped<IPriceAlertService,     PriceAlertService>();
-        services.AddScoped<IProductSearchService,  ProductSearchService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ICurrencyService, CurrencyService>();
+        services.AddScoped<IStoreService, StoreService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IListingService, ListingService>();
+        services.AddScoped<IPriceHistoryService, PriceHistoryService>();
+        services.AddScoped<ITrackingService, TrackingService>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IScrapeLogService, ScrapeLogService>();
+        services.AddScoped<IPriceAlertService, PriceAlertService>();
+        services.AddScoped<IProductSearchService, ProductSearchService>();
         services.AddHostedService<ProductSearchSessionWorker>();
         services.AddScoped<IProductCandidateVerificationQueue, OutboxProductCandidateVerificationQueue>();
         services.Configure<TavilyDiscoveryOptions>(configuration.GetSection("ProductDiscovery:Tavily"));
@@ -269,6 +270,15 @@ public static class ServiceCollectionExtensions
         });
         services.Configure<CurrencyRateOptions>(configuration.GetSection("CurrencyRates"));
         services.AddMemoryCache();
+
+        services.Configure<GeminiSpecOptions>(configuration.GetSection("AiSpecs"));
+        services.AddHttpClient("ai-specs", client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(45);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Dealio/1.0 (+spec research)");
+        });
+        services.AddScoped<IProductSpecService, GeminiProductSpecService>();
+
         services.AddSingleton<IProductDiscoveryProvider, TavilyProductDiscoveryProvider>();
         services.AddScoped<IProductDiscoveryProvider, LocalCatalogDiscoveryProvider>();
         services.AddScoped<ICurrencyConversionService, ExchangeRateConversionService>();
@@ -278,22 +288,22 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IUserRepository,           UserRepository>();
-        services.AddScoped<ICategoryRepository,       CategoryRepository>();
-        services.AddScoped<ICurrencyRepository,       CurrencyRepository>();
-        services.AddScoped<IStoreRepository,          StoreRepository>();
-        services.AddScoped<IProductRepository,        ProductRepository>();
-        services.AddScoped<IListingRepository,        ListingRepository>();
-        services.AddScoped<IPriceHistoryRepository,   PriceHistoryRepository>();
-        services.AddScoped<ITrackingRepository,       TrackingRepository>();
-        services.AddScoped<INotificationRepository,   NotificationRepository>();
-        services.AddScoped<IScrapeLogRepository,      ScrapeLogRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        services.AddScoped<IStoreRepository, StoreRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IListingRepository, ListingRepository>();
+        services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
+        services.AddScoped<ITrackingRepository, TrackingRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IScrapeLogRepository, ScrapeLogRepository>();
         services.AddScoped<IListingScrapeQueue, OutboxListingScrapeQueue>();
 
         services.AddScoped<ISecureTokenService, SecureTokenService>();
         services.AddScoped<IGoogleIdentityTokenValidator, GoogleIdentityTokenValidator>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
-        services.AddScoped<IPasswordHasher,  PasswordHasher>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
 
         // Product photos are resolved live from the tracked retailer link (see
@@ -429,7 +439,7 @@ public class DbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHeal
     }
 
     public async Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(
-        Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, 
+        Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context,
         System.Threading.CancellationToken cancellationToken = default)
     {
         try
