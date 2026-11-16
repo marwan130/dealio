@@ -1,12 +1,9 @@
-
-
 @keyframes dealCardIn {
   from {
     opacity: 0;
     transform: translateY(12px);
   }
 }
-
 
 .skeleton-tracking-card {
   min-height: 150px !important;
@@ -18,7 +15,6 @@
   flex-direction: column !important;
   gap: 10px !important;
 }
-
 
 .skeleton-table {
   border: 1px solid var(--line) !important;
@@ -39,7 +35,6 @@
   border-bottom: 0 !important;
 }
 
-
 .skeleton-metric-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
@@ -57,7 +52,6 @@
   gap: 10px !important;
 }
 
-
 .skeleton-notice-item {
   display: grid !important;
   grid-template-columns: 36px 1fr !important;
@@ -70,7 +64,6 @@
   height: 36px !important;
   border-radius: 10px !important;
 }
-
 
 .compare-skeleton-wrap {
   display: flex !important;
@@ -94,7 +87,6 @@
   gap: 12px !important;
 }
 
-
 .settings-skeleton-panel {
   padding: 24px 28px !important;
   border: 1px solid var(--line) !important;
@@ -106,16 +98,13 @@
   gap: 14px !important;
 }
 
-/* Whole skeleton pages breathe in once instead of snapping into place; the
+/* Whole skeleton pages breathe in once instead of snapping into place,  the
    same curve as the cards keeps loading states visually coherent. */
 .skeleton-page-wrap,
 .compare-skeleton-wrap,
 .tracking-cards {
   animation: dealCardIn 300ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
-
-
-
 
 .not-found-wrap {
   display: flex !important;
@@ -150,7 +139,7 @@
   display: inline-block !important;
   background: var(--brand) !important;
   color: #ffffff !important;
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: 54px !important;
   font-weight: 800 !important;
   line-height: 1 !important;
@@ -251,9 +240,6 @@
   min-width: 160px !important;
 }
 
-
-
-
 .page-wrap {
   flex: 1 1 auto !important;
   width: 100% !important;
@@ -295,7 +281,6 @@
   box-sizing: border-box !important;
 }
 
-
 .skeleton-page-wrap,
 .compare-skeleton-wrap {
   flex: 1 !important;
@@ -318,25 +303,10 @@
   box-sizing: border-box !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 .sidebar,
 .sidebar--collapsed {
   z-index: 200 !important;
 }
-
-
-
 
 .scrim {
   position: fixed !important;
@@ -351,7 +321,7 @@
 }
 
 :root[data-theme="light"] .scrim {
-  background: rgba(0, 0, 0, 0.40) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 
 :root[data-theme="dark"] .scrim {
@@ -366,13 +336,9 @@
   z-index: 10000 !important;
 }
 
-
-
 html {
   scrollbar-gutter: stable !important;
 }
-
-
 
 html.has-modal ::-webkit-scrollbar-thumb,
 html.has-modal *::-webkit-scrollbar-thumb {
@@ -391,20 +357,13 @@ html.has-modal .scrim * {
   pointer-events: auto;
 }
 
-
-
-
 .topbar {
   transition:
     border-radius 0.18s ease-out,
-    box-shadow    0.18s ease-out,
-    border-color  0.18s ease-out,
-    background    0.18s ease-out !important;
+    box-shadow 0.18s ease-out,
+    border-color 0.18s ease-out,
+    background 0.18s ease-out !important;
 }
-
-
-
-
 
 .topbar.topbar--active,
 :root[data-theme="light"] .topbar.topbar--active,
@@ -417,22 +376,22 @@ html.has-modal .scrim * {
   border-radius: 0 !important;
   border: none !important;
   /* The dim must hit the border too: the gradient above darkens the strip's
-     background by 40%, and an un-dimmed border would flip from the darker
+     background by 40%, and an un dimmed border would flip from the darker
      line to the lightest line on the bar the moment the search opens. */
   border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, black) !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1) !important;
   padding: 0 32px !important;
   z-index: 300 !important;
-  background: linear-gradient(rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40)), var(--surface-container) !important;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    var(--surface-container) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-
 .sidebar--collapsed ~ .main-area .topbar.topbar--active {
   left: 68px !important;
 }
-
 
 @media (max-width: 760px) {
   .topbar.topbar--active {
@@ -440,15 +399,13 @@ html.has-modal .scrim * {
   }
 }
 
-
 .topbar.topbar--active .breadcrumbs,
 .topbar.topbar--active .mobile-nav-toggle {
-  opacity: 0.50 !important;
+  opacity: 0.5 !important;
   filter: none !important;
   pointer-events: auto !important;
   transition: opacity 0.18s ease !important;
 }
-
 
 .topbar.topbar--active .topbar-search-area {
   position: relative !important;
@@ -463,16 +420,13 @@ html.has-modal .scrim * {
   z-index: 310 !important;
 }
 
-
-
-
 .topbar-dim-backdrop {
   position: fixed !important;
   inset: 0 !important;
-  /* Same veil the rest of the page uses (the .scrim dialog overlay); the
+  /* Same veil the rest of the page uses (the .scrim dialog overlay),  the
      light theme previously dropped to 0.25 here and read as a different,
      greener dim over the navigation. */
-  background: rgba(0, 0, 0, 0.40) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   z-index: 250 !important;
@@ -481,12 +435,16 @@ html.has-modal .scrim * {
 }
 
 @keyframes topbarBackdropFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 :root[data-theme="light"] .topbar-dim-backdrop {
-  background: rgba(0, 0, 0, 0.40) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 
 :root[data-theme="dark"] .topbar-dim-backdrop {
@@ -494,7 +452,9 @@ html.has-modal .scrim * {
 }
 
 :root[data-theme="dark"] .topbar.topbar--active {
-  background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), var(--surface-container) !important;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+    var(--surface-container) !important;
   /* Same rule as light mode: dim the divider with the strip (65% black) so
      its contrast against the bar never flips when the search opens. */
   border-bottom-color: color-mix(in srgb, var(--line) 35%, black) !important;
@@ -516,9 +476,6 @@ html.has-modal .scrim * {
   outline-offset: 0 !important;
   box-shadow: none !important;
 }
-
-
-
 
 .sidebar,
 .sidebar--collapsed {
@@ -595,9 +552,6 @@ html.has-modal .scrim * {
   overflow: hidden !important;
 }
 
-
-
-
 .empty-state {
   background: var(--surface-container) !important;
   border: 1px dashed var(--line) !important;
@@ -625,7 +579,7 @@ html.has-modal .scrim * {
 
 .empty-state h3 {
   color: var(--text) !important;
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: 20px !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em !important;
@@ -637,7 +591,7 @@ html.has-modal .scrim * {
 
 .empty-state p {
   color: var(--text-muted) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 14px !important;
   line-height: 1.5 !important;
   margin: 8px auto 0 !important;
@@ -653,8 +607,6 @@ html.has-modal .scrim * {
   text-align: center !important;
 }
 
-
-
 .guest-panel {
   border: 1px solid var(--line) !important;
   border-radius: 14px !important;
@@ -662,11 +614,15 @@ html.has-modal .scrim * {
   color: var(--text) !important;
 }
 
-.guest-panel h2 { color: var(--text) !important; }
-.guest-panel p  { color: var(--text-muted) !important; }
-.guest-panel .eyebrow { color: var(--brand) !important; }
-
-
+.guest-panel h2 {
+  color: var(--text) !important;
+}
+.guest-panel p {
+  color: var(--text-muted) !important;
+}
+.guest-panel .eyebrow {
+  color: var(--brand) !important;
+}
 
 #appearance .settings-controls,
 .settings-panel .settings-controls {
@@ -689,12 +645,6 @@ html.has-modal .scrim * {
   width: 100% !important;
 }
 
-
-
-
-
-
-
 body,
 button,
 input,
@@ -707,14 +657,15 @@ span,
 .field-label,
 .dialog-help,
 .account-email-info {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
 }
 
-
-h1, .page-heading h1, .product-hero h1 {
-  font-family: 'Anton', Impact, sans-serif !important;
+h1,
+.page-heading h1,
+.product-hero h1 {
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: clamp(32px, 4vw, 44px) !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em !important;
@@ -723,8 +674,14 @@ h1, .page-heading h1, .product-hero h1 {
   color: var(--text) !important;
 }
 
-h2, .section-heading h2, .dialog-head h2, .guest-panel h2, .content-section h2, .settings-panel h2, .overview-empty h2 {
-  font-family: 'Anton', Impact, sans-serif !important;
+h2,
+.section-heading h2,
+.dialog-head h2,
+.guest-panel h2,
+.content-section h2,
+.settings-panel h2,
+.overview-empty h2 {
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: clamp(22px, 2.8vw, 28px) !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em !important;
@@ -733,8 +690,11 @@ h2, .section-heading h2, .dialog-head h2, .guest-panel h2, .content-section h2, 
   color: var(--text) !important;
 }
 
-h3, .card-title, .empty-state h3, .preview-product h3 {
-  font-family: 'Anton', Impact, sans-serif !important;
+h3,
+.card-title,
+.empty-state h3,
+.preview-product h3 {
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: 18px !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
@@ -744,14 +704,13 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 }
 
 .eyebrow {
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-size: 13px !important;
   font-weight: 800 !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
   color: var(--brand) !important;
 }
-
 
 .metric-value,
 .deal-badge,
@@ -763,18 +722,16 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .recent-deal-prices strong,
 .delta-down,
 .big-stat-number {
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.01em !important;
   font-variant-numeric: tabular-nums !important;
 }
 
-
 .brand {
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
 }
-
 
 .button,
 .button--primary,
@@ -785,7 +742,9 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
   box-shadow: none !important;
-  transition: transform 0.12s ease, opacity 0.12s ease !important;
+  transition:
+    transform 0.12s ease,
+    opacity 0.12s ease !important;
 }
 
 .button:active {
@@ -799,7 +758,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   font-size: 13px !important;
 }
 
-
 .dialog,
 .auth-dialog,
 .preview-modal {
@@ -807,7 +765,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border: 2px solid var(--text) !important;
   box-shadow: none !important;
 }
-
 
 .deal-card,
 .product-card,
@@ -826,7 +783,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   overflow: hidden !important;
 }
 
-
 *:focus {
   outline: none !important;
 }
@@ -836,7 +792,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   outline-offset: 2px !important;
 }
 
-
 .topbar-search-input-wrap input:focus,
 .topbar-search-input-wrap input:focus-visible,
 .add-form input:focus,
@@ -844,7 +799,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   outline: none !important;
   box-shadow: none !important;
 }
-
 
 :root[data-theme="dark"] {
   --line-strong: #5a5247 !important;
@@ -862,34 +816,39 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-bottom: 1.5px solid var(--line) !important;
 }
 
-
-
-
 .data-note {
-  border-inline-start: 3px solid #4D91D8 !important;
+  border-inline-start: 3px solid #4d91d8 !important;
   background: #eee7dc !important;
   color: #202020 !important;
   border-radius: 0 !important;
 }
 
 :root[data-theme="dark"] .data-note {
-  border-inline-start: 3px solid #4D91D8 !important;
+  border-inline-start: 3px solid #4d91d8 !important;
   background: rgba(77, 145, 216, 0.12) !important;
   color: var(--text) !important;
 }
 
 .note-mark {
-  background: #4D91D8 !important;
+  background: #4d91d8 !important;
   color: #102335 !important;
   border-radius: 3px !important;
 }
 
 .notice-item--unread {
-  background: color-mix(in srgb, var(--amber) 10%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--amber) 10%,
+    var(--surface-container)
+  ) !important;
 }
 
 :root[data-theme="dark"] .notice-item--unread {
-  background: color-mix(in srgb, var(--amber) 16%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--amber) 16%,
+    var(--surface-container)
+  ) !important;
 }
 
 .notice-icon {
@@ -906,15 +865,17 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: var(--surface-muted) !important;
 }
 
-
 .recent-deal--featured {
-  background: color-mix(in srgb, var(--amber) 10%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--amber) 10%,
+    var(--surface-container)
+  ) !important;
 }
 
 .recent-deal-photo {
   background: var(--surface-muted) !important;
 }
-
 
 .skip-link {
   background: var(--brand) !important;
@@ -923,22 +884,12 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-radius: 4px !important;
 }
 
-
-
-
-
-
-
-
-
-
 *,
 *::before,
 *::after {
   box-shadow: none !important;
   text-shadow: none !important;
 }
-
 
 .deal-card,
 .product-card,
@@ -974,7 +925,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-radius: 5px !important;
 }
 
-
 .deals-cat-pill,
 .cat-pill,
 .category-pill,
@@ -989,7 +939,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .button--small {
   border-radius: 4px !important;
 }
-
 
 .deal-card,
 .settings-panel,
@@ -1008,12 +957,10 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border: 2px solid var(--text) !important;
 }
 
-
 .table-wrap th,
 .compare-table th {
   border-bottom: 2px solid var(--text) !important;
 }
-
 
 .field input,
 .field select,
@@ -1022,7 +969,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .topbar-search-input-wrap {
   border: 1.5px solid var(--text) !important;
 }
-
 
 *:focus {
   outline: none !important;
@@ -1033,7 +979,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   outline-offset: 1px !important;
 }
 
-
 .sidebar .nav-item,
 .sidebar--collapsed .nav-item,
 .nav-item {
@@ -1041,7 +986,9 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border: none !important;
   position: relative !important;
   overflow: visible !important;
-  transition: background-color 0.15s ease, color 0.15s ease !important;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease !important;
 }
 
 .sidebar .nav-item:hover,
@@ -1055,7 +1002,11 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .sidebar .nav-item.is-active,
 .sidebar--collapsed .nav-item.is-active,
 .nav-item.is-active {
-  background: color-mix(in srgb, var(--brand) 16%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--brand) 16%,
+    var(--surface-container)
+  ) !important;
   color: var(--text) !important;
   font-weight: 700 !important;
   border: none !important;
@@ -1065,7 +1016,11 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 :root[data-theme="dark"] .sidebar .nav-item.is-active,
 :root[data-theme="dark"] .sidebar--collapsed .nav-item.is-active,
 :root[data-theme="dark"] .nav-item.is-active {
-  background: color-mix(in srgb, var(--brand) 22%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--brand) 22%,
+    var(--surface-container)
+  ) !important;
   color: var(--text) !important;
 }
 
@@ -1077,7 +1032,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   color: var(--text) !important;
   stroke: var(--text) !important;
 }
-
 
 .sidebar .nav-item.is-active::after,
 .nav-item.is-active::after {
@@ -1105,38 +1059,49 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   font-weight: 700 !important;
 }
 
-
-h1, .page-heading h1, .product-hero h1, .deals-page-heading h1, .not-found-title {
-  font-family: 'Anton', Impact, sans-serif !important;
+h1,
+.page-heading h1,
+.product-hero h1,
+.deals-page-heading h1,
+.not-found-title {
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em !important;
   text-transform: uppercase !important;
   line-height: 1.1 !important;
 }
 
-h2, .section-heading h2, .dialog-head h2, .guest-panel h2, .content-section h2, .settings-panel h2, .overview-empty h2 {
-  font-family: 'Anton', Impact, sans-serif !important;
+h2,
+.section-heading h2,
+.dialog-head h2,
+.guest-panel h2,
+.content-section h2,
+.settings-panel h2,
+.overview-empty h2 {
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em !important;
   text-transform: uppercase !important;
   line-height: 1.15 !important;
 }
 
-h3, .card-title, .empty-state h3, .preview-product h3 {
-  font-family: 'Anton', Impact, sans-serif !important;
+h3,
+.card-title,
+.empty-state h3,
+.preview-product h3 {
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
   text-transform: uppercase !important;
 }
 
 .eyebrow {
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
   color: var(--brand) !important;
 }
-
 
 .metric-value,
 .deal-badge,
@@ -1152,12 +1117,11 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .delta-down,
 .big-stat-number,
 .not-found-badge {
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.01em !important;
   font-variant-numeric: tabular-nums !important;
 }
-
 
 .deals-cat-pill,
 .cat-pill,
@@ -1168,11 +1132,13 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border: 1.5px solid var(--text) !important;
   background: var(--surface-container) !important;
   color: var(--text) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-weight: 600 !important;
   padding: 8px 14px !important;
   box-shadow: none !important;
-  transition: background-color 0.12s ease, border-color 0.12s ease !important;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease !important;
 }
 
 .deals-cat-pill:hover,
@@ -1183,7 +1149,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-color: var(--text) !important;
   transform: none !important;
 }
-
 
 .deal-card {
   border: 2px solid var(--text) !important;
@@ -1227,13 +1192,12 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-radius: 4px !important;
   background: var(--brand) !important;
   color: #202020 !important;
-  font-family: 'Anton', Impact, sans-serif !important;
+  font-family: "Anton", Impact, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: 0.04em !important;
   font-size: 12px !important;
   border: 1px solid var(--text) !important;
 }
-
 
 .button--primary {
   background: var(--brand) !important;
@@ -1267,7 +1231,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: var(--surface-muted) !important;
 }
 
-
 .status {
   display: inline-flex !important;
   align-items: center !important;
@@ -1275,7 +1238,7 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   padding: 3px 8px !important;
   border: 1px solid currentColor !important;
   border-radius: 4px !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
   letter-spacing: 0.03em !important;
@@ -1300,11 +1263,10 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: currentColor !important;
 }
 
-
 .sidebar-bottom {
   position: relative !important;
   border-top: 0 !important;
-  /* The full-bleed strip must exactly counter the sidebar's own inline
+  /* The full bleed strip must exactly counter the sidebar's own inline
   padding (12px at any rail width >1050px). -14px was written for a
   14px sidebar padding that the rework later changed to 12px, so the
   strip used to stick 2px past the sidebar's border on both edges. */
@@ -1322,7 +1284,8 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   position: absolute;
   inset-block-start: 0;
   inset-inline: 0;
-  border-top: 1px solid color-mix(in srgb, var(--brand) 28%, var(--surface-container));
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand) 28%, var(--surface-container));
   pointer-events: none;
 }
 
@@ -1356,11 +1319,14 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   inset-inline-end: -7px !important;
 }
 
-
 :root[data-theme="dark"] .sidebar .nav-item.is-active,
 :root[data-theme="dark"] .sidebar--collapsed .nav-item.is-active,
 :root[data-theme="dark"] .nav-item.is-active {
-  background: color-mix(in srgb, var(--brand) 22%, var(--surface-container)) !important;
+  background: color-mix(
+    in srgb,
+    var(--brand) 22%,
+    var(--surface-container)
+  ) !important;
   color: var(--text) !important;
 }
 
@@ -1370,7 +1336,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   color: var(--text) !important;
   stroke: var(--text) !important;
 }
-
 
 .page-wrap[data-page="products"] .page-heading,
 .page-wrap[data-page="compare"] .page-heading,
@@ -1424,7 +1389,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   gap: 8px 16px !important;
 }
 
-
 .guest-panel .eyebrow {
   display: inline-block !important;
   padding: 4px 8px !important;
@@ -1441,7 +1405,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 .guest-panel p {
   color: #17243a !important;
 }
-
 
 :root[data-theme="dark"] select,
 :root[data-theme="dark"] .market-control select,
@@ -1556,7 +1519,11 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   margin: 14px 0 4px;
   overflow: hidden;
   border-bottom: 1px solid var(--line);
-  background: repeating-linear-gradient(to bottom, transparent 0 calc(25% - 1px), var(--line) calc(25% - 1px) 25%);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(25% - 1px),
+    var(--line) calc(25% - 1px) 25%
+  );
 }
 
 .compare-history-plot svg {
@@ -1584,7 +1551,10 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 
 .match-review-card {
   display: grid;
-  grid-template-columns: minmax(140px, .8fr) minmax(220px, 1.2fr) minmax(190px, .8fr) auto;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(220px, 1.2fr) minmax(
+      190px,
+      0.8fr
+    ) auto;
   align-items: center;
   gap: 16px;
   width: 100%;
@@ -1595,7 +1565,7 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-sizing: border-box;
 }
 
-.match-review-card>div,
+.match-review-card > div,
 .match-review-card label {
   display: grid;
   gap: 5px;
@@ -1620,7 +1590,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   width: auto !important;
 }
 
-
 .button--account-access {
   color: #202020 !important;
   background: #ffeb00 !important;
@@ -1631,7 +1600,11 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-shadow: 3px 3px 0 var(--text) !important;
   font-weight: 800 !important;
 }
-.button--account-access:hover { background: #fff35a !important; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--text) !important; }
+.button--account-access:hover {
+  background: #fff35a !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text) !important;
+}
 .button--blue {
   color: #fff !important;
   background: #315cba !important;
@@ -1639,7 +1612,9 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-shadow: 3px 3px 0 var(--text) !important;
   font-weight: 750 !important;
 }
-.button--blue:hover { background: #244b9e !important; }
+.button--blue:hover {
+  background: #244b9e !important;
+}
 .button--pause-all {
   min-height: 44px !important;
   padding: 10px 16px !important;
@@ -1650,10 +1625,18 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-shadow: 3px 3px 0 var(--text) !important;
   font-weight: 800 !important;
 }
-.button--pause-all.is-paused { background: #315cba !important; color: #fff !important; }
-.button--pause-all:disabled { opacity: .65; cursor: wait; }
+.button--pause-all.is-paused {
+  background: #315cba !important;
+  color: #fff !important;
+}
+.button--pause-all:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
 
-.status { gap: 8px !important; }
+.status {
+  gap: 8px !important;
+}
 .status i {
   width: 12px !important;
   height: 12px !important;
@@ -1682,8 +1665,12 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   height: 6px;
   background: currentColor;
 }
-.status--paused i::before { left: 3px; }
-.status--paused i::after { right: 3px; }
+.status--paused i::before {
+  left: 3px;
+}
+.status--paused i::after {
+  right: 3px;
+}
 
 .my-products-heading {
   display: grid !important;
@@ -1692,8 +1679,17 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   gap: 14px !important;
   text-align: center !important;
 }
-.my-products-heading > .my-products-heading-copy { grid-column: 2; grid-row: 1; text-align: center !important; }
-.my-products-heading > .button { grid-column: 3; grid-row: 1; justify-self: end; align-self: center; }
+.my-products-heading > .my-products-heading-copy {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: center !important;
+}
+.my-products-heading > .button {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  align-self: center;
+}
 
 .my-products-heading h1 {
   margin-inline: 0 !important;
@@ -1757,7 +1753,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   font: inherit !important;
 }
 
-
 .view-mode-switch {
   margin-inline-start: auto !important;
   display: inline-flex !important;
@@ -1788,12 +1783,14 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   border-radius: 6px !important;
   background: transparent !important;
   color: var(--text-muted) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
   cursor: pointer !important;
   white-space: nowrap !important;
-  transition: background-color 0.15s ease, color 0.15s ease !important;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease !important;
 }
 
 .view-mode-switch button:hover {
@@ -1816,7 +1813,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   width: 15px !important;
   height: 15px !important;
 }
-
 
 .notifications-toolbar,
 .page-wrap[data-page="notifications"] .toolbar {
@@ -1845,7 +1841,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   width: 150px !important;
   min-width: 150px !important;
 }
-
 
 .notifications-heading {
   display: flex !important;
@@ -1877,7 +1872,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   line-height: 1.2 !important;
 }
 
-
 .button--mark-all-read {
   display: inline-flex !important;
   align-items: center !important;
@@ -1890,14 +1884,17 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: #ffeb00 !important;
   color: #202020 !important;
   box-shadow: 3px 3px 0 var(--text) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 13px !important;
   font-weight: 800 !important;
   cursor: pointer !important;
   box-sizing: border-box !important;
   text-align: center !important;
   white-space: nowrap !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease !important;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.15s ease !important;
 }
 
 .button--mark-all-read:hover:not(:disabled) {
@@ -1935,7 +1932,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-shadow: 1px 1px 0 var(--line) !important;
 }
 
-
 .button--export {
   display: inline-flex !important;
   align-items: center !important;
@@ -1946,14 +1942,17 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   padding: 0 16px !important;
   border: 2px solid #202020 !important;
   border-radius: 8px 4px 8px 4px !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 13px !important;
   font-weight: 750 !important;
   box-shadow: 2px 2px 0 var(--text) !important;
   cursor: pointer !important;
   box-sizing: border-box !important;
   text-align: center !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease !important;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.15s ease !important;
 }
 
 .button--export:hover {
@@ -1966,7 +1965,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   box-shadow: 1px 1px 0 var(--text) !important;
 }
 
-
 .button--export-blue {
   background: #315cba !important;
   color: #ffffff !important;
@@ -1976,7 +1974,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: #274996 !important;
   color: #ffffff !important;
 }
-
 
 .button--export-yellow {
   background: #ffeb00 !important;
@@ -2040,8 +2037,10 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: #ffd659 !important;
 }
 
-
-.deal-card-photo-wrap { padding: 0 !important; overflow: hidden !important; }
+.deal-card-photo-wrap {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
 .deal-card-photo-wrap img {
   width: 100% !important;
   height: 100% !important;
@@ -2052,7 +2051,9 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   object-fit: contain !important;
   object-position: center !important;
 }
-.deal-discovered-price { color: var(--text) !important; }
+.deal-discovered-price {
+  color: var(--text) !important;
+}
 .search-loading-indicator {
   display: flex;
   align-items: center;
@@ -2063,21 +2064,44 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   font-size: 12px;
   font-weight: 700;
 }
-.search-loading-indicator--top { margin: 0 0 16px; }
-.search-loading-dots { display: inline-flex; align-items: center; gap: 4px; height: 14px; }
+.search-loading-indicator--top {
+  margin: 0 0 16px;
+}
+.search-loading-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 14px;
+}
 .search-loading-dots i {
   display: block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  animation: dealio-search-dot-bounce .78s ease-in-out infinite;
+  animation: dealio-search-dot-bounce 0.78s ease-in-out infinite;
 }
-.search-loading-dots i:nth-child(1) { background: #ff6257; }
-.search-loading-dots i:nth-child(2) { background: #ffeb00; animation-delay: .13s; }
-.search-loading-dots i:nth-child(3) { background: #315cba; animation-delay: .26s; }
+.search-loading-dots i:nth-child(1) {
+  background: #ff6257;
+}
+.search-loading-dots i:nth-child(2) {
+  background: #ffeb00;
+  animation-delay: 0.13s;
+}
+.search-loading-dots i:nth-child(3) {
+  background: #315cba;
+  animation-delay: 0.26s;
+}
 @keyframes dealio-search-dot-bounce {
-  0%, 60%, 100% { transform: translateY(0); opacity: .7; }
-  30% { transform: translateY(-5px); opacity: 1; }
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
 }
 .search-results-summary {
   width: fit-content;
@@ -2092,10 +2116,21 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 }
 
 @media (max-width: 720px) {
-  .my-products-toolbar { flex-wrap: wrap !important; }
-  .my-products-toolbar .table-search { width: 100% !important; flex: 1 1 100% !important; }
-  .notifications-heading { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
-  .notifications-actions { align-self: flex-start !important; }
+  .my-products-toolbar {
+    flex-wrap: wrap !important;
+  }
+  .my-products-toolbar .table-search {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+  .notifications-heading {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  .notifications-actions {
+    align-self: flex-start !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -2119,7 +2154,7 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   background: #fff !important;
 }
 
-/* Layered swap (search-grid cards): while an incoming photo decodes it sits
+/* Layered swap (search grid cards): while an incoming photo decodes it sits
    hidden above the shown one, then fades in, so the card never repaints a
    partially loaded bitmap. The wrap is position:relative already. */
 .product-image--stack {
@@ -2164,7 +2199,7 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
     180deg,
     rgba(0, 0, 0, 0) 0%,
     rgba(0, 0, 0, 0.05) 30%,
-    rgba(0, 0, 0, 0.10) 55%,
+    rgba(0, 0, 0, 0.1) 55%,
     rgba(0, 0, 0, 0.05) 80%,
     rgba(0, 0, 0, 0) 100%
   );
@@ -2174,7 +2209,7 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 
 /* Same scanning effect as loading product photos, on the skeleton card's
    photo section: the band sweeps only the 180px photo strip. The wrap is
-   already position:relative via .deal-card-photo-wrap; it must clip the
+   already position:relative via .deal-card-photo-wrap,  it must clip the
    band so the sweep never paints over the card body below. */
 .skeleton-deal-img-wrap {
   overflow: hidden !important;
@@ -2191,14 +2226,18 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   );
 }
 
-/* The scan band lives only on the photo strip; the grey placeholder boxes
+/* The scan band lives only on the photo strip,  the grey placeholder boxes
    keep their original shimmer outside it. The strip is always white (same
-   face as the real photo area), so no dark-theme treatment is needed there
+   face as the real photo area), so no dark theme treatment is needed there
    beyond the light sweep band's dark override above. */
 
 @keyframes product-image-scan {
-  from { transform: translateY(-20%); }
-  to { transform: translateY(370%); }
+  from {
+    transform: translateY(-20%);
+  }
+  to {
+    transform: translateY(370%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2239,7 +2278,6 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   padding: 0;
   background: #fff !important;
 }
-
 
 :root[data-theme="dark"] {
   --surface: #211f1b;
@@ -2325,8 +2363,12 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
 :root[data-theme="dark"] .delta-neutral {
   color: #f0d28d !important;
 }
-:root[data-theme="dark"] .metric-value--green { color: #a5dfb8 !important; }
-:root[data-theme="dark"] .metric-value--amber { color: #f0d28d !important; }
+:root[data-theme="dark"] .metric-value--green {
+  color: #a5dfb8 !important;
+}
+:root[data-theme="dark"] .metric-value--amber {
+  color: #f0d28d !important;
+}
 :root[data-theme="dark"] .deal-badge-drop,
 :root[data-theme="dark"] .not-found-badge {
   color: #202020 !important;
@@ -2344,16 +2386,12 @@ h3, .card-title, .empty-state h3, .preview-product h3 {
   :root[data-theme="dark"] *,
   :root[data-theme="dark"] *::before,
   :root[data-theme="dark"] *::after {
-    animation-duration: .01ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
-
-
-
-
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -2365,7 +2403,6 @@ input[type="number"] {
   -moz-appearance: textfield !important;
   appearance: textfield !important;
 }
-
 
 .discover-toolbar {
   display: flex !important;
@@ -2382,7 +2419,6 @@ input[type="number"] {
   box-sizing: border-box !important;
 }
 
-
 .discover-toolbar .sort-control {
   display: flex !important;
   flex-direction: column !important;
@@ -2392,7 +2428,7 @@ input[type="number"] {
 }
 
 .sort-control-label {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
   letter-spacing: 0.08em !important;
@@ -2405,14 +2441,12 @@ input[type="number"] {
   min-width: 185px !important;
 }
 
-
 .discover-toolbar-divider {
   width: 1px !important;
   height: 38px !important;
   background: var(--line) !important;
   flex: none !important;
 }
-
 
 .discover-price-filter {
   display: flex !important;
@@ -2424,7 +2458,7 @@ input[type="number"] {
 }
 
 .discover-price-label {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
   letter-spacing: 0.08em !important;
@@ -2432,7 +2466,6 @@ input[type="number"] {
   color: var(--text-muted) !important;
   line-height: 1 !important;
 }
-
 
 .discover-price-row {
   display: flex !important;
@@ -2449,7 +2482,7 @@ input[type="number"] {
   background: var(--surface-container) !important;
   border: 1px solid var(--line) !important;
   border-radius: 8px !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   color: var(--text) !important;
@@ -2461,7 +2494,9 @@ input[type="number"] {
   -webkit-appearance: textfield !important;
   -moz-appearance: textfield !important;
   appearance: textfield !important;
-  transition: border-color 0.2s ease, background-color 0.2s ease !important;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease !important;
 }
 
 .price-number-input:hover {
@@ -2480,13 +2515,12 @@ input[type="number"] {
 }
 
 .price-sep {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   color: var(--text-muted) !important;
   flex: none !important;
 }
-
 
 .discover-slider-wrap {
   position: relative !important;
@@ -2508,7 +2542,7 @@ input[type="number"] {
   padding: 0 6px !important;
   height: 16px !important;
   border-radius: 3px !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
   letter-spacing: 0.04em !important;
@@ -2518,7 +2552,6 @@ input[type="number"] {
   cursor: pointer !important;
   white-space: nowrap !important;
 }
-
 
 .discover-range-slider {
   -webkit-appearance: none !important;
@@ -2651,7 +2684,6 @@ input[type="number"] {
   }
 }
 
-
 .discover-toolbar {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -2675,10 +2707,16 @@ input[type="number"] {
   min-width: 0 !important;
 }
 
-.discover-toolbar .sort-control { flex: 0 1 230px !important; }
-.discover-price-filter { flex: 1 1 320px !important; }
-.discover-toolbar .sort-control .custom-dropdown { min-width: 0 !important; width: 100% !important; }
-
+.discover-toolbar .sort-control {
+  flex: 0 1 230px !important;
+}
+.discover-price-filter {
+  flex: 1 1 320px !important;
+}
+.discover-toolbar .sort-control .custom-dropdown {
+  min-width: 0 !important;
+  width: 100% !important;
+}
 
 .page-wrap .empty-state {
   width: min(100%, 380px) !important;
@@ -2705,8 +2743,12 @@ input[type="number"] {
   align-self: center !important;
 }
 
-.page-wrap .notifications-load-error { margin: 14px auto !important; }
-.page-wrap .deals-section--empty { min-height: 0 !important; }
+.page-wrap .notifications-load-error {
+  margin: 14px auto !important;
+}
+.page-wrap .deals-section--empty {
+  min-height: 0 !important;
+}
 
 .topbar-search-input-wrap {
   height: 42px !important;
@@ -2715,13 +2757,26 @@ input[type="number"] {
   border-radius: 9px !important;
   background: var(--surface) !important;
   padding-inline: 12px !important;
-  transition: border-color .15s ease, box-shadow .15s ease !important;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease !important;
 }
 
-.topbar-search-input-wrap:focus-within { border-color: var(--brand) !important; }
-.topbar-search-input-wrap input { font-size: 14px !important; font-weight: 650 !important; }
-.topbar-search-input-wrap input::placeholder { color: var(--text-muted) !important; font-weight: 500 !important; opacity: 1; }
-.topbar-search-btn { min-height: 42px !important; }
+.topbar-search-input-wrap:focus-within {
+  border-color: var(--brand) !important;
+}
+.topbar-search-input-wrap input {
+  font-size: 14px !important;
+  font-weight: 650 !important;
+}
+.topbar-search-input-wrap input::placeholder {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  opacity: 1;
+}
+.topbar-search-btn {
+  min-height: 42px !important;
+}
 
 .discover-back-button {
   display: inline-flex !important;
@@ -2735,15 +2790,33 @@ input[type="number"] {
   background: var(--surface) !important;
   color: var(--text) !important;
   box-shadow: 2px 2px 0 var(--text) !important;
-  font: 750 12px 'DM Sans', sans-serif !important;
+  font:
+    750 12px "DM Sans",
+    sans-serif !important;
   cursor: pointer !important;
 }
 
-.discover-back-button:hover { transform: translateY(-1px); }
-.discover-search-error { border-style: solid !important; }
-.discover-search-error .button { margin-top: 14px !important; }
-.search-failure-note { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; color: var(--text-muted); font-size: 13px; }
-.search-failure-note p { margin: 0; }
+.discover-back-button:hover {
+  transform: translateY(-1px);
+}
+.discover-search-error {
+  border-style: solid !important;
+}
+.discover-search-error .button {
+  margin-top: 14px !important;
+}
+.search-failure-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.search-failure-note p {
+  margin: 0;
+}
 
 @media (max-width: 560px) {
   .page-wrap .empty-state,
@@ -2753,8 +2826,13 @@ input[type="number"] {
     max-width: 330px !important;
     height: 330px !important;
   }
-  .topbar-search-area { gap: 6px !important; }
-  .search-failure-note { align-items: flex-start; flex-direction: column; }
+  .topbar-search-area {
+    gap: 6px !important;
+  }
+  .search-failure-note {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .sort-control-label,
@@ -2763,10 +2841,10 @@ input[type="number"] {
   dark, replacing the muted grey that lost contrast on the dark
   toolbar. The price label re-inks itself later in this sheet. */
   color: var(--text) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: "DM Sans", sans-serif !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  letter-spacing: .07em !important;
+  letter-spacing: 0.07em !important;
   line-height: 1.2 !important;
   text-transform: uppercase !important;
 }
@@ -2788,11 +2866,18 @@ input[type="number"] {
   border: 2px solid var(--line) !important;
   border-radius: 9px !important;
   background: var(--surface) !important;
-  font: 700 14px 'DM Sans', sans-serif !important;
+  font:
+    700 14px "DM Sans",
+    sans-serif !important;
 }
 
-.price-number-input:focus { border-color: var(--brand) !important; }
-.price-sep { color: var(--text-muted) !important; font-weight: 800 !important; }
+.price-number-input:focus {
+  border-color: var(--brand) !important;
+}
+.price-sep {
+  color: var(--text-muted) !important;
+  font-weight: 800 !important;
+}
 
 .clear-price-btn {
   position: static !important;
@@ -2803,11 +2888,15 @@ input[type="number"] {
   border-radius: 9px !important;
   background: var(--brand) !important;
   color: var(--text) !important;
-  font: 800 12px 'DM Sans', sans-serif !important;
+  font:
+    800 12px "DM Sans",
+    sans-serif !important;
   cursor: pointer !important;
 }
 
-.clear-price-btn:hover { transform: translateY(-1px); }
+.clear-price-btn:hover {
+  transform: translateY(-1px);
+}
 
 .search-load-more {
   grid-column: 1 / -1;
@@ -2826,7 +2915,7 @@ input[type="number"] {
 }
 
 /* The preview dialog and the global search both drop the indicator inline
-   between stacked blocks; keep the dots on the label's first baseline and
+   between stacked blocks,  keep the dots on the label's first baseline and
    give the row breathing room without the top variant's bottom margin. */
 .search-loading-indicator--inline {
   margin: 0 0 14px;
@@ -2857,12 +2946,20 @@ input[type="number"] {
   flex-direction: column !important;
 }
 
-.deals-section--empty > .deals-empty-state { flex: 1 1 auto !important; min-height: 0 !important; }
+.deals-section--empty > .deals-empty-state {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
 
 @media (max-width: 560px) {
-  .discover-toolbar { align-items: stretch !important; padding: 14px !important; }
+  .discover-toolbar {
+    align-items: stretch !important;
+    padding: 14px !important;
+  }
   .discover-toolbar .sort-control,
-  .discover-price-filter { flex-basis: 100% !important; }
+  .discover-price-filter {
+    flex-basis: 100% !important;
+  }
 }
 
 .settings-category-nav {
@@ -2881,10 +2978,15 @@ input[type="number"] {
   background: var(--surface-container) !important;
   box-shadow: 3px 3px 0 var(--text) !important;
   color: var(--text) !important;
-  font: 700 13px 'DM Sans', sans-serif !important;
+  font:
+    700 13px "DM Sans",
+    sans-serif !important;
   text-align: center !important;
   cursor: pointer !important;
-  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease !important;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease !important;
 }
 
 .settings-category-nav button:hover {
@@ -2892,7 +2994,9 @@ input[type="number"] {
   box-shadow: 4px 4px 0 var(--text) !important;
 }
 
-.settings-category-nav button.is-active { background: var(--brand) !important; }
+.settings-category-nav button.is-active {
+  background: var(--brand) !important;
+}
 
 .settings-category-nav button:focus-visible {
   outline: 3px solid #4d91d8 !important;
@@ -2900,9 +3004,10 @@ input[type="number"] {
 }
 
 @media (max-width: 760px) {
-  .settings-category-nav { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .settings-category-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
 }
-
 
 .page-wrap .empty-state {
   width: 100% !important;
@@ -2929,7 +3034,6 @@ input[type="number"] {
   min-height: max(540px, calc(100dvh - 230px)) !important;
 }
 
-
 .topbar-search-input-wrap:focus-within,
 .topbar.topbar--active .topbar-search-input-wrap:focus-within,
 .add-form input:focus {
@@ -2946,11 +3050,19 @@ input[type="number"] {
   border-radius: 9px !important;
   background: var(--surface) !important;
   color: var(--text) !important;
-  font: 650 14px 'DM Sans', sans-serif !important;
-  transition: border-color .15s ease, background-color .15s ease !important;
+  font:
+    650 14px "DM Sans",
+    sans-serif !important;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease !important;
 }
 
-.add-form input::placeholder { color: var(--text-muted) !important; font-weight: 500 !important; opacity: 1; }
+.add-form input::placeholder {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  opacity: 1;
+}
 
 @media (max-width: 560px) {
   .page-wrap .empty-state,
@@ -2960,10 +3072,28 @@ input[type="number"] {
     padding: 24px !important;
   }
 }
-.google-signin-button { display: flex; justify-content: center; width: 100%; min-height: 42px; margin: 10px 0 14px; }
-.auth-divider { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; color: var(--text-muted); font-size: .78rem; }
-.auth-divider::before, .auth-divider::after { content: ''; height: 1px; flex: 1; background: var(--border); }
-
+.google-signin-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+  margin: 10px 0 14px;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--border);
+}
 
 .scrim:has(.auth-dialog) {
   overflow-y: auto !important;
@@ -3021,7 +3151,10 @@ input[type="number"] {
   border-radius: 10px !important;
   background: var(--surface) !important;
   color: var(--text) !important;
-  font: 500 15px 'DM Sans', Arial, sans-serif;
+  font:
+    500 15px "DM Sans",
+    Arial,
+    sans-serif;
 }
 
 .auth-dialog form > .field:focus-visible {
@@ -3079,9 +3212,14 @@ input[type="number"] {
   border-radius: 10px;
   background: var(--surface);
   color: var(--text);
-  font: 700 14px/1.2 'DM Sans', sans-serif;
+  font:
+    700 14px/1.2 "DM Sans",
+    sans-serif;
   cursor: pointer;
-  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    transform 140ms ease;
 }
 
 .auth-google-fallback:hover {
@@ -3111,10 +3249,14 @@ input[type="number"] {
 }
 
 @media (max-width: 480px) {
-  .scrim:has(.auth-dialog) { place-items: start center !important; }
-  .auth-dialog { width: calc(100vw - 24px) !important; margin-block: auto; }
+  .scrim:has(.auth-dialog) {
+    place-items: start center !important;
+  }
+  .auth-dialog {
+    width: calc(100vw - 24px) !important;
+    margin-block: auto;
+  }
 }
-
 
 .page-wrap .empty-state {
   min-height: max(180px, calc(100dvh - 340px)) !important;
@@ -3122,7 +3264,9 @@ input[type="number"] {
   margin-block: 12px !important;
 }
 
-.page-wrap .deals-section--empty { min-height: 0 !important; }
+.page-wrap .deals-section--empty {
+  min-height: 0 !important;
+}
 
 .page-wrap .deals-section > .deals-empty-state,
 .page-wrap .deals-section--empty > .deals-empty-state {
@@ -3145,20 +3289,25 @@ input[type="number"] {
   }
 }
 
-
-.page-wrap:has(.empty-state) { padding-bottom: 0 !important; }
+.page-wrap:has(.empty-state) {
+  padding-bottom: 0 !important;
+}
 .page-wrap .empty-state,
-.page-wrap .deals-empty-state { margin-bottom: 0 !important; }
+.page-wrap .deals-empty-state {
+  margin-bottom: 0 !important;
+}
 
-
-.page-wrap[data-page="compare"] { padding-bottom: 0 !important; }
+.page-wrap[data-page="compare"] {
+  padding-bottom: 0 !important;
+}
 .page-wrap[data-page="compare"] > .empty-state {
   min-height: max(180px, calc(100dvh - 270px)) !important;
   margin-bottom: 0 !important;
 }
 
-
-.page-wrap[data-page="discover"]:has(.deals-section--empty):not(:has(.discovery-overview)) {
+.page-wrap[data-page="discover"]:has(.deals-section--empty):not(
+    :has(.discovery-overview)
+  ) {
   display: flex !important;
   flex-direction: column !important;
   height: calc(100dvh - 68px) !important;
@@ -3167,7 +3316,8 @@ input[type="number"] {
   overflow: hidden !important;
 }
 
-.page-wrap[data-page="discover"]:has(.deals-section--empty) > .deals-overview-container {
+.page-wrap[data-page="discover"]:has(.deals-section--empty)
+  > .deals-overview-container {
   flex: 1 1 auto !important;
   min-height: 0 !important;
 }
@@ -3188,7 +3338,6 @@ input[type="number"] {
   }
 }
 
-
 .page-wrap[data-page="dashboard"]:has(> .empty-state) {
   padding-bottom: 32px !important;
 }
@@ -3198,9 +3347,12 @@ input[type="number"] {
   margin-bottom: 0 !important;
 }
 
-
-.custom-dropdown { min-width: 0 !important; }
-.custom-dropdown.is-open { z-index: 320 !important; }
+.custom-dropdown {
+  min-width: 0 !important;
+}
+.custom-dropdown.is-open {
+  z-index: 320 !important;
+}
 .custom-dropdown-btn {
   min-height: 42px !important;
   height: 42px !important;
@@ -3209,9 +3361,13 @@ input[type="number"] {
   border-radius: 9px !important;
   background: var(--surface-container) !important;
   color: var(--text) !important;
-  font: 650 14px 'DM Sans', sans-serif !important;
+  font:
+    650 14px "DM Sans",
+    sans-serif !important;
 }
-.custom-dropdown-btn:hover { border-color: var(--line) !important; }
+.custom-dropdown-btn:hover {
+  border-color: var(--line) !important;
+}
 .custom-dropdown-btn:focus-visible {
   border-color: var(--brand) !important;
   outline: 2px solid var(--brand) !important;
@@ -3247,7 +3403,9 @@ input[type="number"] {
   min-height: 40px !important;
   padding: 9px 10px !important;
   border-radius: 6px !important;
-  font: 600 13px 'DM Sans', sans-serif !important;
+  font:
+    600 13px "DM Sans",
+    sans-serif !important;
 }
 .custom-dropdown-option:hover,
 .custom-dropdown-option:focus-visible {
@@ -3255,13 +3413,21 @@ input[type="number"] {
   color: var(--text) !important;
   outline: none !important;
 }
-.custom-dropdown-option.is-selected { background: color-mix(in srgb, var(--brand) 9%, var(--surface)) !important; }
-.option-check { color: var(--brand) !important; font-weight: 900 !important; }
+.custom-dropdown-option.is-selected {
+  background: color-mix(in srgb, var(--brand) 9%, var(--surface)) !important;
+}
+.option-check {
+  color: var(--brand) !important;
+  font-weight: 900 !important;
+}
 .filtered-export-form .custom-dropdown,
-.field-label > .custom-dropdown { width: 100% !important; }
+.field-label > .custom-dropdown {
+  width: 100% !important;
+}
 .filtered-export-form .custom-dropdown-btn,
-.field-label > .custom-dropdown .custom-dropdown-btn { width: 100% !important; }
-
+.field-label > .custom-dropdown .custom-dropdown-btn {
+  width: 100% !important;
+}
 
 input[type="date"],
 input[type="datetime-local"],
@@ -3275,7 +3441,9 @@ input[type="time"] {
   color: var(--text) !important;
   color-scheme: inherit;
   accent-color: var(--brand) !important;
-  font: 600 14px 'DM Sans', sans-serif !important;
+  font:
+    600 14px "DM Sans",
+    sans-serif !important;
   font-variant-numeric: tabular-nums;
   box-shadow: none !important;
 }
@@ -3291,13 +3459,19 @@ input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="datetime-local"]::-webkit-calendar-picker-indicator,
 input[type="month"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  opacity: .8;
+  opacity: 0.8;
 }
 
-
-.dealio-date-picker { position: relative; width: 100%; }
-.dealio-date-picker > input[hidden] { display: none !important; }
-.dealio-date-picker.is-open { z-index: 330 !important; }
+.dealio-date-picker {
+  position: relative;
+  width: 100%;
+}
+.dealio-date-picker > input[hidden] {
+  display: none !important;
+}
+.dealio-date-picker.is-open {
+  z-index: 330 !important;
+}
 .dealio-date-trigger {
   display: flex !important;
   width: 100% !important;
@@ -3311,17 +3485,24 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   background: var(--surface-container) !important;
   color: var(--text) !important;
   text-align: start !important;
-  font: 600 14px 'DM Sans', sans-serif !important;
+  font:
+    600 14px "DM Sans",
+    sans-serif !important;
   box-shadow: none !important;
 }
 .dealio-date-trigger::after {
-  content: 'â–¦';
+  content: "â–¦";
   color: var(--brand);
   font-size: 18px;
   line-height: 1;
 }
-.dealio-date-trigger:hover { border-color: var(--brand) !important; }
-.dealio-date-trigger:focus:not(:focus-visible) { outline: none !important; box-shadow: none !important; }
+.dealio-date-trigger:hover {
+  border-color: var(--brand) !important;
+}
+.dealio-date-trigger:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
 .dealio-date-trigger:focus-visible {
   outline: 2px solid var(--brand) !important;
   outline-offset: 2px !important;
@@ -3352,8 +3533,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 .dealio-calendar-heading strong {
-  font: 700 17px 'Anton', Impact, sans-serif;
-  letter-spacing: .03em;
+  font:
+    700 17px "Anton",
+    Impact,
+    sans-serif;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 .dealio-calendar-nav {
@@ -3366,7 +3550,10 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   font-size: 22px;
   line-height: 1;
 }
-.dealio-calendar-nav:hover { background: var(--amber-bg); color: var(--text); }
+.dealio-calendar-nav:hover {
+  background: var(--amber-bg);
+  color: var(--text);
+}
 .dealio-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -3377,7 +3564,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   min-height: 26px;
   place-items: center;
   color: var(--text-muted);
-  font: 700 11px 'DM Sans', sans-serif;
+  font:
+    700 11px "DM Sans",
+    sans-serif;
 }
 .dealio-calendar-day {
   display: grid;
@@ -3388,7 +3577,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-radius: 6px;
   background: transparent;
   color: var(--text);
-  font: 600 13px 'DM Sans', sans-serif;
+  font:
+    600 13px "DM Sans",
+    sans-serif;
   font-variant-numeric: tabular-nums;
 }
 .dealio-calendar-day:hover,
@@ -3397,8 +3588,14 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   background: color-mix(in srgb, var(--brand) 12%, var(--surface-container));
   outline: none;
 }
-.dealio-calendar-day.is-outside-month { color: var(--text-muted); opacity: .45; }
-.dealio-calendar-day.is-today { border-color: var(--amber); background: var(--amber-bg); }
+.dealio-calendar-day.is-outside-month {
+  color: var(--text-muted);
+  opacity: 0.45;
+}
+.dealio-calendar-day.is-today {
+  border-color: var(--amber);
+  background: var(--amber-bg);
+}
 .dealio-calendar-day[aria-pressed="true"] {
   border-color: var(--text);
   background: var(--brand);
@@ -3425,11 +3622,15 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-radius: 7px;
   background: var(--surface-container);
   color: var(--text);
-  font: 650 13px 'DM Sans', sans-serif;
+  font:
+    650 13px "DM Sans",
+    sans-serif;
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
-.dealio-calendar-time-trigger:hover { border-color: var(--brand); }
+.dealio-calendar-time-trigger:hover {
+  border-color: var(--brand);
+}
 .dealio-calendar-time-trigger:focus:not(:focus-visible) {
   outline: none !important;
   box-shadow: none !important;
@@ -3461,7 +3662,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-radius: 5px;
   background: transparent;
   color: var(--text);
-  font: 600 13px 'DM Sans', sans-serif;
+  font:
+    600 13px "DM Sans",
+    sans-serif;
   font-variant-numeric: tabular-nums;
 }
 .dealio-time-option:hover,
@@ -3477,14 +3680,15 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   font-weight: 800;
 }
 
-
 .page-wrap[data-page="discover"]:has(.discovery-overview) {
   height: auto !important;
   min-height: calc(100dvh - 68px) !important;
   overflow: visible !important;
 }
 
-.page-wrap[data-page="discover"]:has(.discovery-overview) .deals-section--empty > .deals-empty-state {
+.page-wrap[data-page="discover"]:has(.discovery-overview)
+  .deals-section--empty
+  > .deals-empty-state {
   min-height: 132px !important;
   margin-block: 0 !important;
   padding: 20px 24px !important;
@@ -3500,7 +3704,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   min-height: 100px;
   border-radius: 9px;
   border-color: var(--line-strong);
-  transition: border-color 140ms ease, transform 140ms ease;
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease;
 }
 
 .discovery-overview .overview-item:hover {
@@ -3527,7 +3733,6 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 .topbar .topbar-search-btn,
 .topbar .topbar-search-btn:focus-visible {
@@ -3659,7 +3864,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .search-suggestions--collection button:disabled {
   cursor: not-allowed;
-  opacity: .58;
+  opacity: 0.58;
 }
 
 @media (max-width: 680px) {
@@ -3685,13 +3890,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 /* Narrow desktop windows (761â€“1050px): the app collapses to its icon rail.
-   The fixed-size rework rules above (width 240px !important, margin 240px
-   !important, left-aligned nav items) sit later in the cascade than the
+   The fixed size rework rules above (width 240px !important, margin 240px
+   !important, left aligned nav items) sit later in the cascade than the
    original @media(max-width:1050px) block, so they used to defeat it: the
    label texts got hidden but the rail itself stayed 240px wide â€” rows of
    small icons followed by a blank strip. Re-assert the rail geometry above
-   the fixed-size rules with matching weight. The (min-width:761px) guard
-   keeps the <=760px off-canvas drawer untouched; it re-asserts its own
+   the fixed size rules with matching weight. The (min-width:761px) guard
+   keeps the <=760px off canvas drawer untouched,  it re-asserts its own
    widths with !important at (max-width:760px). */
 @media (max-width: 1050px) and (min-width: 761px) {
   .sidebar,
@@ -3701,10 +3906,10 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   }
 
   /* In the rail the sidebar's inline padding is 10px, so the
-  .sidebar-bottom divider strip must bleed exactly -10px; the base
+  .sidebar-bottom divider strip must bleed exactly -10px,  the base
   -12px bleed (for the >1050px paddings) would poke 2px past the rail
-  edge on both sides. Covers both expanded-into-rail and
-  collapsed-into-rail class states. */
+  edge on both sides. Covers both expanded into rail and
+  collapsed into rail class states. */
   .sidebar .sidebar-bottom,
   .sidebar--collapsed .sidebar-bottom {
     margin-inline: -10px !important;
@@ -3722,7 +3927,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     padding: 4px 0 18px !important;
   }
 
-  /* Expanded brand row shows the wide wordmark + collapse button; in the
+  /* Expanded brand row shows the wide wordmark + collapse button,  in the
      rail only the mark fits, so cap the wordmark and drop the button. */
   .sidebar .sidebar-brand-btn {
     width: 100% !important;
@@ -3743,10 +3948,10 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     padding: 0 !important;
   }
 
-  /* The topbar is a fixed strip pinned beside the sidebar; if it keeps its
+  /* The topbar is a fixed strip pinned beside the sidebar,  if it keeps its
      240px/68px offsets while the rail is 76px, a dead gap opens between the
-     rail and the navbar. Match the resting and the search-active strip to
-     the rail. Selectors list every !important-ranked competitor above so
+     rail and the navbar. Match the resting and the search active strip to
+     the rail. Selectors list every !important ranked competitor above so
      the later position here wins on those window sizes. */
   .topbar,
   .topbar.topbar--active,
@@ -3765,13 +3970,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   }
 }
 
-/* Truly narrow windows (<=760px): the sidebar becomes an off-canvas drawer
+/* Truly narrow windows (<=760px): the sidebar becomes an off canvas drawer
    slid out of view, and the page owns the full width. The drawer reset at
    @media(max-width:760px) (margin/topbar left 0 !important) was written
-   before the rework, so the later fixed-offset rules beat it: the persisted
+   before the rework, so the later fixed offset rules beat it: the persisted
    collapsed state pinned the topbar and .main-area at their 68px/240px
    offsets, leaving an empty dead column beside an invisible drawer.
-   Re-assert the full-width geometry at the end of the stylesheet, after
+   Re-assert the full width geometry at the end of the stylesheet, after
    every offset rule. */
 @media (max-width: 760px) {
   .topbar,
@@ -3831,15 +4036,15 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .dash-feed-head-copy .eyebrow {
   color: var(--on-brand);
-  opacity: .92;
+  opacity: 0.92;
 }
 
 .dash-feed-head-copy h2 {
   margin: 2px 0 0;
-  font-family: 'Anton', Impact, sans-serif;
+  font-family: "Anton", Impact, sans-serif;
   font-weight: 400;
   font-size: clamp(24px, 3.4vw, 34px);
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
   color: var(--on-brand);
   line-height: 1.05;
 }
@@ -3883,18 +4088,32 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-radius: 14px;
   box-shadow: 6px 6px 0 var(--surface-high);
   overflow: hidden;
-  animation: feed-tile-in .38s cubic-bezier(.2, .8, .3, 1) both;
+  animation: feed-tile-in 0.38s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
 @keyframes feed-tile-in {
-  from { opacity: 0; transform: translateY(14px) scale(.985); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.feed-tile--c0 { --tile-panel: var(--brand); }
-.feed-tile--c1 { --tile-panel: #4d91d8; }
-.feed-tile--c2 { --tile-panel: var(--green); }
-.feed-tile--c3 { --tile-panel: var(--amber); }
+.feed-tile--c0 {
+  --tile-panel: var(--brand);
+}
+.feed-tile--c1 {
+  --tile-panel: #4d91d8;
+}
+.feed-tile--c2 {
+  --tile-panel: var(--green);
+}
+.feed-tile--c3 {
+  --tile-panel: var(--amber);
+}
 
 .feed-tile:focus-within {
   outline: 3px solid var(--brand);
@@ -3906,7 +4125,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   z-index: 2;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: .7px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
   padding: 3px 10px;
   border: 2px solid var(--text);
@@ -3955,7 +4174,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   background: var(--surface-container);
   border: 3px solid var(--text);
   border-radius: 48% 52% 55% 45% / 52% 46% 54% 48%;
-  opacity: .94;
+  opacity: 0.94;
 }
 
 .feed-media-fallback {
@@ -3968,20 +4187,38 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   background: var(--surface-container);
   border: 3px solid var(--text);
   border-radius: 12px;
-  font-family: 'Anton', Impact, sans-serif;
+  font-family: "Anton", Impact, sans-serif;
   font-size: 44px;
   color: var(--text-soft);
 }
 
-.feed-tile--feature { grid-column: span 2; grid-row: span 2; }
-.feed-tile--feature .feed-media { min-height: 340px; padding: 40px 42px 30px; }
-.feed-tile--feature .feed-media .product-image { max-height: 300px; }
-.feed-tile--feature .feed-name { font-size: clamp(22px, 2.6vw, 30px); }
-.feed-tile--feature .price-display strong { font-size: 30px; }
-.feed-tile--feature .feed-body { padding: 16px 20px 18px; }
+.feed-tile--feature {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.feed-tile--feature .feed-media {
+  min-height: 340px;
+  padding: 40px 42px 30px;
+}
+.feed-tile--feature .feed-media .product-image {
+  max-height: 300px;
+}
+.feed-tile--feature .feed-name {
+  font-size: clamp(22px, 2.6vw, 30px);
+}
+.feed-tile--feature .price-display strong {
+  font-size: 30px;
+}
+.feed-tile--feature .feed-body {
+  padding: 16px 20px 18px;
+}
 
-.feed-tile--wide { grid-column: span 2; }
-.feed-tile--wide .feed-media { min-height: 200px; }
+.feed-tile--wide {
+  grid-column: span 2;
+}
+.feed-tile--wide .feed-media {
+  min-height: 200px;
+}
 
 .feed-body {
   position: relative;
@@ -3993,11 +4230,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .feed-name {
   margin: 0;
-  font-family: 'Anton', Impact, sans-serif;
+  font-family: "Anton", Impact, sans-serif;
   font-weight: 400;
   font-size: 17px;
   line-height: 1.16;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
   color: var(--text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -4012,7 +4249,10 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   gap: 4px 10px;
 }
 
-.feed-tile .price-display strong { font-size: 21px; letter-spacing: -.3px; }
+.feed-tile .price-display strong {
+  font-size: 21px;
+  letter-spacing: -0.3px;
+}
 
 .feed-was {
   display: inline-flex;
@@ -4023,7 +4263,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 .feed-was-label {
   font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -4047,14 +4287,23 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   white-space: nowrap;
 }
 
-.feed-movement--down { color: var(--green); background: var(--green-bg); }
-.feed-movement--up { color: var(--amber); background: var(--amber-bg); }
+.feed-movement--down {
+  color: var(--green);
+  background: var(--green-bg);
+}
+.feed-movement--up {
+  color: var(--amber);
+  background: var(--amber-bg);
+}
 
-.feed-movement-arrow { font-size: 13px; line-height: 1; }
+.feed-movement-arrow {
+  font-size: 13px;
+  line-height: 1;
+}
 
 .feed-movement-date {
   font-weight: 700;
-  opacity: .85;
+  opacity: 0.85;
 }
 
 .feed-meta {
@@ -4067,7 +4316,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 .feed-meta-bit {
   font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
   color: var(--text-soft);
   border: 1.5px solid var(--line-strong);
@@ -4088,7 +4337,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   outline: none;
 }
 
-.feed-tile:hover .feed-body { background: var(--surface-muted); }
+.feed-tile:hover .feed-body {
+  background: var(--surface-muted);
+}
 
 .feed-tile--flat {
   grid-column: span 2;
@@ -4108,12 +4359,28 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-inline-end: 3px solid var(--text);
 }
 
-.feed-tile--flat .feed-blob { width: 64px; }
-.feed-tile--flat .feed-media .product-image { max-height: 64px; max-width: 64px; }
-.feed-tile--flat .feed-body { padding: 10px 14px 11px; gap: 5px; }
-.feed-tile--flat .feed-name { font-size: 15px; -webkit-line-clamp: 1; }
-.feed-tile--flat .price-display strong { font-size: 17px; }
-.feed-tile--flat .feed-movement { font-size: 11.5px; padding: 2px 8px; }
+.feed-tile--flat .feed-blob {
+  width: 64px;
+}
+.feed-tile--flat .feed-media .product-image {
+  max-height: 64px;
+  max-width: 64px;
+}
+.feed-tile--flat .feed-body {
+  padding: 10px 14px 11px;
+  gap: 5px;
+}
+.feed-tile--flat .feed-name {
+  font-size: 15px;
+  -webkit-line-clamp: 1;
+}
+.feed-tile--flat .price-display strong {
+  font-size: 17px;
+}
+.feed-tile--flat .feed-movement {
+  font-size: 11.5px;
+  padding: 2px 8px;
+}
 
 .feed-status {
   display: flex;
@@ -4138,25 +4405,37 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-top: 2.5px solid var(--line-strong);
   padding-top: 14px;
   font-weight: 700;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   max-width: 520px;
   text-align: center;
 }
 
-.feed-sentinel { height: 1px; }
+.feed-sentinel {
+  height: 1px;
+}
 
 @media (max-width: 719px) {
-  .dash-feed-head { grid-template-columns: minmax(0, 1fr); }
-  .feed-grid { gap: 12px; }
+  .dash-feed-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .feed-grid {
+    gap: 12px;
+  }
 }
 
 @media (min-width: 720px) {
-  .feed-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .feed-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .feed-tile { animation: none; }
-  .feed-skeleton { animation: none; }
+  .feed-tile {
+    animation: none;
+  }
+  .feed-skeleton {
+    animation: none;
+  }
 }
 
 .dashboard-feed-title {
@@ -4171,7 +4450,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 .dashboard-feed-title .eyebrow {
   color: var(--text-soft);
   font-size: 12px;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
   text-transform: none;
 }
 
@@ -4188,9 +4467,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   line-height: 1.5;
 }
 
-.dash-feed { margin-top: 0; }
+.dash-feed {
+  margin-top: 0;
+}
 
-.feed-grid { grid-auto-rows: minmax(220px, auto); }
+.feed-grid {
+  grid-auto-rows: minmax(220px, auto);
+}
 
 .feed-tile--solo {
   grid-column: 1 / -1;
@@ -4217,7 +4500,9 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   font-size: clamp(22px, 2.8vw, 34px);
 }
 
-.feed-tile--solo .price-display strong { font-size: clamp(26px, 3vw, 38px); }
+.feed-tile--solo .price-display strong {
+  font-size: clamp(26px, 3vw, 38px);
+}
 
 .feed-tile--solo.feed-tile--flat {
   display: block;
@@ -4235,7 +4520,6 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   justify-content: flex-end;
   gap: 10px 14px;
 }
-
 
 .page-heading.dashboard-feed-title .dashboard-feed-title-copy .eyebrow {
   color: var(--text-soft) !important;
@@ -4255,7 +4539,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   text-transform: none;
 }
 
-.feed-was-label { font-size: 12px; letter-spacing: 0; text-transform: none; }
+.feed-was-label {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
 
 .recent-deal .candidate-label {
   color: #241f1b !important;
@@ -4264,17 +4552,33 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   text-transform: none;
 }
 
-  @media (max-width: 719px) {
-  .dashboard-feed-title { align-items: flex-start; gap: 16px; }
-  .dashboard-feed-title h1 { font-size: 27px; }
-  .dashboard-feed-title p { font-size: 14px; }
-  .feed-tile--solo { grid-template-columns: minmax(0, 1fr); }
-  .feed-tile--solo .feed-media { min-height: 260px; }
-  .feed-tile--solo .feed-media .product-image { max-height: 230px; }
-  .feed-tile--solo .feed-body { padding: 17px; }
-  .product-offer-controls { justify-content: flex-start; }
+@media (max-width: 719px) {
+  .dashboard-feed-title {
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .dashboard-feed-title h1 {
+    font-size: 27px;
+  }
+  .dashboard-feed-title p {
+    font-size: 14px;
+  }
+  .feed-tile--solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .feed-tile--solo .feed-media {
+    min-height: 260px;
+  }
+  .feed-tile--solo .feed-media .product-image {
+    max-height: 230px;
+  }
+  .feed-tile--solo .feed-body {
+    padding: 17px;
+  }
+  .product-offer-controls {
+    justify-content: flex-start;
+  }
 }
-
 
 .product-detail-page {
   --detail-stroke: var(--text);
@@ -4301,22 +4605,32 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-bottom: 1px solid var(--line);
 }
 
-.product-detail-identity { min-width: 0; }
-.product-detail-identity .eyebrow { display: block; margin-bottom: 8px; }
+.product-detail-identity {
+  min-width: 0;
+}
+.product-detail-identity .eyebrow {
+  display: block;
+  margin-bottom: 8px;
+}
 .product-detail-identity h1 {
   max-width: 28ch;
   margin: 0;
   color: var(--text);
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: clamp(25px, 3vw, 38px);
   font-weight: 750;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
   line-height: 1.12;
   text-transform: none;
   overflow-wrap: anywhere;
 }
 
-.product-detail-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.product-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
 .product-detail-meta span {
   padding: 5px 10px;
   border: 1px solid var(--line-strong);
@@ -4326,11 +4640,16 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   font-size: 12px;
   line-height: 1.2;
 }
-.product-detail-compare { flex: none; }
+.product-detail-compare {
+  flex: none;
+}
 
 .product-detail-overview {
   display: grid;
-  grid-template-columns: minmax(260px, .95fr) minmax(280px, 1fr) minmax(180px, .55fr);
+  grid-template-columns: minmax(260px, 0.95fr) minmax(280px, 1fr) minmax(
+      180px,
+      0.55fr
+    );
   align-items: stretch;
   gap: 0;
   overflow: hidden;
@@ -4357,49 +4676,197 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   height: 100%;
   min-height: 280px;
 }
-.product-detail-image > .product-image { object-fit: contain; padding: 0 !important; background: #fff !important; }
-.product-detail-image-fallback { display: grid; place-items: center; color: var(--text-muted); font-size: 48px; }
+.product-detail-image > .product-image {
+  object-fit: contain;
+  padding: 0 !important;
+  background: #fff !important;
+}
+.product-detail-image-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 48px;
+}
 
-.product-detail-buy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: clamp(22px, 3vw, 36px); }
-.product-detail-price-label { color: var(--text-soft); font-size: 13px; font-weight: 650; }
-.product-detail-price { margin-top: 7px; }
-.product-detail-price .price-display strong { color: var(--text); font-size: clamp(30px, 3.4vw, 43px); font-weight: 750; letter-spacing: -.035em; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.product-detail-price-source { margin: 5px 0 0; color: var(--text-soft); font-size: 13px; }
-.product-detail-movement { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin: 18px 0 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--text-soft); font-size: 12px; }
-.product-detail-movement strong { color: var(--brand-strong); font-variant-numeric: tabular-nums; }
-.product-detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; width: 100%; margin-top: 22px; }
-.product-detail-actions .button { min-height: 44px; }
-.product-detail-targets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; color: var(--text-soft); font-size: 12px; }
-.product-detail-targets > strong { color: var(--text); }
-.product-detail-targets .status { margin: 0; }
+.product-detail-buy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: clamp(22px, 3vw, 36px);
+}
+.product-detail-price-label {
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 650;
+}
+.product-detail-price {
+  margin-top: 7px;
+}
+.product-detail-price .price-display strong {
+  color: var(--text);
+  font-size: clamp(30px, 3.4vw, 43px);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.product-detail-price-source {
+  margin: 5px 0 0;
+  color: var(--text-soft);
+  font-size: 13px;
+}
+.product-detail-movement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 18px 0 0;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-movement strong {
+  color: var(--brand-strong);
+  font-variant-numeric: tabular-nums;
+}
+.product-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 22px;
+}
+.product-detail-actions .button {
+  min-height: 44px;
+}
+.product-detail-targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-targets > strong {
+  color: var(--text);
+}
+.product-detail-targets .status {
+  margin: 0;
+}
 
-.product-detail-facts { display: flex; flex-direction: column; justify-content: center; gap: 0; padding: 18px; border-inline-start: 1px solid var(--line); background: var(--surface-muted); }
-.product-detail-facts > div { display: grid; gap: 5px; padding: 14px 2px; border-bottom: 1px solid var(--line); }
-.product-detail-facts > div:last-child { border-bottom: 0; }
-.product-detail-facts span { color: var(--text-soft); font-size: 12px; }
-.product-detail-facts strong { color: var(--text); font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.product-detail-facts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding: 18px;
+  border-inline-start: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+.product-detail-facts > div {
+  display: grid;
+  gap: 5px;
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.product-detail-facts > div:last-child {
+  border-bottom: 0;
+}
+.product-detail-facts span {
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-facts strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
 
-.product-detail-section { min-width: 0; margin-top: 0; padding-top: 22px; border-top: 1px solid var(--line); }
-.product-detail-section .section-heading { align-items: end; gap: 16px; }
+.product-detail-section {
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.product-detail-section .section-heading {
+  align-items: end;
+  gap: 16px;
+}
 .product-detail-section .section-heading h2,
-.product-history-heading h2 { margin: 0; color: var(--text); font-size: 21px; font-weight: 720; letter-spacing: -.025em; line-height: 1.2; text-transform: none; }
-.product-detail-section .section-heading p { display: none; }
-.product-offer-controls { gap: 10px; }
-.product-detail-page .custom-dropdown { min-width: 180px; }
-.product-detail-page .range-select { border: 0 !important; padding: 0 !important; background: transparent !important; }
-:root[data-theme="dark"] .page-wrap[data-page="product-detail"] .product-detail-page .range-select { background-image: none !important; }
-.product-detail-page .custom-dropdown-menu { max-height: min(280px, 45vh); }
-.product-detail-page .table-wrap { border: 1px solid var(--line); border-radius: 12px; }
-.product-detail-page .offers-table { width: 100%; }
-.product-detail-page .offers-table th { white-space: nowrap; }
-.product-detail-page .offer-row--best > td { background: color-mix(in srgb, var(--amber-bg) 55%, var(--surface-container)); }
-.product-detail-page .offer-best-flag { margin-inline-start: 7px; }
+.product-history-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-transform: none;
+}
+.product-detail-section .section-heading p {
+  display: none;
+}
+.product-offer-controls {
+  gap: 10px;
+}
+.product-detail-page .custom-dropdown {
+  min-width: 180px;
+}
+.product-detail-page .range-select {
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+:root[data-theme="dark"]
+  .page-wrap[data-page="product-detail"]
+  .product-detail-page
+  .range-select {
+  background-image: none !important;
+}
+.product-detail-page .custom-dropdown-menu {
+  max-height: min(280px, 45vh);
+}
+.product-detail-page .table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.product-detail-page .offers-table {
+  width: 100%;
+}
+.product-detail-page .offers-table th {
+  white-space: nowrap;
+}
+.product-detail-page .offer-row--best > td {
+  background: color-mix(in srgb, var(--amber-bg) 55%, var(--surface-container));
+}
+.product-detail-page .offer-best-flag {
+  margin-inline-start: 7px;
+}
 
-.product-history-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-.product-history-heading > div:first-child { display: grid; gap: 6px; }
-.product-history-heading .eyebrow { color: var(--text-soft); }
-.product-history-heading .range-select { flex: none; }
-.product-history-section .history-store-controls { margin: 0 0 12px; }
+.product-history-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.product-history-heading > div:first-child {
+  display: grid;
+  gap: 6px;
+}
+.product-history-heading .eyebrow {
+  color: var(--text-soft);
+}
+.product-history-heading .range-select {
+  flex: none;
+}
+.product-history-section .history-store-controls {
+  margin: 0 0 12px;
+}
 .product-history-section .history-chart {
   height: 290px;
   grid-template-columns: 112px minmax(0, 1fr);
@@ -4409,7 +4876,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-radius: 14px;
   background: var(--surface-container);
 }
-.product-history-section .chart-scale { padding: 10px 8px 28px 0; font-size: 11px; line-height: 1.25; }
+.product-history-section .chart-scale {
+  padding: 10px 8px 28px 0;
+  font-size: 11px;
+  line-height: 1.25;
+}
 .product-history-section .chart-plot {
   position: relative;
   min-width: 0;
@@ -4417,49 +4888,158 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border: 0;
   border-radius: 0;
   background-color: transparent;
-  background-image: linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-image: linear-gradient(
+    to bottom,
+    var(--line) 1px,
+    transparent 1px
+  );
   background-size: 100% 25%;
   box-shadow: none;
 }
-.product-history-section .chart-series { position: absolute; inset: 8px 0 30px; width: 100%; height: calc(100% - 38px); overflow: visible; }
-.product-history-section .chart-point { width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid var(--surface-container); box-shadow: 0 0 0 1px var(--text); }
+.product-history-section .chart-series {
+  position: absolute;
+  inset: 8px 0 30px;
+  width: 100%;
+  height: calc(100% - 38px);
+  overflow: visible;
+}
+.product-history-section .chart-point {
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--surface-container);
+  box-shadow: 0 0 0 1px var(--text);
+}
 .product-history-section .chart-point:hover,
-.product-history-section .chart-point:focus-visible { z-index: 2; width: 13px; height: 13px; outline: 2px solid var(--brand); outline-offset: 2px; }
-.product-history-section .chart-date-labels { position: absolute; inset-inline: 0; bottom: 0; display: flex; justify-content: space-between; color: var(--text-soft); font-size: 11px; }
-.product-history-section .history-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; color: var(--text-soft); font-size: 12px; }
-.product-history-section .history-observation-list { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-container); }
-.product-history-section .history-observation-list p { margin: 0; padding: 11px 14px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; }
-.product-history-section .history-observation-list p:last-child { border-bottom: 0; }
+.product-history-section .chart-point:focus-visible {
+  z-index: 2;
+  width: 13px;
+  height: 13px;
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.product-history-section .chart-date-labels {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-soft);
+  font-size: 11px;
+}
+.product-history-section .history-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-history-section .history-observation-list {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-container);
+}
+.product-history-section .history-observation-list p {
+  margin: 0;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 13px;
+}
+.product-history-section .history-observation-list p:last-child {
+  border-bottom: 0;
+}
 
 @media (max-width: 980px) {
-  .product-detail-overview { grid-template-columns: minmax(220px, .85fr) minmax(0, 1fr); }
-  .product-detail-image { border-inline-end: 1px solid var(--line); }
-  .product-detail-facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border-inline-start: 0; border-top: 1px solid var(--line); }
-  .product-detail-facts > div { border-bottom: 0; }
-  .product-history-section .history-chart { grid-template-columns: 100px minmax(0, 1fr); }
+  .product-detail-overview {
+    grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1fr);
+  }
+  .product-detail-image {
+    border-inline-end: 1px solid var(--line);
+  }
+  .product-detail-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border-inline-start: 0;
+    border-top: 1px solid var(--line);
+  }
+  .product-detail-facts > div {
+    border-bottom: 0;
+  }
+  .product-history-section .history-chart {
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
-  .product-detail-page { gap: 18px; }
-  .product-detail-heading { flex-direction: column; align-items: flex-start; }
-  .product-detail-identity h1 { font-size: 25px; }
-  .product-detail-meta { gap: 6px; }
-  .product-detail-compare { align-self: flex-start; padding-inline: 10px; }
-  .product-detail-overview { grid-template-columns: minmax(0, 1fr); }
-  .product-detail-image { min-height: 280px; border-inline-end: 0; border-bottom: 1px solid var(--line); }
+  .product-detail-page {
+    gap: 18px;
+  }
+  .product-detail-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .product-detail-identity h1 {
+    font-size: 25px;
+  }
+  .product-detail-meta {
+    gap: 6px;
+  }
+  .product-detail-compare {
+    align-self: flex-start;
+    padding-inline: 10px;
+  }
+  .product-detail-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .product-detail-image {
+    min-height: 280px;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--line);
+  }
   .product-detail-image > .product-image,
   .product-detail-image > .product-image-scan,
-  .product-detail-image-fallback { min-height: 230px; }
-  .product-detail-buy { padding: 22px; }
-  .product-detail-facts { grid-column: auto; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); border-top: 1px solid var(--line); }
+  .product-detail-image-fallback {
+    min-height: 230px;
+  }
+  .product-detail-buy {
+    padding: 22px;
+  }
+  .product-detail-facts {
+    grid-column: auto;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    border-top: 1px solid var(--line);
+  }
   .product-detail-section .section-heading,
-  .product-history-heading { align-items: flex-start; flex-direction: column; }
-  .product-history-heading { display: flex; }
-  .product-history-heading .range-select { align-self: flex-start; }
-  .product-detail-page .custom-dropdown { min-width: min(100%, 220px); }
-  .product-history-section .history-chart { height: 250px; grid-template-columns: 78px minmax(0, 1fr); gap: 6px; padding: 12px 10px; }
-  .product-history-section .chart-scale { font-size: 10px; }
-  .product-history-section .history-legend { gap: 8px 12px; }
+  .product-history-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .product-history-heading {
+    display: flex;
+  }
+  .product-history-heading .range-select {
+    align-self: flex-start;
+  }
+  .product-detail-page .custom-dropdown {
+    min-width: min(100%, 220px);
+  }
+  .product-history-section .history-chart {
+    height: 250px;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 6px;
+    padding: 12px 10px;
+  }
+  .product-history-section .chart-scale {
+    font-size: 10px;
+  }
+  .product-history-section .history-legend {
+    gap: 8px 12px;
+  }
 }
 .product-detail-page {
   --detail-stroke: var(--text);
@@ -4467,171 +5047,735 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   gap: 24px;
   min-width: 0;
 }
-.product-detail-back { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin: 0; min-height: 38px; }
-.product-detail-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-.product-detail-identity { min-width: 0; }
-.product-detail-identity .eyebrow { display: block; margin-bottom: 8px; }
-.product-detail-identity h1 { max-width: 50ch; margin: 0; color: var(--text); font-family: 'DM Sans', Arial, sans-serif !important; font-size: clamp(23px, 2vw, 29px) !important; font-weight: 750 !important; letter-spacing: -.04em !important; line-height: 1.18 !important; text-transform: none !important; overflow-wrap: anywhere; }
-.product-detail-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
-.product-detail-meta span { padding: 5px 10px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface-container); color: var(--text-soft); font-size: 12px; line-height: 1.2; }
-.product-detail-compare { flex: none; }
-.product-detail-overview { display: grid; grid-template-columns: minmax(260px, .95fr) minmax(280px, 1fr) minmax(180px, .55fr); align-items: stretch; gap: 0; overflow: hidden; border: 1px solid var(--line-strong); border-radius: var(--radius-lg); background: var(--surface-container); }
-.product-detail-image { position: relative; display: grid; min-height: 350px; place-items: center; overflow: hidden; padding: 28px; background: #fff; border-inline-end: 1px solid var(--line); }
-.product-detail-image > .product-image, .product-detail-image > .product-image-scan, .product-detail-image-fallback { grid-area: 1 / 1; width: 100%; height: 100%; min-height: 280px; }
-.product-detail-image > .product-image { object-fit: contain; padding: 0 !important; background: #fff !important; }
-.product-detail-image-fallback { display: grid; place-items: center; color: var(--text-muted); font-size: 48px; }
-.product-detail-buy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: clamp(22px, 3vw, 36px); }
-.product-detail-price-label { color: var(--text-soft); font-size: 13px; font-weight: 650; }
-.product-detail-price { margin-top: 7px; }
-.product-detail-price .price-display strong { color: var(--text); font-family: 'DM Sans', Arial, sans-serif !important; font-size: clamp(30px, 3.4vw, 43px) !important; font-weight: 750 !important; letter-spacing: -.035em; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.product-detail-price .converted-price { font-size: 12px; }
-.product-detail-price-source { margin: 5px 0 0; color: var(--text-soft); font-size: 13px; }
-.product-detail-movement { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin: 18px 0 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--text-soft); font-size: 12px; }
-.product-detail-movement strong { color: var(--brand-strong); font-variant-numeric: tabular-nums; }
-.product-detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; width: 100%; margin-top: 22px; }
-.product-detail-actions .button { min-height: 44px; }
-.product-detail-targets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; color: var(--text-soft); font-size: 12px; }
-.product-detail-targets > strong { color: var(--text); }
-.product-detail-targets .status { margin: 0; }
-.product-detail-facts { display: flex; flex-direction: column; justify-content: center; gap: 0; padding: 18px; border-inline-start: 1px solid var(--line); background: var(--surface-muted); }
-.product-detail-facts > div { display: grid; gap: 5px; padding: 14px 2px; border-bottom: 1px solid var(--line); }
-.product-detail-facts > div:last-child { border-bottom: 0; }
-.product-detail-facts span { color: var(--text-soft); font-size: 12px; }
-.product-detail-facts strong { color: var(--text); font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
-.product-detail-section { min-width: 0; margin-top: 0; padding-top: 22px; border-top: 1px solid var(--line); }
-.product-detail-section .section-heading { align-items: end; gap: 16px; }
-.product-detail-section .section-heading h2, .product-history-heading h2 { margin: 0; color: var(--text); font-size: 21px; font-weight: 720; letter-spacing: -.025em; line-height: 1.2; text-transform: none; }
-.product-detail-section .section-heading p { display: none; }
-.product-offer-controls { gap: 10px; }
-.product-detail-page .custom-dropdown { min-width: 180px; }
-.product-detail-page .custom-dropdown-menu { max-height: min(280px, 45vh); }
-.product-detail-page .table-wrap { border: 1px solid var(--line); border-radius: 12px; }
-.product-detail-page .offers-table { width: 100%; }
-.product-detail-page .offers-table th { white-space: nowrap; }
-.product-detail-page .offer-row--best > td { background: color-mix(in srgb, var(--amber-bg) 55%, var(--surface-container)); }
-.product-detail-page .offer-best-flag { margin-inline-start: 7px; }
-.product-history-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-.product-history-heading > div:first-child { display: grid; gap: 6px; }
-.product-history-heading .eyebrow { color: var(--text-soft); }
-.product-history-heading .range-select { flex: none; }
-.product-history-section .history-store-controls { margin: 0 0 12px; }
-.product-history-section .history-chart { height: 290px; grid-template-columns: 112px minmax(0, 1fr); gap: 10px; padding: 18px 18px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-container); }
-.product-history-section .chart-scale { padding: 10px 8px 28px 0; font-size: 11px; line-height: 1.25; }
-.product-history-section .chart-plot { position: relative; min-width: 0; height: 100%; border: 0; border-radius: 0; background-color: transparent; background-image: linear-gradient(to bottom, var(--line) 1px, transparent 1px); background-size: 100% 25%; box-shadow: none; }
-.product-history-section .chart-series { position: absolute; inset: 8px 0 30px; width: 100%; height: calc(100% - 38px); overflow: visible; }
-.product-history-section .chart-point { width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid var(--surface-container); box-shadow: 0 0 0 1px var(--text); }
-.product-history-section .chart-point:hover, .product-history-section .chart-point:focus-visible { z-index: 2; width: 13px; height: 13px; outline: 2px solid var(--brand); outline-offset: 2px; }
-.product-history-section .chart-date-labels { position: absolute; inset-inline: 0; bottom: 0; display: flex; justify-content: space-between; color: var(--text-soft); font-size: 11px; }
-.product-history-section .history-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; color: var(--text-soft); font-size: 12px; }
-.product-history-section .history-observation-list { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-container); }
-.product-history-section .history-observation-list p { margin: 0; padding: 11px 14px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; }
-.product-history-section .history-observation-list p:last-child { border-bottom: 0; }
+.product-detail-back {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  min-height: 38px;
+}
+.product-detail-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.product-detail-identity {
+  min-width: 0;
+}
+.product-detail-identity .eyebrow {
+  display: block;
+  margin-bottom: 8px;
+}
+.product-detail-identity h1 {
+  max-width: 50ch;
+  margin: 0;
+  color: var(--text);
+  font-family: "DM Sans", Arial, sans-serif !important;
+  font-size: clamp(23px, 2vw, 29px) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.18 !important;
+  text-transform: none !important;
+  overflow-wrap: anywhere;
+}
+.product-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.product-detail-meta span {
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.2;
+}
+.product-detail-compare {
+  flex: none;
+}
+.product-detail-overview {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.95fr) minmax(280px, 1fr) minmax(
+      180px,
+      0.55fr
+    );
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+}
+.product-detail-image {
+  position: relative;
+  display: grid;
+  min-height: 350px;
+  place-items: center;
+  overflow: hidden;
+  padding: 28px;
+  background: #fff;
+  border-inline-end: 1px solid var(--line);
+}
+.product-detail-image > .product-image,
+.product-detail-image > .product-image-scan,
+.product-detail-image-fallback {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+}
+.product-detail-image > .product-image {
+  object-fit: contain;
+  padding: 0 !important;
+  background: #fff !important;
+}
+.product-detail-image-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 48px;
+}
+.product-detail-buy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: clamp(22px, 3vw, 36px);
+}
+.product-detail-price-label {
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 650;
+}
+.product-detail-price {
+  margin-top: 7px;
+}
+.product-detail-price .price-display strong {
+  color: var(--text);
+  font-family: "DM Sans", Arial, sans-serif !important;
+  font-size: clamp(30px, 3.4vw, 43px) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.product-detail-price .converted-price {
+  font-size: 12px;
+}
+.product-detail-price-source {
+  margin: 5px 0 0;
+  color: var(--text-soft);
+  font-size: 13px;
+}
+.product-detail-movement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 18px 0 0;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-movement strong {
+  color: var(--brand-strong);
+  font-variant-numeric: tabular-nums;
+}
+.product-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 22px;
+}
+.product-detail-actions .button {
+  min-height: 44px;
+}
+.product-detail-targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-targets > strong {
+  color: var(--text);
+}
+.product-detail-targets .status {
+  margin: 0;
+}
+.product-detail-facts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding: 18px;
+  border-inline-start: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+.product-detail-facts > div {
+  display: grid;
+  gap: 5px;
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.product-detail-facts > div:last-child {
+  border-bottom: 0;
+}
+.product-detail-facts span {
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-detail-facts strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.product-detail-section {
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.product-detail-section .section-heading {
+  align-items: end;
+  gap: 16px;
+}
+.product-detail-section .section-heading h2,
+.product-history-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-transform: none;
+}
+.product-detail-section .section-heading p {
+  display: none;
+}
+.product-offer-controls {
+  gap: 10px;
+}
+.product-detail-page .custom-dropdown {
+  min-width: 180px;
+}
+.product-detail-page .custom-dropdown-menu {
+  max-height: min(280px, 45vh);
+}
+.product-detail-page .table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.product-detail-page .offers-table {
+  width: 100%;
+}
+.product-detail-page .offers-table th {
+  white-space: nowrap;
+}
+.product-detail-page .offer-row--best > td {
+  background: color-mix(in srgb, var(--amber-bg) 55%, var(--surface-container));
+}
+.product-detail-page .offer-best-flag {
+  margin-inline-start: 7px;
+}
+.product-history-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.product-history-heading > div:first-child {
+  display: grid;
+  gap: 6px;
+}
+.product-history-heading .eyebrow {
+  color: var(--text-soft);
+}
+.product-history-heading .range-select {
+  flex: none;
+}
+.product-history-section .history-store-controls {
+  margin: 0 0 12px;
+}
+.product-history-section .history-chart {
+  height: 290px;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 10px;
+  padding: 18px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-container);
+}
+.product-history-section .chart-scale {
+  padding: 10px 8px 28px 0;
+  font-size: 11px;
+  line-height: 1.25;
+}
+.product-history-section .chart-plot {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    var(--line) 1px,
+    transparent 1px
+  );
+  background-size: 100% 25%;
+  box-shadow: none;
+}
+.product-history-section .chart-series {
+  position: absolute;
+  inset: 8px 0 30px;
+  width: 100%;
+  height: calc(100% - 38px);
+  overflow: visible;
+}
+.product-history-section .chart-point {
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--surface-container);
+  box-shadow: 0 0 0 1px var(--text);
+}
+.product-history-section .chart-point:hover,
+.product-history-section .chart-point:focus-visible {
+  z-index: 2;
+  width: 13px;
+  height: 13px;
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.product-history-section .chart-date-labels {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-soft);
+  font-size: 11px;
+}
+.product-history-section .history-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.product-history-section .history-observation-list {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-container);
+}
+.product-history-section .history-observation-list p {
+  margin: 0;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 13px;
+}
+.product-history-section .history-observation-list p:last-child {
+  border-bottom: 0;
+}
 @media (max-width: 980px) {
-  .product-detail-overview { grid-template-columns: minmax(220px, .85fr) minmax(0, 1fr); }
-  .product-detail-facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border-inline-start: 0; border-top: 1px solid var(--line); }
-  .product-detail-facts > div { border-bottom: 0; }
-  .product-history-section .history-chart { grid-template-columns: 100px minmax(0, 1fr); }
+  .product-detail-overview {
+    grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1fr);
+  }
+  .product-detail-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border-inline-start: 0;
+    border-top: 1px solid var(--line);
+  }
+  .product-detail-facts > div {
+    border-bottom: 0;
+  }
+  .product-history-section .history-chart {
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
 }
 @media (max-width: 640px) {
-  .product-detail-page { gap: 18px; }
-  .product-detail-heading { align-items: flex-start; }
-  .product-detail-identity h1 { font-size: 23px !important; }
-  .product-detail-meta { gap: 6px; }
-  .product-detail-compare { padding-inline: 10px; }
-  .product-detail-overview { grid-template-columns: minmax(0, 1fr); }
-  .product-detail-image { min-height: 280px; border-inline-end: 0; border-bottom: 1px solid var(--line); }
-  .product-detail-image > .product-image, .product-detail-image > .product-image-scan, .product-detail-image-fallback { min-height: 230px; }
-  .product-detail-buy { padding: 22px; }
-  .product-detail-facts { grid-column: auto; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); border-top: 1px solid var(--line); }
-  .product-detail-section .section-heading, .product-history-heading { align-items: flex-start; flex-direction: column; }
-  .product-history-heading { display: flex; }
-  .product-history-heading .range-select { align-self: flex-start; }
-  .product-detail-page .custom-dropdown { min-width: min(100%, 220px); }
-  .product-history-section .history-chart { height: 250px; grid-template-columns: 78px minmax(0, 1fr); gap: 6px; padding: 12px 10px; }
-  .product-history-section .chart-scale { font-size: 10px; }
-  .product-history-section .history-legend { gap: 8px 12px; }
+  .product-detail-page {
+    gap: 18px;
+  }
+  .product-detail-heading {
+    align-items: flex-start;
+  }
+  .product-detail-identity h1 {
+    font-size: 23px !important;
+  }
+  .product-detail-meta {
+    gap: 6px;
+  }
+  .product-detail-compare {
+    padding-inline: 10px;
+  }
+  .product-detail-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .product-detail-image {
+    min-height: 280px;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .product-detail-image > .product-image,
+  .product-detail-image > .product-image-scan,
+  .product-detail-image-fallback {
+    min-height: 230px;
+  }
+  .product-detail-buy {
+    padding: 22px;
+  }
+  .product-detail-facts {
+    grid-column: auto;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    border-top: 1px solid var(--line);
+  }
+  .product-detail-section .section-heading,
+  .product-history-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .product-history-heading {
+    display: flex;
+  }
+  .product-history-heading .range-select {
+    align-self: flex-start;
+  }
+  .product-detail-page .custom-dropdown {
+    min-width: min(100%, 220px);
+  }
+  .product-history-section .history-chart {
+    height: 250px;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 6px;
+    padding: 12px 10px;
+  }
+  .product-history-section .chart-scale {
+    font-size: 10px;
+  }
+  .product-history-section .history-legend {
+    gap: 8px 12px;
+  }
 }
-.page-wrap[data-page="discover"] .deals-page-heading { margin-bottom: 0 !important; padding-block: 6px 2px; }
-.page-wrap[data-page="discover"] .deals-page-heading .eyebrow { margin-bottom: 8px; color: var(--text-soft); font-size: 11px; font-weight: 700; letter-spacing: .08em; }
-.page-wrap[data-page="discover"] .deals-page-heading h1 { max-width: 24ch; font-family: 'DM Sans', Arial, sans-serif; font-size: clamp(26px, 3.3vw, 40px); font-weight: 760; letter-spacing: -.045em; line-height: 1.08; text-transform: none; }
-.page-wrap[data-page="discover"] .deals-category-bar { gap: 8px !important; margin: 22px 0 26px !important; }
-.page-wrap[data-page="discover"] .deals-cat-pill { gap: 9px !important; min-height: 40px; padding: 8px 13px !important; border-color: var(--line-strong) !important; border-radius: 11px !important; background: var(--surface-container) !important; font-size: 13px !important; font-weight: 650 !important; transition: background-color .16s ease, border-color .16s ease, transform .16s ease !important; }
-.page-wrap[data-page="discover"] .deals-cat-pill::before { content: ""; width: 8px; height: 8px; flex: none; border-radius: 2px; background: var(--brand); transform: rotate(45deg); }
-.page-wrap[data-page="discover"] .deals-cat-pill:nth-child(3n + 2)::before { background: #4d91d8; }
-.page-wrap[data-page="discover"] .deals-cat-pill:nth-child(3n)::before { background: var(--amber); }
-.page-wrap[data-page="discover"] .deals-cat-pill:hover { border-color: var(--text) !important; background: var(--surface-muted) !important; transform: translateY(-1px) !important; }
-.page-wrap[data-page="discover"] .deals-cat-pill:focus-visible { outline: 2px solid var(--brand) !important; outline-offset: 2px; }
-.page-wrap[data-page="discover"] .deals-overview-container { gap: 0 !important; }
-.page-wrap[data-page="discover"] .deals-section { margin-top: 0; }
-.page-wrap[data-page="discover"] .deals-section > .section-heading { align-items: end; margin-bottom: 14px; }
-.page-wrap[data-page="discover"] .deals-section > .section-heading h2 { margin: 0; font-size: 21px; font-weight: 730; letter-spacing: -.025em; text-transform: none; }
-.page-wrap[data-page="discover"] .deal-cards-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)) !important; gap: 16px !important; }
-.page-wrap[data-page="discover"] .deal-card { border-color: var(--line-strong) !important; border-radius: 13px !important; }
-.page-wrap[data-page="discover"] .deal-card:hover { border-color: var(--brand) !important; box-shadow: 0 8px 20px color-mix(in srgb, var(--text) 9%, transparent) !important; }
+.page-wrap[data-page="discover"] .deals-page-heading {
+  margin-bottom: 0 !important;
+  padding-block: 6px 2px;
+}
+.page-wrap[data-page="discover"] .deals-page-heading .eyebrow {
+  margin-bottom: 8px;
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.page-wrap[data-page="discover"] .deals-page-heading h1 {
+  max-width: 24ch;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: clamp(26px, 3.3vw, 40px);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  text-transform: none;
+}
+.page-wrap[data-page="discover"] .deals-category-bar {
+  gap: 8px !important;
+  margin: 22px 0 26px !important;
+}
+.page-wrap[data-page="discover"] .deals-cat-pill {
+  gap: 9px !important;
+  min-height: 40px;
+  padding: 8px 13px !important;
+  border-color: var(--line-strong) !important;
+  border-radius: 11px !important;
+  background: var(--surface-container) !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease !important;
+}
+.page-wrap[data-page="discover"] .deals-cat-pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--brand);
+  transform: rotate(45deg);
+}
+.page-wrap[data-page="discover"] .deals-cat-pill:nth-child(3n + 2)::before {
+  background: #4d91d8;
+}
+.page-wrap[data-page="discover"] .deals-cat-pill:nth-child(3n)::before {
+  background: var(--amber);
+}
+.page-wrap[data-page="discover"] .deals-cat-pill:hover {
+  border-color: var(--text) !important;
+  background: var(--surface-muted) !important;
+  transform: translateY(-1px) !important;
+}
+.page-wrap[data-page="discover"] .deals-cat-pill:focus-visible {
+  outline: 2px solid var(--brand) !important;
+  outline-offset: 2px;
+}
+.page-wrap[data-page="discover"] .deals-overview-container {
+  gap: 0 !important;
+}
+.page-wrap[data-page="discover"] .deals-section {
+  margin-top: 0;
+}
+.page-wrap[data-page="discover"] .deals-section > .section-heading {
+  align-items: end;
+  margin-bottom: 14px;
+}
+.page-wrap[data-page="discover"] .deals-section > .section-heading h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 730;
+  letter-spacing: -0.025em;
+  text-transform: none;
+}
+.page-wrap[data-page="discover"] .deal-cards-grid {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, 240px), 1fr)
+  ) !important;
+  gap: 16px !important;
+}
+.page-wrap[data-page="discover"] .deal-card {
+  border-color: var(--line-strong) !important;
+  border-radius: 13px !important;
+}
+.page-wrap[data-page="discover"] .deal-card:hover {
+  border-color: var(--brand) !important;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--text) 9%, transparent) !important;
+}
 
-.page-wrap[data-page="discover"] .deal-card-photo-wrap { height: 205px !important; padding: 12px !important; }
-.page-wrap[data-page="discover"] .deal-card-photo-wrap > .product-image { padding: 0 !important; }
-.page-wrap[data-page="discover"] .deal-card-meta { font-size: 11px !important; letter-spacing: .01em !important; text-transform: none !important; }
-.page-wrap[data-page="discover"] .deal-card-title-link { min-height: 42px; font-size: 14px !important; line-height: 1.45 !important; }
-.page-wrap[data-page="discover"] .deal-current-price { font-size: 21px !important; font-weight: 750 !important; }
+.page-wrap[data-page="discover"] .deal-card-photo-wrap {
+  height: 205px !important;
+  padding: 12px !important;
+}
+.page-wrap[data-page="discover"] .deal-card-photo-wrap > .product-image {
+  padding: 0 !important;
+}
+.page-wrap[data-page="discover"] .deal-card-meta {
+  font-size: 11px !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+}
+.page-wrap[data-page="discover"] .deal-card-title-link {
+  min-height: 42px;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+.page-wrap[data-page="discover"] .deal-current-price {
+  font-size: 21px !important;
+  font-weight: 750 !important;
+}
 @media (max-width: 640px) {
-  .page-wrap[data-page="discover"] .deals-page-heading h1 { font-size: 27px; }
-  .page-wrap[data-page="discover"] .deals-category-bar { flex-wrap: nowrap !important; overflow-x: auto !important; padding: 2px 2px 8px !important; margin: 16px 0 20px !important; scrollbar-width: thin; }
-  .page-wrap[data-page="discover"] .deals-cat-pill { flex: none; }
+  .page-wrap[data-page="discover"] .deals-page-heading h1 {
+    font-size: 27px;
+  }
+  .page-wrap[data-page="discover"] .deals-category-bar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    padding: 2px 2px 8px !important;
+    margin: 16px 0 20px !important;
+    scrollbar-width: thin;
+  }
+  .page-wrap[data-page="discover"] .deals-cat-pill {
+    flex: none;
+  }
 }
 
-.page-wrap[data-page="discover"] .deals-page-heading h1 { font-family: 'DM Sans', Arial, sans-serif !important; font-size: clamp(25px, 2.5vw, 32px) !important; font-weight: 750 !important; letter-spacing: -.035em !important; text-transform: none !important; }
+.page-wrap[data-page="discover"] .deals-page-heading h1 {
+  font-family: "DM Sans", Arial, sans-serif !important;
+  font-size: clamp(25px, 2.5vw, 32px) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.035em !important;
+  text-transform: none !important;
+}
 .page-wrap[data-page="discover"] .eyebrow,
-.page-wrap[data-page="discover"] .discovery-overview .eyebrow { font-size: 12px !important; font-weight: 650 !important; letter-spacing: 0 !important; text-transform: none !important; }
-.page-wrap[data-page="discover"] .converted-price { font-size: 11px !important; }
-.page-wrap[data-page="discover"] .overview-item--product { position: relative; background: var(--surface-container) !important; color: var(--text) !important; }
-.page-wrap[data-page="discover"] .overview-item--product .product-link { color: var(--text) !important; }
+.page-wrap[data-page="discover"] .discovery-overview .eyebrow {
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.page-wrap[data-page="discover"] .converted-price {
+  font-size: 11px !important;
+}
+.page-wrap[data-page="discover"] .overview-item--product {
+  position: relative;
+  background: var(--surface-container) !important;
+  color: var(--text) !important;
+}
+.page-wrap[data-page="discover"] .overview-item--product .product-link {
+  color: var(--text) !important;
+}
 .page-wrap[data-page="discover"] .overview-item--product span,
-.page-wrap[data-page="discover"] .overview-item--product small { color: var(--text-soft) !important; font-size: 12px !important; }
-.page-wrap[data-page="discover"] .overview-product-image { position: relative; flex: none; width: 58px; height: 58px; overflow: hidden; border-radius: 7px; background: #fff; }
+.page-wrap[data-page="discover"] .overview-item--product small {
+  color: var(--text-soft) !important;
+  font-size: 12px !important;
+}
+.page-wrap[data-page="discover"] .overview-product-image {
+  position: relative;
+  flex: none;
+  width: 58px;
+  height: 58px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #fff;
+}
 .page-wrap[data-page="discover"] .overview-product-image > .product-image,
-.page-wrap[data-page="discover"] .overview-product-image > .product-image-scan { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff !important; }
-.page-wrap[data-page="discover"] .discovery-overview .overview-item--product { align-items: center; }
-.page-wrap[data-page="discover"] .recent-deal-body > p { font-size: 12px !important; line-height: 1.45; }
-.page-wrap[data-page="discover"] .recent-deal-prices .converted-price { font-size: 11px !important; }
+.page-wrap[data-page="discover"] .overview-product-image > .product-image-scan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff !important;
+}
+.page-wrap[data-page="discover"] .discovery-overview .overview-item--product {
+  align-items: center;
+}
+.page-wrap[data-page="discover"] .recent-deal-body > p {
+  font-size: 12px !important;
+  line-height: 1.45;
+}
+.page-wrap[data-page="discover"] .recent-deal-prices .converted-price {
+  font-size: 11px !important;
+}
 @media (min-width: 1000px) {
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) { grid-template-columns: minmax(0, 760px) !important; }
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) > .deal-card { display: grid !important; grid-template-columns: minmax(240px, .9fr) minmax(0, 1fr); }
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) .deal-card-photo-wrap { height: auto !important; min-height: 300px; border-bottom: 0 !important; border-inline-end: 1px solid var(--line); }
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) .deal-card-body { min-height: 300px; }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child) {
+    grid-template-columns: minmax(0, 760px) !important;
+  }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child)
+    > .deal-card {
+    display: grid !important;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1fr);
+  }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child)
+    .deal-card-photo-wrap {
+    height: auto !important;
+    min-height: 300px;
+    border-bottom: 0 !important;
+    border-inline-end: 1px solid var(--line);
+  }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child)
+    .deal-card-body {
+    min-height: 300px;
+  }
 }
 @media (max-width: 720px) {
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) { grid-template-columns: minmax(0, 1fr) !important; }
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) > .deal-card { display: flex !important; }
-  .page-wrap[data-page="discover"] .deals-section .deal-cards-grid:has(> .deal-card:only-child) .deal-card-photo-wrap { height: 205px !important; min-height: 0; border-inline-end: 0; border-bottom: 1px solid var(--line) !important; }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child)
+    > .deal-card {
+    display: flex !important;
+  }
+  .page-wrap[data-page="discover"]
+    .deals-section
+    .deal-cards-grid:has(> .deal-card:only-child)
+    .deal-card-photo-wrap {
+    height: 205px !important;
+    min-height: 0;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--line) !important;
+  }
 }
 @media (max-width: 760px) {
-  .app-shell { width: 100vw !important; min-width: 0 !important; }
-  .main-area { width: 100% !important; min-width: 0 !important; margin-inline-start: 0 !important; }
-  .page-wrap { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
-  .topbar { right: 0 !important; width: auto !important; min-width: 0 !important; overflow-x: auto !important; justify-content: flex-start !important; gap: 8px !important; padding-inline: 12px !important; scrollbar-width: none; }
-  .topbar::-webkit-scrollbar { display: none; }
-  .topbar .breadcrumbs { display: none !important; }
-  .topbar-search-area { margin-inline-start: 0 !important; min-width: max-content; }
-  :root[dir="rtl"] .topbar { left: 0 !important; right: 0 !important; }
+  .app-shell {
+    width: 100vw !important;
+    min-width: 0 !important;
+  }
+  .main-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-inline-start: 0 !important;
+  }
+  .page-wrap {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .topbar {
+    right: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding-inline: 12px !important;
+    scrollbar-width: none;
+  }
+  .topbar::-webkit-scrollbar {
+    display: none;
+  }
+  .topbar .breadcrumbs {
+    display: none !important;
+  }
+  .topbar-search-area {
+    margin-inline-start: 0 !important;
+    min-width: max-content;
+  }
+  :root[dir="rtl"] .topbar {
+    left: 0 !important;
+    right: 0 !important;
+  }
 }
 
-/* (max-width: 760px): the sidebar becomes an off-canvas drawer. Two later
-rules in the cascade overrode the drawer's own geometry: the fixed-width
+/* (max-width: 760px): the sidebar becomes an off canvas drawer. Two later
+rules in the cascade overrode the drawer's own geometry: the fixed width
 rework (width 240px/68px !important, z-index 10 !important) beat the
 drawer's plain width min(280px,84vw) and z-index 12, so a persisted
-collapsed state opened a 68px-wide drawer, and the drawer slid underneath
+collapsed state opened a 68px wide drawer, and the drawer slid underneath
 the mobile scrim (z-index 11). Re-assert the drawer geometry at the end of
 the stylesheet, after every competitor. The closed drawer is translated
-fully off-canvas either way; its width comes from the same drawer rules. */
+fully off canvas either way,  its width comes from the same drawer rules. */
 @media (max-width: 760px) {
-.sidebar,
-.sidebar--collapsed,
-.sidebar--mobile-open,
-.sidebar--collapsed.sidebar--mobile-open {
-width: min(280px, 84vw) !important;
-z-index: 12 !important;
-}
+  .sidebar,
+  .sidebar--collapsed,
+  .sidebar--mobile-open,
+  .sidebar--collapsed.sidebar--mobile-open {
+    width: min(280px, 84vw) !important;
+    z-index: 12 !important;
+  }
 }
 
 .settings-category-nav button,
@@ -4641,8 +5785,12 @@ z-index: 12 !important;
   background: var(--surface-container) !important;
   box-shadow: 3px 3px 0 var(--text) !important;
   color: var(--text) !important;
-  font: 700 13px 'DM Sans', sans-serif !important;
-  transition: background-color .14s ease, color .14s ease !important;
+  font:
+    700 13px "DM Sans",
+    sans-serif !important;
+  transition:
+    background-color 0.14s ease,
+    color 0.14s ease !important;
 }
 
 .settings-category-nav button:hover,
@@ -4666,7 +5814,9 @@ z-index: 12 !important;
   outline-offset: 2px !important;
 }
 
-.settings-category-nav button { min-height: 48px !important; }
+.settings-category-nav button {
+  min-height: 48px !important;
+}
 
 .view-mode-switch {
   width: 176px !important;
@@ -4709,7 +5859,7 @@ z-index: 12 !important;
   color: #101820 !important;
   font-size: 12px !important;
   font-weight: 800 !important;
-  letter-spacing: .02em !important;
+  letter-spacing: 0.02em !important;
   line-height: 1.2 !important;
   text-transform: none !important;
 }
@@ -4723,7 +5873,10 @@ z-index: 12 !important;
   flex: 0 0 190px !important;
 }
 
-.page-wrap[data-page="discover"] .discover-toolbar .sort-control .custom-dropdown {
+.page-wrap[data-page="discover"]
+  .discover-toolbar
+  .sort-control
+  .custom-dropdown {
   min-width: 190px !important;
   width: 190px !important;
 }
@@ -4743,7 +5896,7 @@ z-index: 12 !important;
 /* The sort box and both price fields pass borderless in dark mode -
 the hard 2px var(--text) frames read as white rails on the dark
 toolbar. Focus switches to an inset white ring (theme text ink) so the
-field outline matches the white frame family; the brand red ring would
+field outline matches the white frame family,  the brand red ring would
 stand out. Light keeps its ink frame + brand ring. */
 /* Dark mode keeps the same ink frame as light: the 2px var(--text)
 border renders as the cream white rail on the dark toolbar (the same
@@ -4751,12 +5904,26 @@ token paints #202020 in light). Focus adds an inset white ring. The
 open state drops the ring entirely - an outline cannot be clipped per
 side, so its bottom segment would paint a line through the button /
 list union. Light keeps its ink frame + brand ring. */
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown-btn:focus,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown-btn:focus-visible,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .price-number-input:focus,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .price-number-input:focus-visible,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .clear-price-btn:focus,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .clear-price-btn:focus-visible {
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown-btn:focus,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown-btn:focus-visible,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .price-number-input:focus,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .price-number-input:focus-visible,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .clear-price-btn:focus,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .clear-price-btn:focus-visible {
   outline: 2px solid var(--text) !important;
   outline-style: solid !important;
   outline-color: var(--text) !important;
@@ -4765,7 +5932,7 @@ list union. Light keeps its ink frame + brand ring. */
 
 /* Open dropdowns (all of them, both themes): no focus outline while the
 menu is open. The outline would draw a bottom segment straight through
-the button/list union and break the "one extended thing" look; the
+the button/list union and break the "one extended thing" look,  the
 border frame (and the menu's side frames) carry the shape instead. */
 .custom-dropdown.is-open .custom-dropdown-btn:focus,
 .custom-dropdown.is-open .custom-dropdown-btn:focus-visible {
@@ -4774,8 +5941,16 @@ border frame (and the menu's side frames) carry the shape instead. */
 }
 
 /* Dark-scoped twin so it outranks the dark focus rule above. */
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown.is-open .custom-dropdown-btn:focus,
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown.is-open .custom-dropdown-btn:focus-visible {
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-btn:focus,
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-btn:focus-visible {
   outline: none !important;
   outline-offset: 0 !important;
 }
@@ -4786,18 +5961,22 @@ border frame (and the menu's side frames) carry the shape instead. */
 
 .page-wrap[data-page="discover"] .price-number-input {
   /* The min/max fields grow to share the free toolbar width instead of
-  sitting at a fixed 190px with dead space around them; the band stays
-  130px so a squeeze never crushes the fields on mid-size toolbars. */
+  sitting at a fixed 190px with dead space around them,  the band stays
+  130px so a squeeze never crushes the fields on mid size toolbars. */
   width: auto !important;
   min-width: 0 !important;
   flex: 1 1 130px !important;
   padding: 0 13px !important;
   background: var(--surface-container) !important;
-  font: 700 15px 'DM Sans', sans-serif !important;
+  font:
+    700 15px "DM Sans",
+    sans-serif !important;
 }
 
 .page-wrap[data-page="discover"] .price-number-input:focus,
-.page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown-btn:focus-visible,
+.page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown-btn:focus-visible,
 .page-wrap[data-page="discover"] .clear-price-btn:focus-visible {
   border-color: var(--brand) !important;
   outline: none !important;
@@ -4821,7 +6000,9 @@ border frame (and the menu's side frames) carry the shape instead. */
   border-color: var(--text) !important;
   background: #ffeb00 !important;
   color: #202020 !important;
-  font: 700 12px 'DM Sans', sans-serif !important;
+  font:
+    700 12px "DM Sans",
+    sans-serif !important;
   box-shadow: 2px 2px 0 var(--text) !important;
 }
 
@@ -4858,8 +6039,11 @@ border frame (and the menu's side frames) carry the shape instead. */
 .auth-dialog .dialog-head h2 {
   margin: 0 !important;
   color: var(--text) !important;
-  font: 400 clamp(26px, 6vw, 34px)/1 'Anton', Impact, sans-serif !important;
-  letter-spacing: .01em !important;
+  font:
+    400 clamp(26px, 6vw, 34px)/1 "Anton",
+    Impact,
+    sans-serif !important;
+  letter-spacing: 0.01em !important;
   text-transform: uppercase !important;
 }
 
@@ -4873,7 +6057,9 @@ border frame (and the menu's side frames) carry the shape instead. */
   border-radius: 5px !important;
   background: var(--surface) !important;
   color: var(--text) !important;
-  font: 500 14px 'DM Sans', sans-serif !important;
+  font:
+    500 14px "DM Sans",
+    sans-serif !important;
 }
 
 .auth-dialog input.field:focus,
@@ -4905,7 +6091,10 @@ border frame (and the menu's side frames) carry the shape instead. */
     flex-basis: 100% !important;
   }
 
-  .page-wrap[data-page="discover"] .discover-toolbar .sort-control .custom-dropdown {
+  .page-wrap[data-page="discover"]
+    .discover-toolbar
+    .sort-control
+    .custom-dropdown {
     min-width: 0 !important;
     width: 100% !important;
   }
@@ -4932,7 +6121,10 @@ border frame (and the menu's side frames) carry the shape instead. */
     flex: 1 1 100% !important;
   }
 
-  .page-wrap[data-page="discover"] .discover-toolbar .sort-control .custom-dropdown {
+  .page-wrap[data-page="discover"]
+    .discover-toolbar
+    .sort-control
+    .custom-dropdown {
     width: 100% !important;
   }
 
@@ -4943,122 +6135,134 @@ border frame (and the menu's side frames) carry the shape instead. */
   }
 }
 
-
 /* =====================================================================
 Back-button + auth-dialog border design (B tail, revised): instead of
-the account-access offset-shadow look requested earlier, these borrow
+the account-access offset shadow look requested earlier, these borrow
 the discover toolbar container's border design: 2px solid var(--text)
 frame, 7px radius, 3px 3px 0 var(--text) offset shadow. Everything
-keeps the bright #ffeb00 fill; on hover the fill brightens to #fff35a,
+keeps the bright #ffeb00 fill,  on hover the fill brightens to #fff35a,
 the control lifts translate(-1px, -1px) and the shadow grows to
 4px 4px 0. var(--text) ink (instead of hardcoded #202020) keeps the
 frame and shadow visible in dark mode too, exactly like the toolbar.
-Appended at the end so nothing here can be out-cascaded.
+Appended at the end so nothing here can be out cascaded.
 ===================================================================== */
 .discover-back-button,
 .page-wrap[data-page="discover"] .discover-back-button,
 .product-detail-back {
-color: #202020 !important;
-background: #ffeb00 !important;
-border: 2px solid var(--text) !important;
-border-radius: 7px !important;
-box-shadow: 3px 3px 0 var(--text) !important;
-font-weight: 750 !important;
-/* One back affordance geometry on every view that has one: same
-control size, same left offset (start-aligned above the page heading),
+  color: #202020 !important;
+  background: #ffeb00 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 7px !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+  font-weight: 750 !important;
+  /* One back affordance geometry on every view that has one: same
+control size, same left offset (start aligned above the page heading),
 same gap to the heading block (was 12px on search results, 17px on
 product detail). */
-margin-bottom: 14px !important;
-min-height: 40px !important;
-padding: 0 14px !important;
+  margin-bottom: 14px !important;
+  min-height: 40px !important;
+  padding: 0 14px !important;
 }
 
 .discover-back-button:hover,
 .page-wrap[data-page="discover"] .discover-back-button:hover,
 .product-detail-back:hover {
-background: #fff35a !important;
-transform: translate(-1px, -1px) !important;
-box-shadow: 4px 4px 0 var(--text) !important;
+  background: #fff35a !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 4px 4px 0 var(--text) !important;
 }
 
 /* The blue "sign in to manage" button keeps its colors and adopts the
-same hover lift + shadow growth, with the same theme-aware ink. */
+same hover lift + shadow growth, with the same theme aware ink. */
 .button--blue:hover {
-background: #244b9e !important;
-transform: translate(-1px, -1px);
-box-shadow: 4px 4px 0 var(--text) !important;
+  background: #244b9e !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text) !important;
 }
 
 /* The sign in/up popup dialog carries the toolbar container's border
 design: 2px var(--text) frame, 7px corners, 3px 3px 0 var(--text). */
 .scrim .auth-dialog {
-border: 2px solid var(--text) !important;
-border-radius: 7px !important;
-box-shadow: 3px 3px 0 var(--text) !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 7px !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
 }
 
 /* =====================================================================
 Dark-theme discover toolbar controls: boxes and label text.
-- The sort box (custom-dropdown-btn) is pinned to a near-white
-#fffdf8 surface with --text ink; in dark mode --text turns cream and
-the label goes white-on-white. In dark, pin the box to the same dark
+- The sort box (custom-dropdown-btn) is pinned to a near white
+#fffdf8 surface with --text ink,  in dark mode --text turns cream and
+the label goes white on white. In dark, pin the box to the same dark
 surface the price inputs already use, with cream ink, so the sort box
 and both price boxes read as one family on the toolbar.
-- The "Price range" label is pinned to dark-navy #101820 ink, which
-turns near-invisible on the dark toolbar. In dark, switch it to the
+- The "Price range" label is pinned to dark navy #101820 ink, which
+turns near invisible on the dark toolbar. In dark, switch it to the
 theme text color (cream). Light theme keeps the exact original inks.
 ===================================================================== */
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown-btn {
-background: var(--surface-container) !important;
-color: var(--text) !important;
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown-btn {
+  background: var(--surface-container) !important;
+  color: var(--text) !important;
 }
 
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .discover-price-label {
-color: var(--text) !important;
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .discover-price-label {
+  color: var(--text) !important;
 }
 
 /* =====================================================================
-Sort drop-down union (B tail): the list must read as one piece with
-its button — no seam line, no open corners floating above the list.
+Sort drop down union (B tail): the list must read as one piece with
+its button ,  no seam line, no open corners floating above the list.
 Earlier rules tried this (border-bottom-color: transparent) but later
 toolbar rules re-set the frame (border/radius), leaving a visible
 2px strip and open bottom corners above the menu. Re-asserted here,
 after every competitor: the open button loses its bottom frame and
 radius, and the list itself has no top border. The menu already
 overlaps the button's lower edge (top: 100% with no offset), so no
-margin tricking is needed — a margin-bottom would pull the button
+margin tricking is needed ,  a margin-bottom would pull the button
 downward exactly when it opens. No positional change on open.
 ===================================================================== */
-.page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown.is-open .custom-dropdown-btn {
-border-bottom: 0 !important;
-border-bottom-left-radius: 0 !important;
-border-bottom-right-radius: 0 !important;
+.page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-btn {
+  border-bottom: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
-.page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown.is-open .custom-dropdown-menu {
-border-top: 0 !important;
-padding-top: 4px !important;
+.page-wrap[data-page="discover"]
+  .discover-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-menu {
+  border-top: 0 !important;
+  padding-top: 4px !important;
 }
 
 /* =====================================================================
 Categories cards (B tail, dark): on hover only the fill brightens and
 the card lifts. The generic hover rule re-inks the text to #202020 and
-the discover hover re-frames the border to var(--text) — both jump
+the discover hover re-frames the border to var(--text) ,  both jump
 colors on a dark surface. Re-pinned here so text and outline keep
-their resting colors in dark mode; light keeps the original hover.
+their resting colors in dark mode,  light keeps the original hover.
 ===================================================================== */
-:root[data-theme="dark"] .page-wrap[data-page="discover"] .deals-cat-pill:hover {
-border-color: var(--line-strong) !important;
-color: var(--text) !important;
+:root[data-theme="dark"]
+  .page-wrap[data-page="discover"]
+  .deals-cat-pill:hover {
+  border-color: var(--line-strong) !important;
+  color: var(--text) !important;
 }
 
-/* Sort-by drop-down list (B tail): the menu's side frame takes the same
+/* Sort-by drop down list (B tail): the menu's side frame takes the same
 ink as the button frame (var(--text): #202020 black in light, the cream
 white in dark) instead of the muted var(--line), so the open list and
 its button read as one framed piece. Scoped to the discover toolbar
-dropdown; other dropdowns keep their line-color frames. */
+dropdown,  other dropdowns keep their line color frames. */
 .page-wrap[data-page="discover"] .discover-toolbar .custom-dropdown-menu {
-border-color: var(--text) !important;
+  border-color: var(--text) !important;
 }
 
 /* =====================================================================
@@ -5066,8 +6270,8 @@ Sidebar expand / collapse motion system (B tail, final block).
 
 Behavior this replaces: labels/nav badges/footer text were rendered
 conditionally, so they disappeared from the DOM the instant the rail
-toggled; the brand row swapped the wordmark for the mini logo with no
-crossfade; every moving channel ran a plain 0.18s `ease`; the mobile
+toggled,  the brand row swapped the wordmark for the mini logo with no
+crossfade,  every moving channel ran a plain 0.18s `ease`,  the mobile
 drawer had no slide transition at all.
 
 What this block does:
@@ -5079,9 +6283,9 @@ What this block does:
    (opacity + width clip) instead of popping.
 3. The brand row keeps wordmark, collapse button and mini logo in one
    overlapping grid cell and crossfades between them.
-4. Per-aspect-ratio behavior: >1050px animates 240px <-> 68px; the
+4. Per-aspect-ratio behavior: >1050px animates 240px <-> 68px,  the
    761-1050px band keeps its forced 76px rail with labels suppressed
-   in BOTH states; <=760px is the drawer with a real slide.
+   in BOTH states,  <=760px is the drawer with a real slide.
 5. prefers-reduced-motion collapses all of it to jumps.
 ===================================================================== */
 :root {
@@ -5091,12 +6295,14 @@ What this block does:
 
 /* 1) Timing: sidebar width + drawer transform share one curve. */
 .sidebar {
-  transition: width var(--side-dur) var(--side-ease), transform var(--side-dur) var(--side-ease) !important;
+  transition:
+    width var(--side-dur) var(--side-ease),
+    transform var(--side-dur) var(--side-ease) !important;
 }
 
 /* Content reacting smoothly: the main column and the pinned topbar
    move with the EXACT same duration and curve as the sidebar. (The
-   topbar rests against the sidebar edge; a plain-ease mismatch is
+   topbar rests against the sidebar edge,  a plain ease mismatch is
    what used to make the topbar look like it teleported.) */
 .main-area,
 .sidebar ~ .main-area,
@@ -5106,15 +6312,19 @@ What this block does:
 
 .topbar,
 .topbar.topbar--active {
-  transition: left var(--side-dur) var(--side-ease), right var(--side-dur) var(--side-ease) !important;
+  transition:
+    left var(--side-dur) var(--side-ease),
+    right var(--side-dur) var(--side-ease) !important;
 }
 
 :root[dir="rtl"] .topbar {
-  transition: right var(--side-dur) var(--side-ease), left var(--side-dur) var(--side-ease) !important;
+  transition:
+    right var(--side-dur) var(--side-ease),
+    left var(--side-dur) var(--side-ease) !important;
 }
 
 /* 2) Labels live in the DOM on both states now. Expanded they clip to
-   fit; collapsed they fade + shrink to zero width, so the icon row
+   fit,  collapsed they fade + shrink to zero width, so the icon row
    glides instead of the sidebar contents re-flowing in a snap. The
    width/opacity fade runs on the shared curve. */
 .nav-item > .nav-item-label,
@@ -5123,7 +6333,9 @@ What this block does:
   white-space: nowrap !important;
   min-width: 0 !important;
   overflow: hidden !important;
-  transition: opacity var(--side-dur) var(--side-ease), width var(--side-dur) var(--side-ease) !important;
+  transition:
+    opacity var(--side-dur) var(--side-ease),
+    width var(--side-dur) var(--side-ease) !important;
 }
 
 .sidebar--collapsed .nav-item > .nav-item-label,
@@ -5146,9 +6358,9 @@ What this block does:
 .sidebar-top:has(> .sidebar-brand-btn) {
   display: grid !important;
   /* minmax(0, 1fr), never bare 1fr: a bare fr track takes the hidden
-  wordmark's min-content (~99px) as its floor, which overflows the
-  68px rail and slides the centered d-logo out of place. The 0 floor
-  keeps the track at the real rail width; the hidden items overflow
+  wordmark's min content (~99px) as its floor, which overflows the
+  68px rail and slides the centered d logo out of place. The 0 floor
+  keeps the track at the real rail width,  the hidden items overflow
   invisibly instead. */
   grid-template-columns: minmax(0, 1fr) !important;
   align-items: center !important;
@@ -5159,7 +6371,10 @@ What this block does:
 .sidebar-top > .sidebar-brand-btn--minimized {
   grid-row: 1 !important;
   grid-column: 1 !important;
-  transition: opacity var(--side-dur) var(--side-ease), transform var(--side-dur) var(--side-ease), visibility 0s linear var(--side-dur) !important;
+  transition:
+    opacity var(--side-dur) var(--side-ease),
+    transform var(--side-dur) var(--side-ease),
+    visibility 0s linear var(--side-dur) !important;
 }
 
 .sidebar-top > .sidebar-brand-btn {
@@ -5174,42 +6389,46 @@ What this block does:
   justify-self: center !important;
   opacity: 0 !important;
   visibility: hidden !important;
-  transform: scale(.55) !important;
+  transform: scale(0.55) !important;
   pointer-events: none !important;
 }
 
 /* Reveal without latency: when the rail expands, the wordmark and the
 collapse button flip to visible fires instantly - visibility is a
-discrete property, so keeping the 0.22s hide-delay on the exposed
+discrete property, so keeping the 0.22s hide delay on the exposed
 state made both controls invisible for the whole expand animation and
 pop in "after a beat". The delay stays on the collapsed (hiding) side,
-so the fade-out during collapse keeps its crossfade. */
+so the fade out during collapse keeps its crossfade. */
 /* :not(--minimized) matters: the mini button carries BOTH classes
 (sidebar-brand-btn sidebar-brand-btn--minimized), so the bare
-.sidebar-brand-btn selector matched it too and forced the d-logo to
+.sidebar-brand-btn selector matched it too and forced the d logo to
 opacity 1 / visible while the rail was expanded. */
-.sidebar:not(.sidebar--collapsed) .sidebar-top > .sidebar-brand-btn:not(.sidebar-brand-btn--minimized),
+.sidebar:not(.sidebar--collapsed)
+  .sidebar-top
+  > .sidebar-brand-btn:not(.sidebar-brand-btn--minimized),
 .sidebar:not(.sidebar--collapsed) .sidebar-top > .sidebar-collapse-btn {
-opacity: 1 !important;
-visibility: visible !important;
-transform: none !important;
-pointer-events: auto !important;
-transition-delay: 0s !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  transition-delay: 0s !important;
 }
 
-/* Mirror for the mini logo's hide-direction: while expanding, it fades
+/* Mirror for the mini logo's hide direction: while expanding, it fades
 OUT with the delayed visibility (visible fade), while the wordmark and
 collapse button reveal with zero delay. Reveal = instant toggle of
-visibility; hide = fade first, then flip. */
+visibility,  hide = fade first, then flip. */
 .sidebar:not(.sidebar--collapsed) .sidebar-top > .sidebar-brand-btn--minimized {
-transition-delay: 0s, 0s, var(--side-dur) !important;
+  transition-delay: 0s, 0s, var(--side-dur) !important;
 }
 
-.sidebar--collapsed .sidebar-top > .sidebar-brand-btn:not(.sidebar-brand-btn--minimized),
+.sidebar--collapsed
+  .sidebar-top
+  > .sidebar-brand-btn:not(.sidebar-brand-btn--minimized),
 .sidebar--collapsed .sidebar-top > .sidebar-collapse-btn {
   opacity: 0 !important;
   visibility: hidden !important;
-  transform: scale(.55) !important;
+  transform: scale(0.55) !important;
   pointer-events: none !important;
 }
 
@@ -5221,14 +6440,14 @@ transition-delay: 0s, 0s, var(--side-dur) !important;
   transition-delay: 0s !important;
 }
 
-/* The active-item accent bar nudged 4px inward when collapsed; unify
+/* The active item accent bar nudged 4px inward when collapsed,  unify
    the offset so it never nudges during (or after) a toggle. */
 .sidebar .nav-item.is-active::after,
 .sidebar--collapsed .nav-item.is-active::after {
   inset-inline-end: -9px !important;
 }
 
-/* 4a) Forced-rail band (761px-1050px): the sidebar is always the rail
+/* 4a) Forced-rail band (761px 1050px): the sidebar is always the rail
    here, so labels and the expanded brand row are suppressed in BOTH
    states (labels previously spilled past the 76px rail edge). */
 @media (max-width: 1050px) and (min-width: 761px) {
@@ -5252,7 +6471,7 @@ transition-delay: 0s, 0s, var(--side-dur) !important;
   .sidebar-top > .sidebar-brand-btn {
     opacity: 0 !important;
     visibility: hidden !important;
-    transform: scale(.55) !important;
+    transform: scale(0.55) !important;
     pointer-events: none !important;
   }
 
@@ -5275,7 +6494,9 @@ transition-delay: 0s, 0s, var(--side-dur) !important;
   .sidebar--collapsed,
   .sidebar--mobile-open,
   .sidebar--collapsed.sidebar--mobile-open {
-    transition: width var(--side-dur) var(--side-ease), transform var(--side-dur) var(--side-ease) !important;
+    transition:
+      width var(--side-dur) var(--side-ease),
+      transform var(--side-dur) var(--side-ease) !important;
   }
 }
 

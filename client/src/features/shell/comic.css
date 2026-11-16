@@ -1,0 +1,64 @@
+/* =====================================================================
+   Dealio comic book design language, shared by the four product pages
+   (dashboard, discover, compare, product details):
+
+   - price status cards are drawn like comic panels: a thick var(--text)
+     ink frame plus a hard offset shadow, never a soft blur,
+   - corner radii stay on the platform default system (the same family
+     the notifications page uses: token driven 4/5/6px cards, 12px icon
+     tiles, pill chips), so nothing turns super boxy.
+
+   This file loads after the per page stylesheets, so its !important
+   rules out cascade both them and the legacy public stylesheets.
+   ===================================================================== */
+
+/*  1. Comic-panel price status cards  */
+
+/* One recipe everywhere a card reports a price status: 2.5px ink frame,
+   5px 5px 0 offset shadow in the raised surface colour. The dashboard
+   feed tiles keep their own stronger legacy comic frame (3px + 6px
+   shadow),  the nuclear rule above squares them. */
+.page-wrap:is(
+    [data-page="dashboard"],
+    [data-page="discover"],
+    [data-page="compare"],
+    [data-page="product-detail"]
+  )
+  :is(
+    .recent-deal,
+    .home-deal-card,
+    .home-card,
+    .home-store-tile,
+    .dash-tracked-card,
+    .compare-product-panel,
+    .compare-history-card,
+    .product-detail-page .offers-table tbody tr
+  ) {
+  border: 2.5px solid var(--text) !important;
+  box-shadow: 5px 5px 0 var(--surface-high) !important;
+}
+
+/* Clickable panels lift like the comic buttons do (translate into the
+   shadow, which grows by the same step) ,  no soft blur appears. */
+.page-wrap:is(
+    [data-page="dashboard"],
+    [data-page="discover"],
+    [data-page="compare"],
+    [data-page="product-detail"]
+  )
+  :is(
+    .home-card:hover,
+    .home-card:focus-within,
+    .dash-tracked-card:hover,
+    .dash-tracked-card:focus-within
+  ) {
+  border-color: var(--text) !important;
+  box-shadow: 7px 7px 0 var(--surface-high) !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+/*  3. Comic buttons inside the four pages  */
+
+/* The platform's primary/tonal/quiet buttons already carry the legacy
+   comic chrome (2px ink border + 3px 3px 0 shadow) and the shared
+   radius system,  nothing to add here. */

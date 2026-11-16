@@ -1,0 +1,644 @@
+/* Store-front home state of the Discover page (no search query set).
+   Uses the global design tokens from client/public/dealio-app-web.css and
+   logical CSS properties throughout so Arabic RTL mirrors cleanly. */
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  padding-block: 6px 40px;
+}
+
+/* Screen-only page title,  the global display face h1 sizing is irrelevant
+   when hidden, but keep the meter honest. */
+.home-page > .sr-only {
+  font-size: 20px !important;
+}
+
+/*  Category tiles  */
+
+.home-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+/* Phone widths: tiles keep the left aligned rhythm, and the last row's
+   stragglers grow to close it ,  a ragged 2-of 3 gap read as a broken
+   grid edge. */
+@media (max-width: 560px) {
+  .home-categories {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .home-cat-tile {
+    flex: 1 1 calc(33.33% - 8px);
+    min-width: 96px;
+    box-sizing: border-box;
+  }
+}
+
+.home-cat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 10px 14px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-cat-tile:hover,
+.home-cat-tile:focus-visible {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.home-cat-glyph {
+  width: 26px;
+  height: 26px;
+  color: var(--brand);
+}
+
+/*  Deal of the day  */
+
+.home-deal-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  gap: 26px;
+  padding: 24px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+}
+
+.home-deal-media {
+  position: relative;
+  min-height: 240px;
+  border-radius: 14px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.home-deal-badge {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  z-index: 1;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.home-deal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.home-deal-store {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.home-deal-name {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: start;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.home-deal-name:hover,
+.home-deal-name:focus-visible {
+  color: var(--brand);
+}
+
+.home-deal-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* The Price component renders .price-display > strong, and the legacy
+   ".price-display > strong { font: inherit }" rule (0,1,1) resets any
+   single class font-size back to the inherited 14px ,  so the display
+   size lives on the wrapper with enough specificity to win. */
+.home-deal-pricing .home-deal-price {
+  font-size: 30px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.3px;
+}
+
+.home-deal-was {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* The was price <del> contains a nested <strong>,  it must inherit the
+   strike and lose the default heavy weight. The line-through can't just
+   inherit: the Price wrapper is inline-grid, which stops decoration
+   propagation, so strike the strong directly. */
+.home-deal-was strong {
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+/* Secondary "Original AED" conversions are noise inside the pricing
+   block ,  hide them there and in the savings pill. */
+.home-deal-pricing .converted-price,
+.home-deal-savings .converted-price {
+  display: none !important;
+}
+
+.home-deal-savings {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.home-deal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-block-start: 6px;
+}
+
+/* Wide screens: the body's single left aligned column left the right
+   third of the card empty. Split it ,  one tight text block on the left
+   (store, name, price, savings pill stacked) and a vertically centered
+   action cluster on the right, aligned against the media panel, so no
+   corner of the card is orphaned. */
+@media (min-width: 1051px) {
+  .home-deal-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    /* Explicit rows so the action rail's `1 / -1` actually spans the
+       full body height ,  with implicit rows it resolved to one auto
+       row and the rail stuck to the top with dead space under it. */
+    grid-template-rows: repeat(4, auto);
+    column-gap: 28px;
+    align-items: center;
+  }
+
+  .home-deal-store,
+  .home-deal-name,
+  .home-deal-pricing,
+  .home-deal-savings {
+    grid-column: 1;
+  }
+
+  .home-deal-savings {
+    justify-self: start;
+    margin: 0;
+  }
+
+  .home-deal-actions {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
+    justify-self: end;
+    flex-direction: column;
+    /* Centered both ways: the stretched text button rendered its label
+       ragged against the primary button's edge. */
+    align-items: center;
+    margin: 0;
+  }
+
+  .home-deal-actions .button {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/*  Shelves  */
+
+.shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shelf-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Phones: shelf headings wrap to two lines and the arrows floated
+   beside the ragged second line ,  center the pair on the block so the
+   header rows read on one baseline. */
+@media (max-width: 760px) {
+  .shelf-header {
+    align-items: center;
+  }
+}
+
+.shelf-heading h2 {
+  margin: 2px 0 0;
+  font-size: 21px;
+}
+
+/* The deal heading anchors the fold: one clear step above the shelf heads. */
+.home-deal-day .section-heading h2 {
+  margin: 2px 0 0;
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.shelf-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+/* Comic page turn arrows: the same yellow chip language as the back
+   button ,  thick ink border, hard offset shadow, and the chip family's
+   7px corner. Hover lifts into the shadow and grows it one step. */
+.shelf-arrow {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 2px solid var(--text);
+  border-radius: 7px;
+  background: #ffeb00;
+  color: #202020;
+  box-shadow: 3px 3px 0 var(--text);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+/* Touch targets: keep the visual square 36px but grow the hit area on
+   small screens where there is no hover fallback. */
+@media (max-width: 760px) {
+  .shelf-arrow {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.shelf-arrow:hover:not(:disabled),
+.shelf-arrow:focus-visible:not(:disabled) {
+  background: #fff35a;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text);
+}
+
+/* An arrow that can't page anything must say so quietly. The dimmed
+   yellow fill over the warm dark page read as a muddy olive slab , 
+   disabled arrows sit on the platform surface instead, ink outline
+   kept, and only the enabled chip carries the yellow. */
+.shelf-arrow:disabled {
+  background: var(--surface-container);
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: default;
+}
+
+.shelf-arrow:disabled svg {
+  color: var(--text-muted);
+}
+
+.shelf-track {
+  display: grid;
+  grid-auto-flow: column;
+  /* Fixed-ish card width: a single item must render as a card, not a
+     full width billboard (the old minmax(_, 1fr) stretched it). */
+  grid-auto-columns: clamp(196px, 21vw, 300px);
+  gap: 14px;
+  padding: 4px 2px 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  scrollbar-width: thin;
+}
+
+.shelf-track > * {
+  scroll-snap-align: start;
+}
+
+.shelf-track:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Store tiles are narrower than product cards on wide screens,  on phones
+   they share the product shelf's mobile card width so the two strips
+   read as one system. */
+.home-stores .shelf-track {
+  grid-auto-columns: minmax(210px, 240px);
+}
+
+@media (max-width: 760px) {
+  .home-stores .shelf-track {
+    grid-auto-columns: clamp(160px, 42vw, 220px);
+  }
+}
+
+/*  Product cards on shelves  */
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+  overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-card:hover,
+.home-card:focus-within {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.home-card-media {
+  position: relative;
+  display: block;
+  height: 150px;
+  padding: 10px;
+  border: 0;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.home-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Imageless drops: the same Anton monogram tile the dashboard and
+   compare headers use, centered in the media panel. */
+.home-card-thumb-fallback {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-container);
+  color: var(--text-muted);
+  font-family: Anton, Impact, sans-serif;
+  font-size: 34px;
+  line-height: 1;
+  user-select: none;
+}
+
+.home-card-media:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -3px;
+}
+
+.home-card-badge {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.home-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.home-card-name {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: start;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.home-card-name:hover,
+.home-card-name:focus-visible {
+  color: var(--brand);
+}
+
+.home-card-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.home-card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.home-card-price {
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-card-was {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.home-card-view {
+  margin-block-start: 2px;
+}
+
+/*  Store tiles  */
+
+.home-store-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+/* A letter mark gives the text only tile a logo slot that matches the
+   image-fallback language used across the app (Anton initial on a tint).
+   Sized up so the coral stays legible at mobile tile scale. */
+.home-store-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-block-end: 4px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--brand) 16%, var(--surface-container));
+  color: var(--brand);
+  font-family: Anton, "DM Sans", sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+
+.home-store-tile:hover,
+.home-store-tile:focus-visible {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.home-store-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.home-store-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/*  Skeletons / empty  */
+
+.home-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+}
+
+.home-card-skeleton-photo {
+  height: 130px;
+  border-radius: 10px;
+}
+
+.home-empty {
+  margin-block: 10px;
+}
+
+/*  Responsive  */
+
+@media (max-width: 760px) {
+  .home-page {
+    gap: 26px;
+    padding-block-end: 28px;
+  }
+
+  .home-deal-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .home-deal-media {
+    min-height: 200px;
+  }
+
+  .home-categories {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 8px;
+  }
+
+  .home-cat-tile {
+    padding: 14px 8px 12px;
+    font-size: 12px;
+  }
+
+  .home-cat-glyph {
+    width: 22px;
+    height: 22px;
+  }
+
+  .shelf-track {
+    grid-auto-columns: clamp(160px, 42vw, 220px);
+  }
+
+  /* On phones the deal title runs three tight lines with a mid word
+     ellipsis,  two balanced lines read cleaner above the fold. */
+  .home-deal-name {
+    -webkit-line-clamp: 2;
+    text-wrap: balance;
+  }
+}
+
+/* Tablet: the 30px price + 15px was price pair wraps the struck price
+   onto its own line inside the narrower card ,  tighten the pair. */
+@media (min-width: 561px) and (max-width: 1050px) {
+  .home-deal-pricing {
+    gap: 10px;
+  }
+
+  .home-deal-pricing .home-deal-price {
+    font-size: 26px;
+  }
+
+  .home-deal-was {
+    font-size: 13px;
+  }
+
+  /* Keep the 3-line allowance here (phones get 2) and let the browser
+     balance the ragged mid word cut. */
+  .home-deal-name {
+    text-wrap: balance;
+  }
+}

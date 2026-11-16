@@ -1,0 +1,889 @@
+/* Product details page: two column hero (gallery + sticky buy box),
+   anchored sections, and a mobile bottom buy bar.
+   Uses the global tokens from client/public/dealio-app-web.css and logical
+   CSS properties so Arabic RTL mirrors cleanly. The legacy .product-hero
+   rules in the public stylesheet are intentionally overridden here. */
+
+.product-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-block-end: 40px;
+}
+
+/* Back button. The legacy stylesheet paints .product-detail-back and
+   .discover-back-button as the same yellow comic chip (2px ink border,
+   7px hand cut radius, 3px 3px 0 shadow) ,  keep exactly that and only
+   pin the page layout bits the chip needs inside this flex column. */
+.product-detail-page .product-detail-back {
+  align-self: flex-start;
+}
+
+[dir="rtl"] .product-detail-page .product-detail-back svg {
+  transform: scaleX(-1);
+}
+
+/*  Hero: gallery + buy box  */
+
+.product-detail-page .product-hero {
+  display: grid;
+  grid-template-columns: minmax(260px, 440px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+}
+
+.product-hero-media {
+  position: sticky;
+  inset-block-start: 84px;
+}
+
+.product-hero-image {
+  /* The legacy sheet positions layered .product-image--stack frames
+     absolutely (dealio-app-web-b.css 2125) assuming a relative wrap,  below
+     900px the sticky media panel goes static and the frames would escape
+     to the page root ,  painting the photo full bleed over the back link
+     while the panel itself stays empty. Contain them here. */
+  position: relative;
+  min-height: 300px;
+  border-radius: 14px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.product-hero-image > .product-image,
+.product-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-hero-image-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+  color: var(--text-muted);
+  font-family: Anton, "DM Sans", sans-serif;
+  font-size: 64px;
+}
+
+.product-hero-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.product-hero-main .eyebrow {
+  margin-block-start: 2px;
+}
+
+.product-detail-page .product-hero h1 {
+  margin: 0;
+  font-family: "DM Sans", Roboto, sans-serif !important;
+  font-size: clamp(20px, 2.2vw, 26px) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.product-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.product-hero-meta > span + span::before {
+  content: "·";
+  margin-inline-end: 10px;
+  color: var(--line);
+}
+
+/* Price hierarchy: current large, old struck through, discount badge. */
+
+.product-hero-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  margin-block-start: 6px;
+}
+
+.product-detail-page .product-hero-price-label {
+  display: block;
+  flex-basis: 100%;
+  color: var(--text-muted) !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* The current price reads in DM Sans rather than the global Anton display
+   face: it sits inside a sentence context buy box, not on a badge.
+   Scoped to the direct child: the "was" del also lives in this block and
+   must not inherit the 30px headline treatment. */
+.product-detail-page .product-hero-price > strong {
+  font-family: "DM Sans", Roboto, sans-serif !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  font-variant-numeric: tabular-nums !important;
+  line-height: 1.1 !important;
+}
+
+.product-detail-page .product-hero-old-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--text-muted) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  /* The <del> element strikes all of its text by default ,  the "Was"
+     label must stay plain,  only the price value below keeps the line. */
+  text-decoration: none !important;
+}
+
+/* The struck through previous price stays small and muted: it must never
+   compete with the current price (the global stylesheet sizes any strong
+   inside the price block like a headline). */
+.product-detail-page .product-hero-old-price strong,
+.product-detail-page .product-hero-old-price .price-display strong {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-muted) !important;
+  text-decoration: line-through !important;
+}
+
+.product-detail-page .product-hero-old-price small,
+.product-detail-page .product-hero-old-price .converted-price {
+  font-size: 12px !important;
+}
+
+.product-detail-page .product-hero-old-price span {
+  font-size: inherit !important;
+  color: inherit !important;
+}
+
+/* Converted-original sub lines: hidden in the hero (the market currency
+   appears once in the details facts row instead). */
+.product-detail-page .product-hero-price .converted-price {
+  display: none !important;
+}
+
+/* History chart scale labels (min / mid / max). */
+.product-detail-page .chart-scale span {
+  font-size: 11px !important;
+}
+
+/* Keep the offers count clear of the screen edge. */
+.product-detail-page .product-offer-controls {
+  margin-inline-end: 8px;
+}
+
+.product-detail-page .product-hero-discount {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.product-detail-page .product-hero-price .deal-quality {
+  font-size: 13px;
+}
+
+.product-hero-price-source {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.product-hero-cta {
+  margin-block-start: 8px;
+}
+
+.product-hero-cta .button {
+  min-width: 200px;
+}
+
+.product-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-detail-movement {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: 13px;
+}
+
+.product-detail-movement strong {
+  color: var(--brand);
+}
+
+.product-detail-targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 4px;
+  padding: 10px 14px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.product-detail-targets strong {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/*  In-page section nav  */
+
+.product-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-section-nav a {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  scroll-margin-block-start: 90px;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.product-section-nav a:hover,
+.product-section-nav a:focus-visible {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/*  Details section facts  */
+
+/* The global stylesheet sets table headers at 10px,  11px keeps them legible. */
+.product-detail-page .offers-table th {
+  font-size: 11px !important;
+  letter-spacing: 0.3px !important;
+}
+
+.product-details-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-block-end: 14px;
+}
+
+.product-details-facts > div {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-container);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.product-details-facts span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.product-details-facts strong {
+  font-size: 15px;
+}
+
+.product-details-description {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 72ch;
+}
+
+/*  Mobile bottom buy bar  */
+
+.product-mobile-buybar {
+  display: none;
+}
+
+/*  Responsive  */
+
+@media (max-width: 900px) {
+  .product-detail-page .product-hero {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .product-hero-media {
+    position: static;
+  }
+
+  .product-hero-image,
+  .product-hero-image-fallback {
+    min-height: 240px;
+  }
+}
+
+/* The sticky bar's product thumbnail is an absolutely positioned layered
+   image ,  out of the flex flow, so the title slid under it. Reserve its
+   38px + gap at the row start. */
+.product-detail-page .sticky-product-identity {
+  padding-inline-start: 48px;
+}
+
+/* The truncated title runs straight into the red price ,  the price
+   anchors to the identity block's far end instead. */
+.product-detail-page .sticky-product-identity > span {
+  margin-inline-start: auto;
+  padding-inline-start: 16px;
+}
+
+/* Tablet/phone topbar: the page title crumb wrapped onto two lines and
+   crowded the search icon ,  one ellipsized line, like the legacy
+   ≤560px rule. */
+@media (max-width: 1050px) {
+  .topbar .breadcrumbs {
+    min-width: 0;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+
+  .topbar .breadcrumbs strong {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .product-detail-page {
+    padding-block-end: 84px;
+  }
+
+  /* The DOM enhancement's sticky top bar is replaced by the bottom buy bar
+     on phones (documented behavior change). */
+  .sticky-product-bar {
+    display: none !important;
+  }
+
+  .product-mobile-buybar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-block-start: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: 0 -6px 18px rgb(0 0 0 / 12%);
+  }
+
+  .product-mobile-buybar-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .product-mobile-buybar-info strong {
+    font-size: 20px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .product-mobile-buybar-discount {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .product-mobile-buybar .button {
+    flex: none;
+    min-height: 40px;
+  }
+
+  .product-section-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-block-end: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ===========================================================================
+   PDP redesign: flat sections, row card offers, pill toggles.
+   The legacy sheets wrap every section in a bordered box and style the
+   offers as a full table,  the platform language is flat sections with
+   1.5px border cards, so the boxes go and the rows become cards.
+   =========================================================================== */
+
+/*  Flat sections: strip the section box + table frame  */
+
+.product-detail-page .content-section {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+.product-detail-page .table-wrap {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Empty states inside PDP sections are secondary notes, not heroes , 
+   collapse the legacy viewport height min heights. */
+.product-detail-page .empty-state {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 26px 22px !important;
+  margin-block: 6px !important;
+  border: 1.5px dashed var(--line-strong) !important;
+  border-radius: var(--radius-lg) !important;
+  background: transparent !important;
+  align-items: center;
+}
+
+/*  Hero price hierarchy  */
+
+/* The current price reads in DM Sans rather than the global Anton display
+   face: it sits inside a sentence context buy box, not on a badge. The
+   Price component wraps the text in an inline-grid, so the winning rule
+   must target the inner strong ,  the legacy ".product-hero-price strong"
+   Anton rule (0,1,1 !important) loses to this (0,3,1) one. */
+.product-detail-page .product-hero-price > strong .price-display > strong {
+  color: var(--text) !important;
+  font-family: "DM Sans", Roboto, sans-serif !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.3px !important;
+  line-height: 1.1 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Secondary "Original AED" conversions are noise on the hero, in the
+   struck old price, in target chips, in offers and in the mobile buy
+   bar ,  hide them here. */
+.product-detail-page .product-hero-old-price .converted-price,
+.product-detail-page .product-detail-targets .converted-price,
+.product-detail-page .offer-price .converted-price,
+.product-detail-page .tracking-preference-card .converted-price,
+.product-detail-page .product-mobile-buybar .converted-price,
+.product-activity .converted-price {
+  display: none !important;
+}
+
+/* The "was" <del> contains a nested <strong> from the Price component, 
+   strike it directly (the inline-grid wrapper stops decoration
+   propagation) and drop the heavy weight. */
+.product-detail-page .product-hero-old-price strong {
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+/*  Offers: row cards instead of a bordered table  */
+
+.product-detail-page .offers-table,
+.product-detail-page .offers-table tbody {
+  display: block;
+}
+
+.product-detail-page .offers-table thead {
+  display: none;
+}
+
+.product-detail-page .offers-table tbody {
+  display: grid;
+  gap: 10px;
+}
+
+.product-detail-page .offers-table tbody tr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  padding: 14px 18px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.product-detail-page .offers-table tbody tr:hover {
+  border-color: var(--brand);
+}
+
+.product-detail-page .offers-table td {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+/* The store name anchors the row,  let it take the leading space. */
+.product-detail-page .offers-table td:first-child {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.product-detail-page .offers-table td:first-child .product-link {
+  overflow-wrap: anywhere;
+}
+
+/* The best offer is framed by the brand, not an amber wash. */
+.product-detail-page .offers-table .offer-row--best {
+  border-color: var(--brand) !important;
+  background: color-mix(
+    in srgb,
+    var(--brand) 8%,
+    var(--surface-container)
+  ) !important;
+}
+
+.product-detail-page .offers-table .offer-best-flag {
+  padding: 3px 10px;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: var(--brand);
+  color: #202020;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-inline-start: 0;
+}
+
+/* Price cell: the amount is the loudest element in the row, with the
+   trust flag as a quiet sub line. The .offer-price wrapper is the flex
+   row that used to run "EGP 7,275.60VERIFIED" together ,  stack it. */
+.product-detail-page .offers-table .offer-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.product-detail-page .offers-table .price-cell .price-display > strong {
+  color: var(--text);
+  font-size: 19px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-detail-page .offers-table .offer-flag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+/* The remaining cells read as quiet metadata. */
+.product-detail-page .offers-table td:nth-child(3) {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* An offer without enough history reads "Insufficient history" as a bare
+   string at body size,  give it the scored pill's quiet sibling treatment. */
+.product-detail-page .offers-table .deal-quality:not(.deal-quality--scored) {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-family: "DM Sans", Roboto, sans-serif !important;
+}
+
+/* Empty states inside the page (no offers, no history, alerts): the legacy
+   dashed dropzone with a yellow ring reads as a broken upload box , 
+   flatten to a quiet panel with the brand dot. */
+.product-detail-page .empty-state {
+  min-height: 0 !important;
+  padding: 24px 20px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  background: transparent !important;
+}
+
+.product-detail-page .empty-ring {
+  background: transparent !important;
+  border: 1.5px solid var(--line-strong) !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+.product-detail-page .empty-ring span {
+  background: var(--brand) !important;
+}
+
+.product-detail-page .empty-state h3 {
+  font-family: "DM Sans", Roboto, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+/*  Tracking activity: flat rows with hairline separators  */
+
+.product-activity {
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.product-activity .product-activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.product-activity .product-activity-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 18px;
+  padding: 11px 0;
+}
+
+.product-activity .product-activity-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+/*  Target & email preferences: flat rows, pill toggles  */
+
+.product-detail-page .tracking-preference-grid {
+  gap: 0 !important;
+}
+
+.product-detail-page .tracking-preference-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 18px 0 20px !important;
+}
+
+.product-detail-page
+  .tracking-preference-grid
+  .tracking-preference-card
+  + .tracking-preference-card {
+  border-top: 1px solid var(--line) !important;
+}
+
+/* History store filters: platform pill toggles. Unchecked means the
+   series is hidden ,  fade the pill instead of removing it. */
+.product-detail-page .history-store-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px !important;
+}
+
+.product-detail-page .history-store-controls label {
+  position: relative;
+  padding: 7px 14px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.product-detail-page .history-store-controls input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.product-detail-page .history-store-controls label:has(input:checked) {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+}
+
+.product-detail-page .history-store-controls label:has(input:not(:checked)) {
+  opacity: 0.5;
+}
+
+/* Email preferences become the same pill toggles. */
+.product-detail-page .email-preferences {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.product-detail-page .email-preferences legend {
+  flex: 1 1 100%;
+  padding: 0 !important;
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.product-detail-page .email-preferences label {
+  padding: 6px 13px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.product-detail-page .email-preferences input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.product-detail-page .email-preferences label:has(input:checked) {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+}
+
+/*  Chart & hero polish  */
+
+/* The movement banner states the percentage once ,  the sentence carries
+   it,  the chip repeated it. The banner itself renders as the dashboard
+   feed's movement pill: directional glyph, semantic green/amber, date
+   only (the time of day read as noise). */
+.product-detail-page .product-detail-movement strong {
+  display: none;
+}
+
+.product-detail-page .product-detail-movement {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  width: fit-content;
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.product-detail-page .product-detail-movement::before {
+  content: "▼";
+  font-size: 10px;
+  line-height: 1;
+}
+
+.product-detail-page .product-detail-movement--down {
+  color: var(--green);
+  background: var(--green-bg);
+}
+
+.product-detail-page .product-detail-movement--up {
+  color: var(--amber);
+  background: var(--amber-bg);
+}
+
+.product-detail-page .product-detail-movement--up::before {
+  content: "▲";
+}
+
+/* The chart's y-axis ticks were 11px muted ,  a squint. One step up in
+   both size and brightness makes them comfortably legible. */
+.product-detail-page .product-history-section .chart-scale {
+  font-size: 12px;
+}
+
+.product-detail-page .product-history-section .chart-scale span {
+  font-size: 12px !important;
+  color: var(--text) !important;
+}
+
+/* Endpoint date labels used to clip at the plot edges. */
+.product-detail-page .chart-date-labels span {
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1050px) {
+  /* Tablet and below: cap the media height so the buy block stays in
+     the first viewport (the full bleed image slab filled the whole
+     768px fold before this). */
+  .product-detail-page .product-hero-media,
+  .product-detail-page .product-hero-image {
+    max-height: 320px;
+    overflow: hidden;
+  }
+
+  .product-detail-page .product-hero-image img {
+    max-height: 320px;
+    width: 100%;
+    object-fit: contain;
+  }
+}

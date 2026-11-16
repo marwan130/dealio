@@ -1,0 +1,643 @@
+/* Dashboard: account style layout with greeting row, stat tiles, tracked
+   product cards with progress bars, an alerts panel, and the existing
+   discovery feed below. Uses the global tokens from
+   client/public/dealio-app-web.css and logical CSS properties for RTL. */
+
+.dashboard-greeting {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.dashboard-greeting-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.dashboard-greeting h1 {
+  margin: 0;
+}
+
+.dashboard-greeting-sub {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.dash-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/*  Page heading overrides (global styles set Anton 44px)  */
+
+.page-heading.dashboard-greeting h1 {
+  font-family: "DM Sans", Roboto, sans-serif !important;
+  font-size: clamp(24px, 3vw, 30px) !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.page-heading.dashboard-greeting .dashboard-greeting-sub {
+  color: color-mix(in srgb, var(--text) 62%, var(--text-muted)) !important;
+}
+
+/*  Legacy feed detail softening  */
+
+/* The guest panel's body copy sits at 2.9:1 on the dark surface,  lift it
+   above the 3:1 floor while keeping it secondary to the heading. */
+.guest-panel p {
+  color: color-mix(in srgb, var(--text) 68%, var(--text-muted)) !important;
+}
+
+/* The legacy b.css guest panel (background #4d91d8 with a #ffeb00 yellow
+   eyebrow chip) fights the coral/cream palette,  bring it back to the
+   platform surface treatment. */
+.guest-panel {
+  background: var(--surface-container) !important;
+  border-color: var(--line-strong) !important;
+}
+
+.guest-panel .eyebrow {
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--brand) !important;
+}
+
+.guest-panel h2 {
+  color: var(--text) !important;
+}
+
+/* Price sub lines (converted original currency) inside dashboard tiles. */
+.dash-feed .price-display small.converted-price,
+.dash-feed .feed-was .feed-was-value {
+  font-size: 11.5px !important;
+}
+
+/* In the recent drops price pair the block level converted sub line
+   breaks the baseline row ,  hide it there and let the struck old price
+   carry the "was". */
+.recent-deals .recent-deal-prices .converted-price {
+  display: none !important;
+}
+
+.recent-deals .recent-deal-prices del {
+  color: var(--text-muted);
+  font-size: 15px;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+.recent-deals .recent-deal-prices del .price-display {
+  display: inline;
+}
+
+/* The solo feed tile: the white photo rectangle slices the decorative
+   blob behind it ,  drop the blob and round the photo into a clean card.
+   The coral media field behind it read as a dead void: swap the solo
+   tile's media panel to the platform surface. */
+.dash-feed .feed-tile--solo .feed-blob {
+  display: none !important;
+}
+
+.dash-feed .feed-tile--solo {
+  --tile-panel: var(--surface-container);
+}
+
+.dash-feed .feed-tile--solo .feed-media .product-image {
+  border-radius: 14px;
+}
+
+/* The featured recent drop tile painted #fff4cf with a dark on yellow
+   "x% lower" label ,  a third accent outside the coral/cream system.
+   Bring the tile back to the platform surface and the label to coral. */
+.recent-deals .recent-deal--featured {
+  background: var(--surface-container) !important;
+  border-color: var(--brand) !important;
+}
+
+.recent-deals .candidate-label {
+  background: transparent !important;
+  color: var(--brand) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Products without a photo used to show a bare beige slab the size of
+   the whole media panel ,  an Anton initial turns the empty block into a
+   deliberate monogram instead. */
+.recent-deals .recent-deal-photo-fallback {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: clamp(64px, 8vw, 110px);
+  line-height: 1;
+  color: var(--text-muted);
+  opacity: 0.5;
+  user-select: none;
+}
+
+/* The struck old price in the drops tiles must lose to the current
+   price, not tie with it. The inner strong is what legacy's Anton
+   groups repaint (mint, full size) ,  dim it there, not on the del. */
+.recent-deals .recent-deal-prices del {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* The was price shares the current price's baseline as a second Anton
+   shout ,  it crowds the big figure and runs at the card edge on narrow
+   cards. It gets its own quiet line, with breathing room before the
+   savings line below it. */
+.recent-deals .recent-deal-prices {
+  row-gap: 12px;
+}
+
+.recent-deals .recent-deal-prices del {
+  flex-basis: 100%;
+}
+
+.recent-deals .recent-deal-prices del strong {
+  color: var(--text-muted) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* The green "↓ saved" delta is a third price in the row,  legacy's
+   price-display rule blew its figure up to the featured 35px Anton and
+   it collided with the was line above it. It's a quiet annotation. */
+.recent-deals .recent-deal-prices span .price-display strong {
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Feed tiles: the "Original AED" converted sub line adds a third number
+   that competes with current and was ,  the display price is enough. */
+.dash-feed .converted-price {
+  display: none !important;
+}
+
+/* Imageless products render the flat tile's 88px monogram column (see
+   DashboardPage), so the legacy row template works again ,  the name
+   keeps its full column. The decorative blob is far larger than the
+   narrow column (it clipped the monogram tile into a half moon), so it
+   is dropped here,  the tile itself shrinks to the column. */
+.dash-feed .feed-tile--flat .feed-blob {
+  display: none !important;
+}
+
+.dash-feed .feed-tile--flat .feed-media {
+  padding: 12px 10px;
+}
+
+.dash-feed .feed-tile--flat .feed-media-fallback {
+  width: 64px;
+  aspect-ratio: 1;
+  border-width: 2px;
+  font-size: 34px;
+}
+
+/* The imageless tiles stretch to their row neighbour's height,  at legacy
+   15px/17px type the wide hero card read as a nearly empty band. One
+   step up fills the slot without shouting. */
+.dash-feed .feed-tile--flat .feed-name {
+  font-size: clamp(16px, 1.4vw, 19px) !important;
+}
+
+.dash-feed .feed-tile--flat .price-display strong {
+  font-size: 21px !important;
+}
+
+/* The decorative blob circles are larger than their media panels and
+   spill past them ,  their arcs ran behind the featured card's title
+   text. Contain them. */
+.dash-feed .feed-media {
+  overflow: hidden !important;
+}
+
+/* The flat (imageless) tile stretches to its row neighbour's height, 
+   with the legacy margin-top:auto pinning the meta chips to the floor,
+   the middle read as a dead zone. Center the content group instead. */
+.dash-feed .feed-tile--flat .feed-body {
+  justify-content: center;
+}
+
+.dash-feed .feed-tile--flat .feed-meta {
+  margin-top: 0;
+}
+
+/* The movement pill is nowrap,  on a half width tablet card the full
+   datetime ran to the card border. Give the row end margin to breathe. */
+.dash-feed .feed-tile--flat .feed-movement {
+  margin-inline-end: 6px;
+}
+
+/* Phones: the 2-column feed left the second card at half width beside
+   the full width flat card ,  one column reads as a proper stack. */
+@media (max-width: 560px) {
+  .dash-feed .feed-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .dash-feed .feed-tile--flat,
+  .dash-feed .feed-tile--wide {
+    grid-column: auto !important;
+  }
+
+  /* Standard tiles ran price and was on one tight line at phone
+     widths,  stack the pair like the flat cards already do. */
+  .dash-feed .feed-pricing {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .dash-feed .feed-pricing .feed-was {
+    flex-basis: 100%;
+  }
+}
+
+/* Two tracked products can't fill the 4-column feed ,  the leftover
+   cells strand a large void beside a half width card. Two items read
+   as two full width cards instead. */
+.dash-feed .feed-grid--pair {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.dash-feed .feed-grid--pair .feed-tile {
+  grid-column: 1 / -1 !important;
+}
+
+/* Two drops can't fill the featured + 2-up grid ,  the second half slot
+   strands a void beside a half width card. Sparse drops stack as
+   full width cards instead. */
+.recent-deal-grid--sparse {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.recent-deal-grid--sparse .recent-deal--featured {
+  grid-column: auto !important;
+}
+
+/* Anton's tight apertures make mid word ellipsis cuts read as breakage , 
+   clamp the feed name to two full lines instead. The featured card's
+   display size name gets three lines at a slightly smaller size so the
+   title reads as a complete phrase. */
+.dash-feed .feed-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dash-feed .feed-tile--feature .feed-name {
+  -webkit-line-clamp: 4;
+  font-size: clamp(17px, 1.8vw, 22px);
+}
+
+/* The solo tile's lone "1 store" chip floated near the tile's bottom
+   edge,  anchor it with a hairline so it reads as the row's footer. */
+.dash-feed .feed-tile--solo .feed-meta {
+  border-block-start: 1px solid var(--line);
+  margin-block-start: 16px;
+  padding-block-start: 14px;
+}
+
+/* The solo tile's white photo card ended mid panel leaving surface void
+   around and beneath it ,  let the photo fill the media panel. */
+.dash-feed .feed-tile--solo .feed-media .product-image {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  border-radius: 14px;
+}
+
+/* The end of feed row's hairline only spanned its 520px max-width ,  give
+   the rule the feed's full width so the row doesn't float. */
+.dash-feed .feed-status--end {
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+/* The drop tile product name rendered as a six line Anton wall next to
+   the price stack ,  clamp it like the feed tiles do. */
+.recent-deals .recent-deal-body .product-link {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tablet: the solo tile's price+was pair wrapped the struck price onto
+   its own line ,  tighten so it keeps the desktop's inline rhythm. */
+@media (min-width: 561px) and (max-width: 1050px) {
+  .dash-feed .feed-tile--solo .price-display > strong {
+    font-size: 24px !important;
+  }
+}
+
+/* The solo name renders at up to 34px Anton,  the 2-line clamp then cuts
+   mid word ("…ACTIVE NOI…"). One size down, the cut lands after a whole
+   word far more often. */
+.dash-feed .feed-tile--solo .feed-name {
+  font-size: clamp(20px, 2.4vw, 28px);
+}
+
+/* Recent-drops card meta line (store · currency · date). */
+.recent-deals .recent-deal-body p {
+  font-size: 11.5px !important;
+}
+
+/* Store/count meta bits: the global 10px uppercase is below legibility
+   floor,  sentence case at 11px reads quietly without shouting. */
+.dash-feed .feed-meta-bit {
+  font-size: 11px !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* The movement pill's full strength 2px currentColor border reads heavy, 
+   a quiet outline keeps the pill's colour coding without the frame. */
+.dash-feed .feed-movement {
+  border-width: 1px;
+  border-color: color-mix(in srgb, currentColor 32%, transparent);
+}
+
+/*  Tracked product cards  */
+
+.dash-tracked-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.dash-tracked-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container);
+  overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dash-tracked-card:hover,
+.dash-tracked-card:focus-within {
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
+  box-shadow: 0 8px 20px rgb(0 0 0 / 8%);
+  transform: translateY(-2px);
+}
+
+.dash-tracked-card--reached {
+  border-color: color-mix(
+    in srgb,
+    var(--status-green, #55a878) 55%,
+    var(--line)
+  );
+}
+
+.dash-tracked-media {
+  display: block;
+  height: 140px;
+  padding: 10px;
+  border: 0;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.dash-tracked-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dash-tracked-media:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -3px;
+}
+
+.dash-tracked-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px 14px 10px;
+}
+
+.dash-tracked-name {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: start;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.dash-tracked-name:hover,
+.dash-tracked-name:focus-visible {
+  color: var(--brand);
+}
+
+.dash-tracked-store {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.dash-tracked-pricing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-block-start: 2px;
+}
+
+.dash-tracked-price {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-tracked-target {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.dash-tracked-progress {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  overflow: hidden;
+  margin-block-start: 4px;
+}
+
+.dash-tracked-progress-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--brand);
+}
+
+.dash-tracked-card--reached .dash-tracked-progress-bar {
+  background: var(--status-green, #55a878);
+}
+
+.dash-tracked-status {
+  margin-block-start: 2px;
+}
+
+.dash-tracked-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px 12px;
+  margin-block-start: auto;
+}
+
+/*  Alerts panel  */
+
+.dash-alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dash-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-container);
+}
+
+.dash-alert.is-unread {
+  border-inline-start: 3px solid var(--brand);
+}
+
+.dash-alert.is-read {
+  opacity: 0.75;
+}
+
+.dash-alert-type {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin-block-start: 6px;
+  border-radius: 999px;
+  background: var(--text-muted);
+}
+
+.dash-alert-type--targetReached {
+  background: var(--status-green, #55a878);
+}
+
+.dash-alert-type--furtherDecrease {
+  background: var(--brand);
+}
+
+.dash-alert-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.dash-alert-type-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.dash-alert-product {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dash-alert-product:hover,
+.dash-alert-product:focus-visible {
+  color: var(--brand);
+}
+
+.dash-alert-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.dash-alert-pricing {
+  color: var(--text);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/*  Responsive  */
+
+@media (max-width: 760px) {
+  .dash-tracked-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .dash-tracked-media {
+    height: 110px;
+  }
+
+  .dash-tracked-price {
+    font-size: 16px;
+  }
+
+  .dash-alert {
+    flex-wrap: wrap;
+  }
+
+  /* The recent drops heading and its "Discover more" button crowd the
+     title at phone widths,  let the button wrap under the heading. */
+  .recent-deals .section-heading {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .recent-deals .section-heading .text-button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
