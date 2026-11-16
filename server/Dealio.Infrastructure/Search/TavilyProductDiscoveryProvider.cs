@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Dealio.Application.DTOs.Products;
@@ -26,7 +27,8 @@ public sealed class TavilyDiscoveryOptions
 public sealed class TavilyProductDiscoveryProvider(
     IHttpClientFactory httpClientFactory,
     IOptions<TavilyDiscoveryOptions> options,
-    IConnectionMultiplexer? redis = null) : IProductDiscoveryProvider
+    IConnectionMultiplexer? redis = null,
+    ILogger<TavilyProductDiscoveryProvider>? logger = null) : IProductDiscoveryProvider
 {
     private static readonly IReadOnlyDictionary<string, string[]> MarketRetailers = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
     {
@@ -129,8 +131,8 @@ public sealed class TavilyProductDiscoveryProvider(
     private static string BuildCacheKey(string query, string? market, string? categoryName, int page)
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes($"{market?.Trim().ToUpperInvariant()}|{categoryName?.Trim().ToLowerInvariant()}|{query.Trim().ToLowerInvariant()}|{page}"));
-        // v13: sharafdg search-landing slugs (no /product/ key) stopped being
-        // candidates; a version bump so old cached bursts can't serve them.
+        // v13: sharafdg search landing slugs (no /product/ key) stopped being
+        // candidates,  a version bump so old cached bursts can't serve them.
         return $"product-discovery:websearch:cache:v13:{Convert.ToHexString(bytes)[..32].ToLowerInvariant()}";
     }
 
@@ -173,13 +175,27 @@ public sealed class TavilyProductDiscoveryProvider(
     private static readonly IReadOnlyDictionary<string, string[]> LocalStoreCurrencies =
         new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
         {
-            ["amazon.eg"] = ["EGP"], ["jumia.com.eg"] = ["EGP"], ["btech.com"] = ["EGP"],
-            ["2b.com.eg"] = ["EGP"], ["sigma-computer.com"] = ["EGP"], ["compume.com"] = ["EGP"],
-            ["carrefouregypt.com"] = ["EGP"], ["dream2000.com.eg"] = ["EGP"], ["rayashop.com"] = ["EGP"],
-            ["elarabygroup.com"] = ["EGP"], ["amazon.ae"] = ["AED"], ["amazon.sa"] = ["SAR"],
-            ["jumia.com.sa"] = ["SAR"], ["jarir.com"] = ["SAR"], ["extra.com"] = ["SAR"],
-            ["saco.sa"] = ["SAR"], ["sharafdg.com"] = ["AED"], ["jumbo.ae"] = ["AED"],
-            ["emaxonline.com"] = ["AED"], ["virginmegastore.ae"] = ["AED"], ["xcite.com"] = ["KWD"]
+            ["amazon.eg"] = ["EGP"],
+            ["jumia.com.eg"] = ["EGP"],
+            ["btech.com"] = ["EGP"],
+            ["2b.com.eg"] = ["EGP"],
+            ["sigma-computer.com"] = ["EGP"],
+            ["compume.com"] = ["EGP"],
+            ["carrefouregypt.com"] = ["EGP"],
+            ["dream2000.com.eg"] = ["EGP"],
+            ["rayashop.com"] = ["EGP"],
+            ["elarabygroup.com"] = ["EGP"],
+            ["amazon.ae"] = ["AED"],
+            ["amazon.sa"] = ["SAR"],
+            ["jumia.com.sa"] = ["SAR"],
+            ["jarir.com"] = ["SAR"],
+            ["extra.com"] = ["SAR"],
+            ["saco.sa"] = ["SAR"],
+            ["sharafdg.com"] = ["AED"],
+            ["jumbo.ae"] = ["AED"],
+            ["emaxonline.com"] = ["AED"],
+            ["virginmegastore.ae"] = ["AED"],
+            ["xcite.com"] = ["KWD"]
         };
 
     private static bool SnippetCurrencyMatchesStore(string host, string currency, MarketInfo? urlMarket)
@@ -229,7 +245,10 @@ public sealed class TavilyProductDiscoveryProvider(
                 await redis.GetDatabase().StringSetAsync(key, json, CacheTtl);
                 return;
             }
-            catch (RedisException) { }
+            catch (RedisException ex)
+            {
+                logger?.LogWarning(ex, "Redis cache write failed for key {Key}, keeping the result in the local cache only", key);
+            }
         }
         _localCache[key] = (DateTime.UtcNow.Add(CacheTtl), results);
     }
@@ -444,13 +463,23 @@ public sealed class TavilyProductDiscoveryProvider(
         if (currency.Length == 0 && match.Groups["localCurrency"].Success)
             currency = match.Groups["localCurrency"].Value switch
             {
-                "د.إ" => "AED", "ر.س" => "SAR", "ج.م" => "EGP", "د.ك" => "KWD", "د.ا" => "JOD",
-                "د.ب" => "BHD", "ر.ع." or "ر.ع" => "OMR", "ر.ق" => "QAR", _ => string.Empty
+                "د.إ" => "AED",
+                "ر.س" => "SAR",
+                "ج.م" => "EGP",
+                "د.ك" => "KWD",
+                "د.ا" => "JOD",
+                "د.ب" => "BHD",
+                "ر.ع." or "ر.ع" => "OMR",
+                "ر.ق" => "QAR",
+                _ => string.Empty
             };
         if (currency.Length == 0 && match.Groups["symbol"].Success)
             currency = match.Groups["symbol"].Value switch
             {
-                "€" => "EUR", "£" => "GBP", "₺" => "TRY", _ => "USD"
+                "€" => "EUR",
+                "£" => "GBP",
+                "₺" => "TRY",
+                _ => "USD"
             };
         return currency;
     }

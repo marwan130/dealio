@@ -30,15 +30,15 @@ public class JwtTokenService : IJwtTokenService
             new Claim(ClaimTypes.Role,           user.Role.ToString())
         };
 
-        var key     = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]!));
-        var creds   = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["Jwt:AccessTokenExpiryMinutes"]!));
 
         var token = new JwtSecurityToken(
-            issuer:             _config["Jwt:Issuer"],
-            audience:           _config["Jwt:Audience"],
-            claims:             claims,
-            expires:            expires,
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
+            claims: claims,
+            expires: expires,
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -68,26 +68,30 @@ public class JwtTokenService : IJwtTokenService
     {
         try
         {
-            var handler    = new JwtSecurityTokenHandler();
-            var key        = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]!));
+            var handler = new JwtSecurityTokenHandler();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]!));
             var parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey         = key,
-                ValidateIssuer           = true,
-                ValidIssuer              = _config["Jwt:Issuer"],
-                ValidateAudience         = true,
-                ValidAudience            = _config["Jwt:Audience"],
-                ValidateLifetime         = true,
-                ClockSkew                = TimeSpan.Zero
+                IssuerSigningKey = key,
+                ValidateIssuer = true,
+                ValidIssuer = _config["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = _config["Jwt:Audience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
 
             var principal = handler.ValidateToken(token, parameters, out _);
-            var claim     = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var claim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             return Guid.TryParse(claim, out var userId) ? userId : null;
         }
-        catch
+        // An invalid token means "not signed in" here, so expected
+        // validation failures return null. Anything else is a bug and
+        // must not be swallowed, so the catch is scoped to what token
+        // validation and a null or malformed token can throw.
+        catch (Exception ex) when (ex is SecurityTokenException or ArgumentException)
         {
             return null;
         }

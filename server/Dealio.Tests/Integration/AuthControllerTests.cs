@@ -19,7 +19,7 @@ public class AuthControllerTests : TestBase
         };
         var response = await Client.PostAsJsonAsync("/v1/auth/register", request);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -70,7 +70,7 @@ public class AuthControllerTests : TestBase
         };
         var response = await Client.PostAsJsonAsync("/v1/auth/login", loginRequest);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();
@@ -117,7 +117,7 @@ public class AuthControllerTests : TestBase
         };
         var response = await Client.PostAsJsonAsync("/v1/auth/refresh", refreshRequest);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<JsonElement>(content);
         result.GetProperty("success").GetBoolean().Should().BeTrue();

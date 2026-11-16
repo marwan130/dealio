@@ -2,7 +2,7 @@ namespace Dealio.API.Extensions;
 
 public static class ConfigurationExtensions
 {
-    private const int MinJwtSecretLength    = 32;
+    private const int MinJwtSecretLength = 32;
     private const int MinSharedSecretLength = 16;
 
     public static WebApplicationBuilder MapPlatformConfiguration(this WebApplicationBuilder builder)
@@ -17,7 +17,7 @@ public static class ConfigurationExtensions
         }
 
         var allowedHosts = builder.Configuration["AllowedHosts"];
-        var flyAppName   = builder.Configuration["FLY_APP_NAME"];
+        var flyAppName = builder.Configuration["FLY_APP_NAME"];
 
         if ((string.IsNullOrWhiteSpace(allowedHosts) || allowedHosts == "*")
             && !string.IsNullOrWhiteSpace(flyAppName))
@@ -36,7 +36,7 @@ public static class ConfigurationExtensions
         if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Testing"))
             return builder;
 
-        var config  = builder.Configuration;
+        var config = builder.Configuration;
         var missing = new List<string>();
         var invalid = new List<string>();
 
@@ -47,16 +47,17 @@ public static class ConfigurationExtensions
         ValidateSecret(config["InternalApi:Key"], "InternalApi:Key", MinSharedSecretLength, missing, invalid);
         ValidateSecret(config["Hangfire:DashboardApiKey"], "Hangfire:DashboardApiKey", MinSharedSecretLength, missing, invalid);
 
-        if (!string.IsNullOrWhiteSpace(config["Brevo:ApiKey"]))
+        var brevoConfigured = !string.IsNullOrWhiteSpace(config["Brevo:ApiKey"]);
+
+        if (brevoConfigured)
         {
             if (string.IsNullOrWhiteSpace(config["Brevo:SenderEmail"]))
                 missing.Add("Brevo:SenderEmail");
         }
-
-        if (config.GetValue<int>("ProductDiscovery:Tavily:MonthlyQuota") is < 0 or > 1000)
-            invalid.Add("ProductDiscovery:Tavily:MonthlyQuota (must be between 0 and 1000)");
         else
         {
+            // No Brevo key: the local SMTP fallback is the only email path,
+            // so it must be fully configured.
             if (string.IsNullOrWhiteSpace(config["Smtp:Host"]))
                 missing.Add("Smtp:Host (or configure Brevo:ApiKey)");
             if (string.IsNullOrWhiteSpace(config["Smtp:Username"]))
@@ -66,6 +67,11 @@ public static class ConfigurationExtensions
             if (string.IsNullOrWhiteSpace(config["Smtp:From"]))
                 missing.Add("Smtp:From");
         }
+
+        var quotaSetting = config["ProductDiscovery:Tavily:MonthlyQuota"];
+        if (!string.IsNullOrWhiteSpace(quotaSetting)
+            && (!int.TryParse(quotaSetting, out var monthlyQuota) || monthlyQuota is < 0 or > 1000))
+            invalid.Add("ProductDiscovery:Tavily:MonthlyQuota (must be an integer between 0 and 1000)");
 
         if (string.IsNullOrWhiteSpace(config["Frontend:BaseUrl"])
             && string.IsNullOrWhiteSpace(config["PUBLIC_APP_URL"]))
@@ -77,7 +83,7 @@ public static class ConfigurationExtensions
         if (string.IsNullOrWhiteSpace(allowedHosts))
             missing.Add("AllowedHosts");
 
-        var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+        var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>()
                       ?? (string.IsNullOrWhiteSpace(config["Cors:AllowedOrigins"]) ? [] : [config["Cors:AllowedOrigins"]!]);
         if (origins.Length == 0 || origins.All(string.IsNullOrWhiteSpace))
             missing.Add("Cors:AllowedOrigins (at least one frontend origin required)");
@@ -96,8 +102,8 @@ public static class ConfigurationExtensions
 
     private static void ValidateSecret(
         string? value,
-        string  key,
-        int     minLength,
+        string key,
+        int minLength,
         List<string> missing,
         List<string> invalid)
     {
@@ -111,7 +117,7 @@ public static class ConfigurationExtensions
             invalid.Add($"{key} (must be at least {minLength} characters)");
     }
 
-    // Fly.io supplies postgres://; Npgsql requires postgresql://.
+    // Fly.io supplies postgres://.  Npgsql requires postgresql://.
     private static string NormalizePostgresUrl(string url)
     {
         if (url.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))

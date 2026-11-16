@@ -14,35 +14,35 @@ using Dealio.Domain.Exceptions;
 public class AuthService : IAuthService
 {
     private const string InvalidVerificationTokenMessage = "Invalid or expired verification token.";
-    private const string InvalidResetTokenMessage        = "Invalid or expired reset token.";
-    private const string InvalidRefreshTokenMessage      = "Invalid or expired refresh token.";
+    private const string InvalidResetTokenMessage = "Invalid or expired reset token.";
+    private const string InvalidRefreshTokenMessage = "Invalid or expired refresh token.";
 
-    private readonly IUserRepository     _userRepository;
-    private readonly IJwtTokenService    _jwtTokenService;
-    private readonly IPasswordHasher     _passwordHasher;
-    private readonly IEmailSender        _emailSender;
+    private readonly IUserRepository _userRepository;
+    private readonly IJwtTokenService _jwtTokenService;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IEmailSender _emailSender;
     private readonly ISecureTokenService _secureTokenService;
-    private readonly IConfiguration      _configuration;
+    private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
     private readonly IGoogleIdentityTokenValidator? _googleIdentityValidator;
 
     public AuthService(
-        IUserRepository     userRepository,
-        IJwtTokenService    jwtTokenService,
-        IPasswordHasher     passwordHasher,
-        IEmailSender        emailSender,
+        IUserRepository userRepository,
+        IJwtTokenService jwtTokenService,
+        IPasswordHasher passwordHasher,
+        IEmailSender emailSender,
         ISecureTokenService secureTokenService,
-        IConfiguration      configuration,
+        IConfiguration configuration,
         ILogger<AuthService>? logger = null,
         IGoogleIdentityTokenValidator? googleIdentityValidator = null)
     {
-        _userRepository     = userRepository;
-        _jwtTokenService    = jwtTokenService;
-        _passwordHasher     = passwordHasher;
-        _emailSender        = emailSender;
+        _userRepository = userRepository;
+        _jwtTokenService = jwtTokenService;
+        _passwordHasher = passwordHasher;
+        _emailSender = emailSender;
         _secureTokenService = secureTokenService;
-        _configuration      = configuration;
-        _logger             = logger ?? NullLogger<AuthService>.Instance;
+        _configuration = configuration;
+        _logger = logger ?? NullLogger<AuthService>.Instance;
         _googleIdentityValidator = googleIdentityValidator;
     }
 
@@ -57,17 +57,17 @@ public class AuthService : IAuthService
 
         var user = new User
         {
-            UserId                        = Guid.NewGuid(),
-            Name                          = request.Name,
-            Email                         = email,
-            Phone                         = request.Phone,
-            PasswordHash                  = _passwordHasher.Hash(request.Password),
-            Role                          = UserRole.User,
-            IsActive                      = true,
-            EmailVerified                 = false,
-            EmailVerificationTokenHash    = _secureTokenService.HashToken(verificationToken),
+            UserId = Guid.NewGuid(),
+            Name = request.Name,
+            Email = email,
+            Phone = request.Phone,
+            PasswordHash = _passwordHasher.Hash(request.Password),
+            Role = UserRole.User,
+            IsActive = true,
+            EmailVerified = false,
+            EmailVerificationTokenHash = _secureTokenService.HashToken(verificationToken),
             EmailVerificationTokenExpiresAt = _secureTokenService.GetEmailVerificationExpiryUtc(),
-            CreatedAt                     = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         await _userRepository.AddAsync(user);
@@ -77,19 +77,19 @@ public class AuthService : IAuthService
         }
         catch (Exception ex) when (IsEmailDeliveryException(ex))
         {
-            // Keep registration available during verification-email outages.
+            // Keep registration available during verification email outages.
             _logger.LogWarning(ex, "Verification email could not be sent for newly registered user {UserId}", user.UserId);
         }
 
         return new AuthResponse
         {
-            UserId        = user.UserId,
-            Name          = user.Name,
-            Email         = user.Email,
-            Role          = user.Role.ToString(),
-            AccessToken   = _jwtTokenService.GenerateAccessToken(user),
-            RefreshToken  = IssueRefreshToken(user.UserId),
-            ExpiresIn     = AccessTokenExpirySeconds(),
+            UserId = user.UserId,
+            Name = user.Name,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            AccessToken = _jwtTokenService.GenerateAccessToken(user),
+            RefreshToken = IssueRefreshToken(user.UserId),
+            ExpiresIn = AccessTokenExpirySeconds(),
             EmailVerified = false
         };
     }
@@ -110,13 +110,13 @@ public class AuthService : IAuthService
 
         return new AuthResponse
         {
-            UserId        = user.UserId,
-            Name          = user.Name,
-            Email         = user.Email,
-            Role          = user.Role.ToString(),
-            AccessToken   = _jwtTokenService.GenerateAccessToken(user),
-            RefreshToken  = refreshToken,
-            ExpiresIn     = AccessTokenExpirySeconds(),
+            UserId = user.UserId,
+            Name = user.Name,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            AccessToken = _jwtTokenService.GenerateAccessToken(user),
+            RefreshToken = refreshToken,
+            ExpiresIn = AccessTokenExpirySeconds(),
             EmailVerified = user.EmailVerified
         };
     }
@@ -154,9 +154,14 @@ public class AuthService : IAuthService
                     ? null : _secureTokenService.GenerateToken();
                 user = new User
                 {
-                    UserId = Guid.NewGuid(), Name = string.IsNullOrWhiteSpace(identity.Name) ? email : identity.Name.Trim(),
-                    Email = email, GoogleSubject = identity.Subject, PasswordHash = _passwordHasher.Hash(Guid.NewGuid().ToString("N")),
-                    Role = UserRole.User, IsActive = true, EmailVerified = verificationToken is null,
+                    UserId = Guid.NewGuid(),
+                    Name = string.IsNullOrWhiteSpace(identity.Name) ? email : identity.Name.Trim(),
+                    Email = email,
+                    GoogleSubject = identity.Subject,
+                    PasswordHash = _passwordHasher.Hash(Guid.NewGuid().ToString("N")),
+                    Role = UserRole.User,
+                    IsActive = true,
+                    EmailVerified = verificationToken is null,
                     EmailVerifiedAt = verificationToken is null ? DateTime.UtcNow : null,
                     EmailVerificationTokenHash = verificationToken is null ? null : _secureTokenService.HashToken(verificationToken),
                     EmailVerificationTokenExpiresAt = verificationToken is null ? null : _secureTokenService.GetEmailVerificationExpiryUtc(),
@@ -175,9 +180,14 @@ public class AuthService : IAuthService
         if (!user.IsActive) throw new UnauthorizedException("Account is deactivated.");
         return new AuthResponse
         {
-            UserId = user.UserId, Name = user.Name, Email = user.Email, Role = user.Role.ToString(),
-            AccessToken = _jwtTokenService.GenerateAccessToken(user), RefreshToken = IssueRefreshToken(user.UserId),
-            ExpiresIn = AccessTokenExpirySeconds(), EmailVerified = user.EmailVerified
+            UserId = user.UserId,
+            Name = user.Name,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            AccessToken = _jwtTokenService.GenerateAccessToken(user),
+            RefreshToken = IssueRefreshToken(user.UserId),
+            ExpiresIn = AccessTokenExpirySeconds(),
+            EmailVerified = user.EmailVerified
         };
     }
 
@@ -232,9 +242,9 @@ public class AuthService : IAuthService
 
         return new TokenResponse
         {
-            AccessToken  = _jwtTokenService.GenerateAccessToken(user),
+            AccessToken = _jwtTokenService.GenerateAccessToken(user),
             RefreshToken = IssueRefreshToken(user.UserId),
-            ExpiresIn    = AccessTokenExpirySeconds()
+            ExpiresIn = AccessTokenExpirySeconds()
         };
     }
 
@@ -382,8 +392,12 @@ public class AuthService : IAuthService
     {
         var typeName = ex.GetType().FullName ?? string.Empty;
 
+        // HttpRequestException and TaskCanceledException cover the HTTP
+        // providers (Brevo returns 401 or 5xx, and timeouts cancel).
         return ex is InvalidOperationException
             or FormatException
+            or System.Net.Http.HttpRequestException
+            or TaskCanceledException
             or System.Net.Sockets.SocketException
             or System.IO.IOException
             || typeName.StartsWith("MailKit.", StringComparison.Ordinal)

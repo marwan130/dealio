@@ -43,10 +43,10 @@ public class JwtTokenServiceTests
         };
         var token = _jwtTokenService.GenerateAccessToken(user);
         token.Should().NotBeNullOrEmpty();
-        
+
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
-        
+
         jwtToken.Claims.Should().Contain(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier && c.Value == user.UserId.ToString());
         jwtToken.Claims.Should().Contain(c => c.Type == System.Security.Claims.ClaimTypes.Email && c.Value == user.Email);
         jwtToken.Claims.Should().Contain(c => c.Type == System.Security.Claims.ClaimTypes.Role && c.Value == user.Role.ToString());

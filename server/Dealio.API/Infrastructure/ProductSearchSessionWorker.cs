@@ -91,8 +91,8 @@ public sealed class ProductSearchSessionWorker(
             }
             var results = await service.SearchProgressivelyAsync(filter, async (candidate, token) =>
             {
-                // Every streamed discovery card is stage-bound until a real scrape
-                // proves its price, stock and image; snippets alone stay unverified.
+                // Every streamed discovery card is stage bound until a real scrape
+                // proves its price, stock and image,  snippets alone stay unverified.
                 try
                 {
                     await verificationQueue.StageAsync(claimed.SessionId, candidate, token);
@@ -103,8 +103,8 @@ public sealed class ProductSearchSessionWorker(
                         candidate.ProductUrl, claimed.SessionId);
                 }
 
-                // Appends are serialized through appendLock; buffering small batches
-                // and committing them together cuts the per-candidate cost from a
+                // Appends are serialized through appendLock,  buffering small batches
+                // and committing them together cuts the per candidate cost from a
                 // session read + sequence max + save each to one transaction per
                 // batch, which otherwise delays streaming completion noticeably.
                 await appendLock.WaitAsync(token);
@@ -359,7 +359,12 @@ public sealed class ProductSearchSessionWorker(
                 if (json.RootElement.TryGetProperty("reviewEventId", out var id) && id.TryGetInt64(out var value))
                     resolvedIds.Add(value);
             }
-            catch (JsonException) { }
+            catch (JsonException ex)
+            {
+                // A malformed stored payload keeps the session alive as
+                // "unresolved" forever, so the corruption is worth seeing.
+                logger.LogWarning(ex, "Unreadable matchReviewResolved payload on a product search session event, the review stays unresolved");
+            }
         }
 
         var unresolvedSessionIds = reviews.Where(x => !resolvedIds.Contains(x.Id))

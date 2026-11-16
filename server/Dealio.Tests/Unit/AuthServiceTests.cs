@@ -108,6 +108,35 @@ public class AuthServiceTests
     }
 
     [Fact]
+    public async Task RegisterAsync_WhenVerificationEmailFails_StillRegisters()
+    {
+        var request = new RegisterRequest
+        {
+            Name = "Test User",
+            Email = "outage@example.com",
+            Password = "Test123!@#"
+        };
+
+        _userRepositoryMock.Setup(x => x.ExistsByEmailAsync(request.Email))
+            .ReturnsAsync(false);
+        _passwordHasherMock.Setup(x => x.Hash(request.Password))
+            .Returns("hashed_password");
+        _jwtTokenServiceMock.Setup(x => x.GenerateAccessToken(It.IsAny<User>()))
+            .Returns("access_token");
+        _jwtTokenServiceMock.Setup(x => x.GenerateRefreshToken())
+            .Returns("refresh_token");
+        _emailSenderMock.Setup(x => x.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ThrowsAsync(new System.Net.Http.HttpRequestException("Brevo returned 401"));
+
+        var result = await _authService.RegisterAsync(request);
+
+        result.Should().NotBeNull();
+        result.AccessToken.Should().Be("access_token");
+        result.EmailVerified.Should().BeFalse();
+        _userRepositoryMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
+    }
+
+    [Fact]
     public async Task LoginAsync_WithValidCredentials_ReturnsTokens()
     {
         var request = new LoginRequest
@@ -135,7 +164,7 @@ public class AuthServiceTests
 
         _jwtTokenServiceMock.Setup(x => x.GenerateAccessToken(user))
             .Returns("access_token");
-        
+
         _jwtTokenServiceMock.Setup(x => x.GenerateRefreshToken())
             .Returns("refresh_token");
         var result = await _authService.LoginAsync(request);
@@ -217,7 +246,7 @@ public class AuthServiceTests
 
         _jwtTokenServiceMock.Setup(x => x.GenerateAccessToken(user))
             .Returns("new_access_token");
-        
+
         _jwtTokenServiceMock.Setup(x => x.GenerateRefreshToken())
             .Returns("new_refresh_token");
         var result = await _authService.RefreshTokenAsync(request);

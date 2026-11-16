@@ -57,8 +57,8 @@ public sealed class TavilyProductDiscoveryProviderTests
     [Fact]
     public async Task SearchAsync_SkipsSavingsAndInstallmentSnippetPricesForTheRealOne()
     {
-        // The "4.71722"-scale fragments come from ratings and review counts; with
-        // no contextual marker they are dropped by the amount-format rule instead.
+        // The "4.71722"-scale fragments come from ratings and review counts,  with
+        // no contextual marker they are dropped by the amount format rule instead.
         const string responseJson = """
             {"results":[{"title":"Noon iPhone 15 Case","url":"https://www.noon.com/egypt-en/iphone-15-case-armor-screen-protect/N12345678A/p/","content":"Official iPhone 15 protective case with clear armor glass. Or 4 interest-free payments of EGP 13.41 per month. You save EGP 48.30 compared to the original retail price. 4.71722 customers also viewed JBL Go3 Rating 4.687,222 Price: EGP 249.99","images":[]}]}
             """;
@@ -102,9 +102,9 @@ public sealed class TavilyProductDiscoveryProviderTests
     [Fact]
     public async Task SearchAsync_BindsTopLevelImagesThroughTheImageSourceTitle()
     {
-        // Tavily returns images as one unbound top-level array; each entry's title
+        // Tavily returns images as one unbound top level array,  each entry's title
         // names the crawled page. The White Joy-Con image must land on the matching
-        // result only; a sale banner under Amazon's /images/G/ chrome never binds,
+        // result only,  a sale banner under Amazon's /images/G/ chrome never binds,
         // and a repeated photo URL can't decorate a second product.
         const string responseJson = """
             {

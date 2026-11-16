@@ -6,6 +6,7 @@ using Dealio.Application.Interfaces.Repositories;
 using Dealio.Application.Interfaces.Services;
 using Dealio.Application.Services;
 using Dealio.Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 public sealed class TrackingServiceTests
@@ -62,7 +63,8 @@ public sealed class TrackingServiceTests
             prices.Object,
             Mock.Of<IPriceAlertService>(),
             Mock.Of<IListingScrapeQueue>(),
-            conversion.Object);
+            conversion.Object,
+            Mock.Of<ILogger<TrackingService>>());
 
         var result = Assert.Single(await service.GetByUserIdAsync(userId, "AED"));
 

@@ -7,33 +7,37 @@ using Dealio.Application.Interfaces.Services;
 using Dealio.Domain.Entities;
 using Dealio.Domain.Exceptions;
 using Dealio.Domain.Markets;
+using Microsoft.Extensions.Logging;
 
 public class TrackingService : ITrackingService
 {
-    private readonly ITrackingRepository       _trackingRepository;
-    private readonly IProductRepository        _productRepository;
-    private readonly IListingRepository        _listingRepository;
-    private readonly IPriceHistoryRepository   _priceHistoryRepository;
-    private readonly IPriceAlertService        _priceAlertService;
-    private readonly IListingScrapeQueue      _listingScrapeQueue;
+    private readonly ITrackingRepository _trackingRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IListingRepository _listingRepository;
+    private readonly IPriceHistoryRepository _priceHistoryRepository;
+    private readonly IPriceAlertService _priceAlertService;
+    private readonly IListingScrapeQueue _listingScrapeQueue;
     private readonly ICurrencyConversionService _currencyConversionService;
+    private readonly ILogger<TrackingService> _logger;
 
     public TrackingService(
-        ITrackingRepository       trackingRepository,
-        IProductRepository        productRepository,
-        IListingRepository        listingRepository,
-        IPriceHistoryRepository   priceHistoryRepository,
-        IPriceAlertService        priceAlertService,
-        IListingScrapeQueue      listingScrapeQueue,
-        ICurrencyConversionService currencyConversionService)
+        ITrackingRepository trackingRepository,
+        IProductRepository productRepository,
+        IListingRepository listingRepository,
+        IPriceHistoryRepository priceHistoryRepository,
+        IPriceAlertService priceAlertService,
+        IListingScrapeQueue listingScrapeQueue,
+        ICurrencyConversionService currencyConversionService,
+        ILogger<TrackingService> logger)
     {
-        _trackingRepository     = trackingRepository;
-        _productRepository      = productRepository;
-        _listingRepository      = listingRepository;
+        _trackingRepository = trackingRepository;
+        _productRepository = productRepository;
+        _listingRepository = listingRepository;
         _priceHistoryRepository = priceHistoryRepository;
-        _priceAlertService      = priceAlertService;
-        _listingScrapeQueue     = listingScrapeQueue;
+        _priceAlertService = priceAlertService;
+        _listingScrapeQueue = listingScrapeQueue;
         _currencyConversionService = currencyConversionService;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<TrackingResponse>> GetByUserIdAsync(Guid userId, string? displayCurrency = null)
@@ -94,18 +98,18 @@ public class TrackingService : ITrackingService
 
         var tracking = new UserProductTracking
         {
-            TrackingId   = Guid.NewGuid(),
-            UserId       = userId,
-            ProductId    = request.ProductId,
-            ListingId    = request.ListingId,
-            TargetPrice  = request.TargetPrice,
+            TrackingId = Guid.NewGuid(),
+            UserId = userId,
+            ProductId = request.ProductId,
+            ListingId = request.ListingId,
+            TargetPrice = request.TargetPrice,
             CurrencyCode = request.CurrencyCode,
-            Product      = product,
-            Listing      = selectedListing,
-            IsActive     = request.IsActive,
-            NotifyEmail  = request.NotifyEmail,
+            Product = product,
+            Listing = selectedListing,
+            IsActive = request.IsActive,
+            NotifyEmail = request.NotifyEmail,
             NotifyFurtherDecreaseEmail = request.NotifyFurtherDecreaseEmail,
-            CreatedAt    = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         await _trackingRepository.AddAsync(tracking);
@@ -255,20 +259,21 @@ public class TrackingService : ITrackingService
             catch (Exception ex) when (ex is HttpRequestException or InvalidDataException or TaskCanceledException or System.Text.Json.JsonException)
             {
                 // Keep source prices visible until a fresh exchange rate is available.
+                _logger.LogWarning(ex, "Currency conversion for tracking {TrackingId} failed, showing source currency prices", tracking.TrackingId);
             }
         }
 
         return new TrackingResponse
         {
-            TrackingId   = tracking.TrackingId,
-            UserId       = tracking.UserId,
-            ProductId    = tracking.ProductId,
-            ProductName  = tracking.Product?.Name        ?? string.Empty,
+            TrackingId = tracking.TrackingId,
+            UserId = tracking.UserId,
+            ProductId = tracking.ProductId,
+            ProductName = tracking.Product?.Name ?? string.Empty,
             CategoryName = tracking.Product?.Category?.Name,
             MarketCountry = tracking.Listing?.Store?.Country,
-            ListingId    = tracking.ListingId,
-            StoreName    = tracking.Listing?.Store?.Name,
-            TargetPrice  = tracking.TargetPrice,
+            ListingId = tracking.ListingId,
+            StoreName = tracking.Listing?.Store?.Name,
+            TargetPrice = tracking.TargetPrice,
             CurrencyCode = tracking.CurrencyCode,
             CurrentPrice = latest?.Price,
             CurrentPriceCurrencyCode = latest?.CurrencyCode,
@@ -278,10 +283,10 @@ public class TrackingService : ITrackingService
             PreviousPriceInDisplayCurrency = previousPriceInDisplayCurrency,
             PriceDropPercent = priceDropPercent,
             CurrentPriceUpdatedAt = latest?.RecordedAt,
-            IsActive     = tracking.IsActive,
-            NotifyEmail  = tracking.NotifyEmail,
+            IsActive = tracking.IsActive,
+            NotifyEmail = tracking.NotifyEmail,
             NotifyFurtherDecreaseEmail = tracking.NotifyFurtherDecreaseEmail,
-            CreatedAt    = tracking.CreatedAt
+            CreatedAt = tracking.CreatedAt
         };
     }
 }
