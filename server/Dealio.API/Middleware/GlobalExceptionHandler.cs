@@ -11,36 +11,42 @@ public class GlobalExceptionHandler : IExceptionHandler
     public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
         => _logger = logger;
 
+    // The request path is URL decoded user input. Control characters
+    // (a %0A in the raw URL) could forge log lines, so strip them before
+    // the path reaches any log entry.
+    private static string StripControlChars(string? value)
+        => string.IsNullOrEmpty(value) ? "" : new string(value.Where(ch => !char.IsControl(ch)).ToArray());
+
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext      context,
-        Exception        exception,
+        HttpContext context,
+        Exception exception,
         CancellationToken ct)
     {
         var (statusCode, code, message) = exception switch
         {
             FluentValidation.ValidationException e => (400, "VALIDATION_ERROR", string.Join("; ", e.Errors.Select(err => err.ErrorMessage))),
-            NotFoundException      e => (404, "RESOURCE_NOT_FOUND",     e.Message),
-            ConflictException      e => (409, "DUPLICATE_ENTRY",         e.Message),
+            NotFoundException e => (404, "RESOURCE_NOT_FOUND", e.Message),
+            ConflictException e => (409, "DUPLICATE_ENTRY", e.Message),
             Domain.Exceptions.ValidationException e => (400, "VALIDATION_ERROR", e.Message),
-            UnauthorizedException  e => (401, "INVALID_CREDENTIALS",    e.Message),
-            ForbiddenException     e => (403, "INSUFFICIENT_ROLE",      e.Message),
-            BusinessRuleException  e => (422, "BUSINESS_RULE_VIOLATION", e.Message),
-            _                        => (500, "INTERNAL_SERVER_ERROR",  "An unexpected error occurred.")
+            UnauthorizedException e => (401, "INVALID_CREDENTIALS", e.Message),
+            ForbiddenException e => (403, "INSUFFICIENT_ROLE", e.Message),
+            BusinessRuleException e => (422, "BUSINESS_RULE_VIOLATION", e.Message),
+            _ => (500, "INTERNAL_SERVER_ERROR", "An unexpected error occurred.")
         };
 
         if (statusCode >= 500)
             _logger.LogError(exception, "Unhandled request error {ErrorCode} ({StatusCode}) for {Method} {Path}",
-                code, statusCode, context.Request.Method, context.Request.Path);
+                code, statusCode, context.Request.Method, StripControlChars(context.Request.Path.ToString()));
         else
             _logger.LogWarning("Request rejected with {ErrorCode} ({StatusCode}) for {Method} {Path}",
-                code, statusCode, context.Request.Method, context.Request.Path);
+                code, statusCode, context.Request.Method, StripControlChars(context.Request.Path.ToString()));
 
-        context.Response.StatusCode  = statusCode;
+        context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/json";
 
         var response = ApiResponse<object>.Fail(new ApiError
         {
-            Code    = code,
+            Code = code,
             Message = message
         });
 

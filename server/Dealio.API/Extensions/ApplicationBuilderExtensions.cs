@@ -58,7 +58,7 @@ public static class ApplicationBuilderExtensions
 
     public static IApplicationBuilder UseDealioHangfire(
         this IApplicationBuilder app,
-        IConfiguration           config)
+        IConfiguration config)
     {
         app.UseHangfireDashboard(
             config["Hangfire:DashboardPath"] ?? "/hangfire",
@@ -69,19 +69,32 @@ public static class ApplicationBuilderExtensions
 
         using var scope = app.ApplicationServices.CreateScope();
         var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-        recurringJobs.RemoveIfExists("scrape-all-listings");
-        recurringJobs.AddOrUpdate<PriceAlertJob>(
-            "evaluate-price-alerts",
-            job => job.ExecuteAsync(),
-            "*/15 * * * *");
-        recurringJobs.AddOrUpdate<ActiveOfferRefreshJob>(
-            "refresh-active-offers",
-            job => job.ExecuteAsync(),
-            "17 * * * *");
-        recurringJobs.AddOrUpdate<TrackedProductDiscoveryJob>(
-            "rediscover-tracked-products",
-            job => job.ExecuteAsync(CancellationToken.None),
-            "43 2 * * *");
+        // Registration persists across restarts in the Hangfire schema, so a
+        // busy distributed lock (a recurring job executing on another
+        // instance holds the same lock) must not crash the application.
+        // The stored schedules keep running and the next clean boot updates them.
+        try
+        {
+            recurringJobs.RemoveIfExists("scrape-all-listings");
+            recurringJobs.AddOrUpdate<PriceAlertJob>(
+                "evaluate-price-alerts",
+                job => job.ExecuteAsync(),
+                "*/15 * * * *");
+            recurringJobs.AddOrUpdate<ActiveOfferRefreshJob>(
+                "refresh-active-offers",
+                job => job.ExecuteAsync(),
+                "17 * * * *");
+            recurringJobs.AddOrUpdate<TrackedProductDiscoveryJob>(
+                "rediscover-tracked-products",
+                job => job.ExecuteAsync(CancellationToken.None),
+                "43 2 * * *");
+        }
+        catch (Hangfire.PostgreSql.PostgreSqlDistributedLockException ex)
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
+                .CreateLogger("Dealio.Hangfire");
+            logger.LogWarning(ex, "Recurring job registration skipped, the Hangfire distributed lock was busy. Stored schedules continue to run");
+        }
 
         return app;
     }
