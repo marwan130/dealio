@@ -46,9 +46,12 @@ public static class ProductPageImageMiner
 
         Uri candidate;
         // Absolute or protocol relative URLs resolve directly
+        // A bare Unix path parses as an absolute file URI on Linux, so the
+        // file scheme falls through to the base URL join instead.
         if (raw.StartsWith("//", StringComparison.Ordinal))
             candidate = new Uri("https:" + raw);
-        else if (Uri.TryCreate(raw, UriKind.Absolute, out var absolute) && absolute is not null)
+        else if (Uri.TryCreate(raw, UriKind.Absolute, out var absolute)
+                 && absolute is not null && absolute.Scheme != Uri.UriSchemeFile)
             candidate = absolute;
         else if (Uri.TryCreate(pageUrl, new Uri(raw, UriKind.RelativeOrAbsolute), out var joined) && joined is not null)
             candidate = joined;
