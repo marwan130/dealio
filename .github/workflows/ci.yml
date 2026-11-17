@@ -54,7 +54,9 @@ jobs:
         run: dotnet list server/Dealio.slnx package --vulnerable --include-transitive
 
       - name: Validate Compose configuration
-        run: docker compose --env-file docker/.env.example -f docker/docker-compose.yml config --quiet
+        run: |
+          cp docker/.env.example docker/.env
+          docker compose --env-file docker/.env.example -f docker/docker-compose.yml config --quiet
 
       - name: Build service images
         run: docker compose --env-file docker/.env.example -f docker/docker-compose.yml build
