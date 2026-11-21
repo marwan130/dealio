@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../../lib/api";
 import type { ProductResponse } from "../../lib/api-types";
 import { Icon } from "./Icon";
-import { ProductImage } from "./ProductImage";
+import { PRODUCT_ILLUSTRATION_FALLBACK, ProductImage } from "./ProductImage";
 import { useLocale } from "../../lib/i18n-context";
 import "./compare-tray.css";
 
@@ -11,13 +11,9 @@ interface CompareTrayProps {
   onRemove: (productId: string) => void;
   onClear: () => void;
   onOpenCompare: () => void;
-  /** True on phone sized product pages, where a bottom buy bar already sits. */
   raised?: boolean;
 }
 
-// Persistent tray of products picked for comparison. Shows the selected
-// products on every page with a direct jump to the compare page, the way
-// retail compare flows work.
 export function CompareTray({
   ids,
   onRemove,
@@ -53,8 +49,13 @@ export function CompareTray({
   return (
     <aside
       className={`compare-tray${raised ? " compare-tray--raised" : ""}`}
+      data-count={ids.length}
       aria-label={strings.compareTrayLabel}
     >
+      <span className="compare-tray-lead" aria-hidden="true">
+        <Icon name="compare" />
+        {strings.navCompare}
+      </span>
       <div className="compare-tray-items">
         {ids.map((id) => {
           const product = cacheRef.current[id];
@@ -64,23 +65,15 @@ export function CompareTray({
               key={id}
               title={product?.name ?? id}
             >
-              {product?.primaryImage ? (
-                <ProductImage
-                  source={product.primaryImage}
-                  baseUrl={undefined}
-                  productId={id}
-                  alt=""
-                  loading="lazy"
-                  layered
-                />
-              ) : (
-                <span
-                  className="compare-tray-thumb-fallback"
-                  aria-hidden="true"
-                >
-                  {(product?.name ?? id).trim().charAt(0).toUpperCase()}
-                </span>
-              )}
+              <ProductImage
+                source={product?.primaryImage}
+                baseUrl={undefined}
+                productId={id}
+                alt=""
+                loading="lazy"
+                layered
+                fallback={PRODUCT_ILLUSTRATION_FALLBACK}
+              />
               <button
                 type="button"
                 className="compare-tray-remove"
@@ -93,6 +86,9 @@ export function CompareTray({
           );
         })}
       </div>
+      {!canCompare && (
+        <p className="compare-tray-hint">{strings.compareNeedTwo}</p>
+      )}
       <div className="compare-tray-actions">
         <span className="compare-tray-count">
           {strings.compareCount(ids.length)}

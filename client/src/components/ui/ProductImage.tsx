@@ -5,6 +5,18 @@ import { sanitizeImageUrl, resolveProductImage } from "../../lib/api";
 
 const MIN_PHOTO_SIDE = 80;
 
+export const PRODUCT_ILLUSTRATION_FALLBACK =
+  "/dealio-context/illustrations/product-box.svg";
+
+export const PRODUCT_ILLUSTRATION_ALT =
+  "/dealio-context/illustrations/package-box.svg";
+
+export function productIllustration(index: number) {
+  return index % 2 === 0
+    ? PRODUCT_ILLUSTRATION_FALLBACK
+    : PRODUCT_ILLUSTRATION_ALT;
+}
+
 const isIconSizedBitmap = (img) => {
   const w = img.naturalWidth,
     h = img.naturalHeight;
@@ -18,20 +30,30 @@ export function ProductImage({
   alt: x,
   loading: d = "eager",
   layered: L = false,
+  fallback: F = "",
 }) {
   const [resolved, h] = useState("");
   const [fallback, setFallback] = useState("");
+  const [resolveDone, setResolveDone] = useState(false);
+  const [broken, setBroken] = useState(false);
   const fallbackAttempted = useRef(false);
   useEffect(() => {
     if (c || (!u && !f)) return;
     h("");
+    setResolveDone(false);
     let K = true;
     resolveProductImage(u, f)
       .then((p) => {
-        if (K) h(p || "");
+        if (K) {
+          h(p || "");
+          setResolveDone(true);
+        }
       })
       .catch(() => {
-        if (K) h("");
+        if (K) {
+          h("");
+          setResolveDone(true);
+        }
       });
     return () => {
       K = false;
@@ -39,9 +61,14 @@ export function ProductImage({
   }, [c, u, f]);
   useEffect(() => {
     setFallback("");
+    setResolveDone(false);
+    setBroken(false);
     fallbackAttempted.current = false;
   }, [c, u, f]);
-  const p = fallback || resolved || (c ? sanitizeImageUrl(c, f) : "");
+  const hasSource = Boolean(c || u || f);
+  const p = broken
+    ? ""
+    : fallback || resolved || (c ? sanitizeImageUrl(c, f) : "");
 
   async function handleImageError(event) {
     const image = event.currentTarget;
@@ -57,10 +84,10 @@ export function ProductImage({
           return;
         }
       } catch {
-        /* keep the unavailable image out of the layout */
+        // No replacement exists. The illustration takes over below.
       }
     }
-    image.remove();
+    setBroken(true);
   }
 
   const [frames, setFrames] = useState(null);
@@ -88,6 +115,11 @@ export function ProductImage({
     return () => clearTimeout(t);
   }, [frames, L]);
 
+  useEffect(() => {
+    if (!L || !hasSource) return;
+    if (frames && frames.length === 0) setBroken(true);
+  }, [L, hasSource, frames]);
+
   const anyReady = L ? !!frames?.some((fr) => fr.ready) : false;
   const [scanOver, k] = useState(false);
   useEffect(() => {
@@ -99,33 +131,52 @@ export function ProductImage({
     return () => clearTimeout(t);
   }, [L, p, anyReady, scanOver]);
 
-  if (!L) {
-    return p
-      ? jsx("img", {
-          className: "product-image",
-          src: p,
-          alt: x,
-          width: 512,
-          height: 512,
-          loading: d,
-          decoding: "async",
-          referrerPolicy: "strict-origin-when-cross-origin",
-          onLoad: (N) => {
-            if (isIconSizedBitmap(N.currentTarget)) {
-              void handleImageError(N);
-            }
-          },
-          onError: (N) => {
+  const showFallback =
+    Boolean(F) && (broken || (!p && (resolveDone || !hasSource || Boolean(c))));
+  const fallbackImg = showFallback
+    ? jsx("img", {
+        className: "product-illustration",
+        src: F,
+        alt: "",
+        "aria-hidden": "true",
+        loading: d,
+        decoding: "async",
+      })
+    : null;
+
+  const plainImg = p
+    ? jsx("img", {
+        className: "product-image",
+        src: p,
+        alt: x,
+        width: 512,
+        height: 512,
+        loading: d,
+        decoding: "async",
+        referrerPolicy: "strict-origin-when-cross-origin",
+        onLoad: (N) => {
+          if (isIconSizedBitmap(N.currentTarget)) {
             void handleImageError(N);
-          },
-        })
-      : null;
+          }
+        },
+        onError: (N) => {
+          void handleImageError(N);
+        },
+      })
+    : null;
+
+  if (!L) {
+    return plainImg || fallbackImg;
   }
 
   const scanEl = scanOver
     ? null
-    : jsx("div", { className: "product-image-scan", "aria-hidden": "true" });
-  if (!frames || !frames.length) return scanEl;
+    : jsx(
+        "div",
+        { className: "product-image-scan", "aria-hidden": "true" },
+        "scan",
+      );
+  if (!frames || !frames.length) return fallbackImg || scanEl;
   return (anyReady ? [] : [scanEl]).concat(
     frames.map((fr) =>
       jsx(

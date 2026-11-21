@@ -3,17 +3,12 @@ import { Icon } from "./Icon";
 import { useLocale } from "../../lib/i18n-context";
 
 interface ScrollShelfProps {
-  /** Heading content rendered beside the arrows. */
   heading: ReactNode;
   children: ReactNode;
   className?: string;
-  /** Accessible name for the scroll region when the heading is not plain text. */
   ariaLabel?: string;
 }
 
-// Horizontal card shelf with scroll snap. Arrow buttons page the strip by one
-// viewport,  keyboard users get the same behavior through the scroll region's
-// native arrow key scrolling.
 export function ScrollShelf({
   heading,
   children,
@@ -22,8 +17,6 @@ export function ScrollShelf({
 }: ScrollShelfProps) {
   const strings = useLocale();
   const shelfRef = useRef<HTMLDivElement>(null);
-  // The affordance must not lie: at the strip's start the prev arrow goes
-  // quiet (absolute scroll offsets make RTL behave the same).
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
 

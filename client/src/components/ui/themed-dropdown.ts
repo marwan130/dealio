@@ -132,7 +132,7 @@ export function mountThemedDropdown(
         const check = document.createElement("span");
         check.className = "option-check";
         check.setAttribute("aria-hidden", "true");
-        check.textContent = "✓";
+        check.textContent = "✓"; // taste-skill-ignore: text checkmark glyph, not an emoji
         item.append(check);
       }
       item.addEventListener("click", () => choose(option));

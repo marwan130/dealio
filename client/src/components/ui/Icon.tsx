@@ -24,6 +24,7 @@ export function Icon({ name: c }) {
     "chevron-down": "m6 9 6 6 6-6",
     close: "m6 6 12 12M18 6 6 18",
     plus: "M12 5v14M5 12h14",
+    minus: "M5 12h14",
     external:
       "M14 4h6v6m0-6-9 9M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6",
     check: "m5 12 4 4L19 6",

@@ -1,34 +1,66 @@
-/* Persistent compare tray: fixed to the foot of the viewport on every page
-   while products are selected for comparison. Shares the notifications
-   page's component dimensions (notice-list frame, 36px icon tiles) and
-   logical CSS properties for RTL mirroring. */
-
 .compare-tray {
   position: fixed;
-  inset-inline: 16px;
-  inset-block-end: 12px;
-  z-index: 8;
+  inset-block-end: 20px;
+  inset-inline-start: 256px;
+  inset-inline-end: 16px;
+  z-index: 9;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 11px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  gap: 16px;
+  width: auto;
+  max-width: 800px;
+  margin-inline: auto;
+  padding: 12px 14px 12px 16px;
+  border: 2px solid var(--text);
+  border-radius: 6px;
   background: var(--surface-container);
-  box-shadow: 0 4px 24px rgb(0 0 0 / 10%);
+  box-shadow: 4px 4px 0 var(--text) !important;
 }
 
-/* On phone sized product pages the bottom buy bar is already anchored
-   there,  lift the tray above it. */
+@media (min-width: 1051px) {
+  body:has(.sidebar--collapsed) .compare-tray {
+    inset-inline-start: 84px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .compare-tray {
+    inset-inline-start: 92px;
+    inset-inline-end: 16px;
+  }
+}
+
 @media (max-width: 760px) {
-  .compare-tray--raised {
-    inset-block-end: 76px;
+  .compare-tray {
+    inset-inline-start: 12px;
+    inset-inline-end: 12px;
+    inset-block-end: 12px;
   }
 
-  .compare-tray {
-    inset-inline: 10px;
+  .compare-tray--raised {
+    inset-block-end: 84px;
   }
+}
+
+.compare-tray-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding-inline-end: 14px;
+  border-inline-end: 1.5px solid var(--line-strong);
+  color: var(--text);
+  font-family: Anton, "DM Sans", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.compare-tray-lead svg {
+  inline-size: 18px;
+  block-size: 18px;
+  color: var(--compare-text);
 }
 
 .compare-tray-items {
@@ -38,16 +70,14 @@
   min-width: 0;
 }
 
-/* Thumb tiles use the notifications page's icon tile dimensions
-   (notice-icon: 36x36, 6px corners, 1px ring). */
 .compare-tray-item {
   position: relative;
   flex: none;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--text);
+  border-radius: 5px;
+  background: #f6f1e8 !important;
   overflow: visible;
 }
 
@@ -59,12 +89,17 @@
   padding: 3px;
 }
 
+.compare-tray-item .product-image {
+  background: transparent !important;
+  mix-blend-mode: multiply !important;
+}
+
 .compare-tray-thumb-fallback {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--text-muted);
   font-family: Anton, "DM Sans", sans-serif;
   font-size: 16px;
@@ -72,27 +107,29 @@
 
 .compare-tray-remove {
   position: absolute;
-  inset-block-start: -6px;
-  inset-inline-end: -6px;
+  z-index: 2;
+  inset-block-start: -8px;
+  inset-inline-end: -8px;
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   padding: 0;
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--text);
   border-radius: 999px;
   background: var(--surface);
-  color: var(--text-muted);
+  color: var(--text);
   cursor: pointer;
   transition:
     color 0.15s ease,
-    border-color 0.15s ease;
+    background-color 0.15s ease;
 }
 
 .compare-tray-remove:hover,
 .compare-tray-remove:focus-visible {
-  border-color: var(--brand);
-  color: var(--brand);
+  background: var(--brand);
+  border-color: var(--text);
+  color: #202020;
 }
 
 .compare-tray-remove svg {
@@ -103,24 +140,177 @@
 .compare-tray-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex: none;
 }
 
-.compare-tray-count {
+.compare-tray-hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding-inline: 4px;
   color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: end;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 860px) {
+  .compare-tray-hint {
+    display: none;
+  }
+}
+
+.compare-tray-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1.5px solid var(--text);
+  border-radius: 999px;
+  background: var(--surface-high);
+  color: var(--compare-text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-  .compare-tray-count {
+.compare-tray .text-button,
+:root[data-theme="dark"] .compare-tray .text-button {
+  padding: 6px 2px;
+  color: var(--text-muted) !important;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.compare-tray .text-button:hover,
+.compare-tray .text-button:focus-visible,
+:root[data-theme="dark"] .compare-tray .text-button:hover,
+:root[data-theme="dark"] .compare-tray .text-button:focus-visible {
+  color: var(--text) !important;
+  text-decoration-thickness: 2px;
+}
+
+.compare-tray .button--primary {
+  min-height: 38px !important;
+  padding-inline: 16px !important;
+  background: var(--accent-blue, #4d91d8) !important;
+  border: 2px solid var(--text) !important;
+  color: #10151b !important;
+  box-shadow: none !important;
+}
+
+.compare-tray .button--primary:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--accent-blue, #4d91d8) 82%,
+    #ffffff
+  ) !important;
+  color: #10151b !important;
+}
+
+.compare-tray .button--primary:focus-visible {
+  outline: 2px solid var(--compare-text);
+  outline-offset: 2px;
+}
+
+.compare-tray .button--primary:disabled {
+  background: transparent !important;
+  border: 2px dashed var(--line-strong) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .compare-tray {
+    gap: 10px;
+    padding: 10px 10px 10px 12px;
+  }
+
+  .compare-tray-lead {
     display: none;
   }
 
   .compare-tray-actions {
     gap: 8px;
   }
+
+  .compare-tray-count {
+    min-height: 28px;
+    padding: 3px 9px;
+    font-size: 11.5px;
+  }
+
+  .compare-tray .button--primary {
+    min-height: 36px !important;
+    padding-inline: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .compare-tray {
+    gap: 8px;
+    padding: 8px 8px 8px 10px;
+  }
+
+  .compare-tray-actions {
+    gap: 6px;
+  }
+
+  .compare-tray-count {
+    min-height: 26px;
+    padding: 2px 7px;
+    font-size: 11px;
+  }
+
+  .compare-tray .text-button,
+  :root[data-theme="dark"] .compare-tray .text-button {
+    font-size: 11.5px;
+    padding-inline: 0;
+  }
+
+  .compare-tray .button--primary {
+    min-height: 34px !important;
+    padding-inline: 10px !important;
+    font-size: 11.5px !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .compare-tray-count {
+    display: none;
+  }
+}
+
+@media (max-width: 460px) {
+  .compare-tray[data-count="2"],
+  .compare-tray[data-count="3"] {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .compare-tray[data-count="2"] .compare-tray-actions,
+  .compare-tray[data-count="3"] .compare-tray-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+body:has(.compare-tray) .page-wrap {
+  padding-bottom: 132px !important;
+}
+
+:root[dir="rtl"] .compare-tray .button--primary svg {
+  transform: scaleX(-1);
 }

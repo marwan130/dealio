@@ -57,7 +57,10 @@ export function GlobalSearchDialog({
               const je = JSON.parse(xe.data);
               je.sessionId && sessionStorage.setItem(_, je.sessionId);
             } catch (error) {
-              console.warn("Unreadable search progress event, the session id was not stored", error);
+              console.warn(
+                "Unreadable search progress event, the session id was not stored",
+                error,
+              );
             }
           },
           re = () => {
@@ -91,7 +94,10 @@ export function GlobalSearchDialog({
                   );
                 });
               } catch (error) {
-                console.warn("Unreadable search candidate event, that candidate was dropped", error);
+                console.warn(
+                  "Unreadable search candidate event, that candidate was dropped",
+                  error,
+                );
               }
           }),
           $.addEventListener("completed", (xe) => {

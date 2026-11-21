@@ -3,20 +3,6 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import { translations } from "../../i18n";
 
 export function DiscoverPageSkeleton() {
-  const strings =
-    translations[
-      document.documentElement.lang.toLowerCase().startsWith("ar") ? "ar" : "en"
-    ];
-  const c = [
-    { label: strings.dealCategoryElectronics, width: 76 },
-    { label: strings.dealCategoryMobiles, width: 110 },
-    { label: strings.dealCategoryComputers, width: 88 },
-    { label: strings.dealCategoryHome, width: 100 },
-    { label: strings.dealCategoryGaming, width: 52 },
-    { label: strings.dealCategoryAudio, width: 90 },
-    { label: strings.dealCategoryFashion, width: 50 },
-    { label: strings.dealCategoryBeauty, width: 104 },
-  ];
   return jsxs("div", {
     className: "skeleton-page-wrap",
     "aria-label":
@@ -26,83 +12,88 @@ export function DiscoverPageSkeleton() {
           : "en"
       ].discoverSearching,
     children: [
-      jsx("div", {
-        className: "page-heading deals-page-heading",
-        style: { marginBottom: 0 },
-        children: jsxs("div", {
-          children: [
-            jsx("span", {
-              className: "skeleton-box",
-              style: {
-                width: 140,
-                height: 11,
-                marginBottom: 7,
-                borderRadius: 3,
-                display: "block",
-              },
-            }),
-            jsx("span", {
-              className: "skeleton-box",
-              style: {
-                width: 330,
-                height: 36,
-                marginBottom: 0,
-                borderRadius: 6,
-                display: "block",
-              },
-            }),
-          ],
-        }),
-      }),
       jsxs("div", {
-        className: "deals-overview-container",
+        className: "home-mosaic",
         children: [
-          jsx("div", {
-            className: "deals-category-bar",
-            children: c.map((f, x) =>
+          jsx("figure", { className: "home-editorial-photo skeleton-box" }),
+          jsxs("div", {
+            className: "home-category-panel",
+            children: [
+              jsx("span", {
+                className: "skeleton-box skeleton-mosaic-heading",
+                style: { marginBottom: 12 },
+              }),
+              jsxs("div", {
+                className: "home-categories",
+                children: [1, 2, 3, 4, 5, 6, 7, 8].map((f) =>
+                  jsxs(
+                    "span",
+                    {
+                      className: "home-cat-tile home-cat-tile-skel",
+                      children: [
+                        jsx("span", {
+                          className: "skeleton-box home-cat-glyph-skel",
+                          style: { borderRadius: 10 },
+                        }),
+                        jsx("span", {
+                          className: "skeleton-box home-cat-label-skel",
+                          style: { borderRadius: 4 },
+                        }),
+                      ],
+                    },
+                    f,
+                  ),
+                ),
+              }),
+            ],
+          }),
+        ],
+      }),
+      jsxs("section", {
+        className: "shelf",
+        children: [
+          jsxs("div", {
+            className: "shelf-header",
+            children: [
+              jsxs("div", {
+                className: "shelf-heading",
+                children: [
+                  jsx("span", {
+                    className: "skeleton-box skeleton-shelf-eyebrow",
+                    style: { marginBottom: 6, borderRadius: 3 },
+                  }),
+                  jsx("span", {
+                    className: "skeleton-box skeleton-shelf-heading",
+                    style: { borderRadius: 6 },
+                  }),
+                ],
+              }),
+            ],
+          }),
+          jsxs("div", {
+            className: "shelf-track",
+            children: [1, 2, 3, 4].map((f) =>
               jsxs(
                 "div",
                 {
-                  className: "deals-cat-pill skeleton-cat-pill",
+                  className: "home-card-skeleton",
                   children: [
-                    jsx("span", {
-                      className: "skeleton-box",
-                      style: {
-                        width: 16,
-                        height: 16,
-                        borderRadius: 4,
-                        flexShrink: 0,
-                      },
+                    jsx("div", {
+                      className: "home-card-skeleton-photo skeleton-box",
                     }),
                     jsx("span", {
                       className: "skeleton-box",
-                      style: { width: f.width, height: 13, borderRadius: 4 },
+                      style: { width: "80%", height: 13 },
+                    }),
+                    jsx("span", {
+                      className: "skeleton-box",
+                      style: { width: "45%", height: 13 },
                     }),
                   ],
                 },
-                x,
+                f,
               ),
             ),
-          }),
-          jsxs("section", {
-            className: "deals-section",
-            children: [
-              jsx("div", {
-                className: "section-heading",
-                children: jsx("div", {
-                  children: jsx("span", {
-                    className: "skeleton-box",
-                    style: {
-                      width: 250,
-                      height: 26,
-                      borderRadius: 6,
-                      display: "block",
-                    },
-                  }),
-                }),
-              }),
-              jsx(DealCardSkeletons, { count: 6 }),
-            ],
           }),
         ],
       }),
@@ -110,9 +101,6 @@ export function DiscoverPageSkeleton() {
   });
 }
 
-// Mirrors the real search-card anatomy (photo area, store meta, title, price
-// row, action buttons) with widths that vary per slot position, so replacing
-// skeletons with results reads as a continuation, not a blinking swap.
 export function DealCardSkeleton({ index: e = 0 }) {
   return jsxs("article", {
     className: "deal-card skeleton-deal-card",
@@ -180,18 +168,54 @@ export function TrackingCardSkeletons({ count: c = 6 }) {
         {
           className: "tracking-card skeleton-tracking-card",
           children: [
-            jsx("div", {
-              className: "skeleton-box skeleton-text skeleton-pill",
+            jsxs("div", {
+              className: "skeleton-tracking-select",
+              children: [
+                jsx("span", {
+                  className: "skeleton-box skeleton-tracking-check",
+                }),
+                jsx("span", {
+                  className: "skeleton-box skeleton-tracking-label",
+                  style: { width: `${48 + (x % 3) * 6}%` },
+                }),
+              ],
             }),
-            jsx("div", {
-              className: "skeleton-box skeleton-text skeleton-title",
+            jsx("span", {
+              className: "skeleton-box skeleton-tracking-status",
+              style: { width: 88 - (x % 3) * 10 },
             }),
-            jsx("div", {
-              className: "skeleton-box skeleton-text skeleton-price",
+            jsx("span", {
+              className: "skeleton-box skeleton-tracking-title",
+              style: { width: `${86 - (x % 3) * 9}%` },
             }),
-            jsx("div", {
-              className: "skeleton-box skeleton-text",
-              style: { width: "40%" },
+            jsx("span", {
+              className: "skeleton-box skeleton-tracking-store",
+              style: { width: `${30 + (x % 2) * 6}%` },
+            }),
+            jsxs("div", {
+              className: "skeleton-tracking-prices",
+              children: [
+                jsx("span", {
+                  className: "skeleton-box skeleton-tracking-price",
+                  style: { width: `${30 + (x % 3) * 4}%` },
+                }),
+                jsx("span", {
+                  className: "skeleton-box skeleton-tracking-target",
+                  style: { width: `${34 + (x % 2) * 6}%` },
+                }),
+              ],
+            }),
+            jsxs("div", {
+              className: "skeleton-tracking-actions",
+              children: [
+                jsx("span", {
+                  className: "skeleton-box skeleton-tracking-dash",
+                }),
+                jsx("span", {
+                  className:
+                    "skeleton-box skeleton-tracking-dash skeleton-tracking-dash--wide",
+                }),
+              ],
             }),
           ],
         },
@@ -239,34 +263,74 @@ export function SkeletonTable({ rows: c = 5 }) {
 }
 
 export function NoticeListSkeleton({ count: c = 4 }) {
-  return jsx("div", {
-    className: "notice-list",
-    children: Array.from({ length: c }).map((f, x) =>
-      jsxs(
-        "div",
-        {
-          className: "notice-item skeleton-notice-item",
+  return jsxs("div", {
+    className: "notifications-skeleton",
+    "aria-hidden": "true",
+    children: [
+      jsx("div", {
+        className: "page-heading notifications-heading",
+        children: jsxs("div", {
+          className: "skeleton-notice-heading-copy",
           children: [
-            jsx("div", { className: "skeleton-box skeleton-notice-icon" }),
-            jsxs("div", {
-              className: "notice-copy",
-              style: { width: "100%" },
-              children: [
-                jsx("div", {
-                  className: "skeleton-box skeleton-text",
-                  style: { width: "45%" },
-                }),
-                jsx("div", {
-                  className: "skeleton-box skeleton-text",
-                  style: { width: "75%", marginTop: "6px" },
-                }),
-              ],
+            jsx("span", { className: "skeleton-box skeleton-notice-eyebrow" }),
+            jsx("span", {
+              className: "skeleton-box skeleton-notice-page-title",
             }),
           ],
-        },
-        x,
-      ),
-    ),
+        }),
+      }),
+      jsxs("div", {
+        className: "toolbar notifications-toolbar",
+        children: [
+          jsx("span", { className: "skeleton-box skeleton-notice-filter" }),
+          jsx("span", { className: "skeleton-box skeleton-notice-filter" }),
+          jsx("span", { className: "skeleton-box skeleton-notice-count" }),
+          jsx("span", { className: "skeleton-box skeleton-notice-markall" }),
+        ],
+      }),
+      jsxs("div", {
+        className: "notice-list skeleton-notice-list",
+        children: Array.from({ length: c }).map((f, x) =>
+          jsxs(
+            "div",
+            {
+              className: "notice-item skeleton-notice-item",
+              children: [
+                jsx("span", {
+                  className: "skeleton-box notice-icon skeleton-notice-icon",
+                }),
+                jsxs("div", {
+                  className: "notice-copy",
+                  children: [
+                    jsxs("div", {
+                      className: "notice-top",
+                      children: [
+                        jsx("span", {
+                          className: "skeleton-box skeleton-notice-title",
+                          style: { width: `${44 + (x % 3) * 8}%` },
+                        }),
+                        jsx("span", {
+                          className: "skeleton-box skeleton-notice-date",
+                        }),
+                      ],
+                    }),
+                    jsx("span", {
+                      className: "skeleton-box skeleton-notice-body",
+                      style: { width: `${72 + (x % 2) * 12}%` },
+                    }),
+                    jsx("span", {
+                      className: "skeleton-box skeleton-notice-state",
+                      style: { width: `${30 + (x % 2) * 7}%` },
+                    }),
+                  ],
+                }),
+              ],
+            },
+            x,
+          ),
+        ),
+      }),
+    ],
   });
 }
 
@@ -277,28 +341,24 @@ export function TopbarSkeleton() {
       jsx("div", {
         className: "topbar-skeleton-left",
         children: jsx("span", {
-          className: "skeleton-box",
-          style: { width: 140, height: 20, borderRadius: 6 },
+          className: "skeleton-box topbar-skel-left",
         }),
       }),
       jsxs("div", {
         className: "topbar-skeleton-right",
         children: [
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 220, height: 38, borderRadius: 8 },
+            className: "skeleton-box topbar-skel-search",
           }),
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 130, height: 38, borderRadius: 8 },
+            className:
+              "skeleton-box topbar-skel-action topbar-skel-action--wide",
           }),
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 110, height: 38, borderRadius: 8 },
+            className: "skeleton-box topbar-skel-action",
           }),
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 75, height: 38, borderRadius: 8 },
+            className: "skeleton-box topbar-skel-icon",
           }),
         ],
       }),
@@ -308,7 +368,7 @@ export function TopbarSkeleton() {
 
 export function SidebarSkeleton({ collapsed: c }) {
   return c
-    ? jsx("div", {
+    ? jsxs("div", {
         className: "sidebar-skeleton-items",
         style: {
           padding: "0",
@@ -321,14 +381,13 @@ export function SidebarSkeleton({ collapsed: c }) {
           jsx(
             "span",
             {
-              className: "skeleton-box",
-              style: { width: 44, height: 44, borderRadius: 12 },
+              className: "skeleton-box sidebar-skel-icon",
             },
             f,
           ),
         ),
       })
-    : jsx("div", {
+    : jsxs("div", {
         className: "sidebar-skeleton-items",
         style: {
           padding: "0 4px",
@@ -341,7 +400,6 @@ export function SidebarSkeleton({ collapsed: c }) {
             "span",
             {
               className: "skeleton-box sidebar-skeleton-item",
-              style: { height: 42, borderRadius: 12, width: "100%" },
             },
             f,
           ),
@@ -360,51 +418,42 @@ export function DashboardSkeleton() {
       ].loadingProducts,
     children: [
       jsxs("div", {
-        className: "page-heading",
+        className: "page-heading dashboard-greeting",
         children: [
-          jsx("div", {
-            children: jsx("span", {
-              className: "skeleton-box",
-              style: { width: 180, height: 36, marginBottom: 8 },
-            }),
+          jsxs("div", {
+            className: "dashboard-greeting-copy",
+            children: [
+              jsx("span", {
+                className: "skeleton-box greeting-skel-eyebrow",
+                style: { marginBottom: 7, borderRadius: 3 },
+              }),
+              jsx("span", { className: "skeleton-box greeting-skel-heading" }),
+              jsx("span", {
+                className: "skeleton-box greeting-skel-sub",
+                style: { marginTop: 10 },
+              }),
+            ],
           }),
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 120, height: 40, borderRadius: 12 },
+            className: "skeleton-box greeting-skel-action",
+            style: { gridArea: "actions", borderRadius: 8 },
+          }),
+          jsx("figure", {
+            className: "dashboard-editorial-photo skeleton-box",
+            style: { gridArea: "photo" },
           }),
         ],
       }),
-      jsx("div", {
-        className: "skeleton-box",
-        style: { height: 110, borderRadius: 14, marginBottom: 28 },
+      jsxs("div", {
+        className: "feed-grid",
+        children: [
+          jsx("div", { className: "feed-skeleton feed-skeleton--feature" }),
+          jsx("div", { className: "feed-skeleton" }),
+          jsx("div", { className: "feed-skeleton" }),
+          jsx("div", { className: "feed-skeleton" }),
+          jsx("div", { className: "feed-skeleton" }),
+        ],
       }),
-      jsx("div", {
-        className: "skeleton-metric-grid",
-        children: [1, 2, 3, 4].map((c) =>
-          jsxs(
-            "div",
-            {
-              className: "skeleton-metric-card",
-              children: [
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "60%", height: 14 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "40%", height: 32 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "80%", height: 12 },
-                }),
-              ],
-            },
-            c,
-          ),
-        ),
-      }),
-      jsx(SkeletonTable, { rows: 4 }),
     ],
   });
 }
@@ -423,8 +472,7 @@ export function SettingsSkeleton() {
         className: "page-heading",
         children: jsx("div", {
           children: jsx("span", {
-            className: "skeleton-box",
-            style: { width: 140, height: 36, marginBottom: 8 },
+            className: "skeleton-box skeleton-page-heading",
           }),
         }),
       }),
@@ -432,24 +480,16 @@ export function SettingsSkeleton() {
         className: "settings-skeleton-panel",
         children: [
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 120, height: 20 },
+            className: "skeleton-box skeleton-panel-title",
           }),
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 220, height: 14 },
+            className: "skeleton-box skeleton-panel-line",
           }),
           jsxs("div", {
-            style: { display: "flex", gap: 10, marginTop: 8 },
+            className: "skeleton-field-row",
             children: [
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 100, height: 38, borderRadius: 8 },
-              }),
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 100, height: 38, borderRadius: 8 },
-              }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
             ],
           }),
         ],
@@ -458,20 +498,14 @@ export function SettingsSkeleton() {
         className: "settings-skeleton-panel",
         children: [
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 140, height: 20 },
+            className:
+              "skeleton-box skeleton-panel-title skeleton-panel-title--wide",
           }),
           jsxs("div", {
-            style: { display: "flex", gap: 16 },
+            className: "skeleton-field-row",
             children: [
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 160, height: 38, borderRadius: 8 },
-              }),
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 160, height: 38, borderRadius: 8 },
-              }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
             ],
           }),
         ],
@@ -480,20 +514,14 @@ export function SettingsSkeleton() {
         className: "settings-skeleton-panel",
         children: [
           jsx("span", {
-            className: "skeleton-box",
-            style: { width: 150, height: 20 },
+            className:
+              "skeleton-box skeleton-panel-title skeleton-panel-title--widest",
           }),
           jsxs("div", {
-            style: { display: "flex", gap: 16 },
+            className: "skeleton-field-row",
             children: [
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 180, height: 38, borderRadius: 8 },
-              }),
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: 180, height: 38, borderRadius: 8 },
-              }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
+              jsx("span", { className: "skeleton-box skeleton-field" }),
             ],
           }),
         ],
@@ -516,45 +544,17 @@ export function ComparePageSkeleton() {
         className: "page-heading",
         children: jsx("div", {
           children: jsx("span", {
-            className: "skeleton-box",
-            style: { width: 160, height: 36 },
+            className: "skeleton-box skeleton-page-heading",
           }),
         }),
       }),
-      jsx("div", {
-        className: "compare-skeleton-grid",
-        children: [1, 2, 3].map((c) =>
-          jsxs(
-            "div",
-            {
-              className: "compare-skeleton-col",
-              children: [
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "100%", height: 140, borderRadius: 8 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "80%", height: 20 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "50%", height: 26 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "100%", height: 40 },
-                }),
-                jsx("span", {
-                  className: "skeleton-box",
-                  style: { width: "100%", height: 40 },
-                }),
-              ],
-            },
-            c,
-          ),
+      jsxs("div", {
+        className: "compare-skeleton-head",
+        children: [1, 2, 3, 4].map((c) =>
+          jsx("span", { className: "skeleton-box" }, c),
         ),
       }),
+      jsx(SkeletonTable, { rows: 4 }),
     ],
   });
 }
@@ -570,47 +570,25 @@ export function ProductDetailsSkeleton() {
       ].productDetailsLoading,
     children: [
       jsx("span", {
-        className: "skeleton-box",
-        style: { width: 90, height: 28, marginBottom: 18, borderRadius: 6 },
+        className:
+          "skeleton-box skeleton-page-heading skeleton-page-heading--sm",
+        style: { marginBottom: 18 },
       }),
       jsxs("div", {
-        style: {
-          display: "grid",
-          gridTemplateColumns: "minmax(200px, 320px) 1fr",
-          gap: 28,
-          marginBottom: 28,
-        },
+        className: "pdp-skeleton-hero",
         children: [
-          jsx("span", {
-            className: "skeleton-box",
-            style: { height: 260, borderRadius: 12 },
-          }),
+          jsx("span", { className: "skeleton-box pdp-skeleton-media" }),
           jsxs("div", {
-            style: { display: "flex", flexDirection: "column", gap: 12 },
+            className: "pdp-skeleton-copy",
             children: [
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: "70%", height: 32 },
-              }),
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: "35%", height: 28 },
-              }),
-              jsx("span", {
-                className: "skeleton-box",
-                style: { width: "90%", height: 60, borderRadius: 8 },
-              }),
+              jsx("span", { className: "skeleton-box pdp-skeleton-title" }),
+              jsx("span", { className: "skeleton-box pdp-skeleton-price" }),
+              jsx("span", { className: "skeleton-box pdp-skeleton-body" }),
               jsxs("div", {
-                style: { display: "flex", gap: 10, marginTop: "auto" },
+                className: "pdp-skeleton-actions",
                 children: [
-                  jsx("span", {
-                    className: "skeleton-box",
-                    style: { width: 130, height: 40, borderRadius: 8 },
-                  }),
-                  jsx("span", {
-                    className: "skeleton-box",
-                    style: { width: 130, height: 40, borderRadius: 8 },
-                  }),
+                  jsx("span", { className: "skeleton-box pdp-skeleton-cta" }),
+                  jsx("span", { className: "skeleton-box pdp-skeleton-cta" }),
                 ],
               }),
             ],
@@ -618,13 +596,8 @@ export function ProductDetailsSkeleton() {
         ],
       }),
       jsx("span", {
-        className: "skeleton-box",
-        style: {
-          width: "100%",
-          height: 220,
-          borderRadius: 10,
-          marginBottom: 24,
-        },
+        className: "skeleton-box pdp-skeleton-chart",
+        style: { marginBottom: 24 },
       }),
       jsx(SkeletonTable, { rows: 3 }),
     ],
