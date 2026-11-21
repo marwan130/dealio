@@ -125,7 +125,9 @@ services:
     cpus: 2.0
     pids_limit: 128
     ports:
-      - "127.0.0.1:5001:8080"
+      # Override with API_HOST_PORT when a local dotnet run already holds
+      # 5001; the container side stays 8080 either way.
+      - "127.0.0.1:${API_HOST_PORT:-5001}:8080"
     env_file:
       - .env
     environment:
@@ -168,7 +170,7 @@ services:
       - service-egress
       - web
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080 && printf \"GET /health/ready HTTP/1.0\\r\\n\\r\\n\" >&3 && grep -q \"200 OK\" <&3'"]
       interval: 10s
       timeout: 5s
       retries: 5
