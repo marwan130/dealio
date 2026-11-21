@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Category mark: groceries, a paper bag of produce. -->
+  <path d="M42 62h76l8 70a8 8 0 0 1-8 9H42a8 8 0 0 1-8-9l8-70Z" fill="#FFEB00" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M50 62c0-16 6-26 10-26s8 10 8 26M102 62c0-16-6-26-10-26s-8 10-8 26" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="66" cy="46" r="16" fill="#FF6257" stroke="#202020" stroke-width="6"/>
+  <path d="M66 30v-8" stroke="#202020" stroke-width="6" stroke-linecap="round"/>
+  <path d="M80 96h32M80 110h22" stroke="#202020" stroke-width="6" stroke-linecap="round"/>
+</svg>

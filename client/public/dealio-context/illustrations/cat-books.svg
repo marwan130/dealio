@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Category mark: books and media, an open storybook. -->
+  <path d="M22 34c20-10 38-10 56 0 18-10 36-10 56 0v88c-20-10-38-10-56 0-18-10-36-10-56 0V34Z" fill="#FF6257" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M78 34v88" stroke="#202020" stroke-width="7"/>
+  <path d="M36 56h28M36 72h28" stroke="#F6F1E8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 56h28M96 72h28" stroke="#F6F1E8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M118 22c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+</svg>

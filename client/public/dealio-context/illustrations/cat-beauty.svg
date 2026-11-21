@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Category mark: beauty and health, a perfume bottle with a spark. -->
+  <rect x="62" y="58" width="44" height="78" rx="10" fill="#FF6257" stroke="#202020" stroke-width="7"/>
+  <rect x="70" y="30" width="28" height="20" rx="4" fill="#FFEB00" stroke="#202020" stroke-width="6"/>
+  <path d="M84 30v-8" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <rect x="72" y="72" width="24" height="34" rx="6" fill="#F6F1E8" stroke="#202020" stroke-width="6"/>
+  <path d="M132 66c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+</svg>

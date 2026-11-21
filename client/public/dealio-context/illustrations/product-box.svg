@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Shipping package, the shared no-photo placeholder for product cards. -->
+  <path d="M26 56 80 38l54 18v56l-54 18-54-18V56Z" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M26 56l54 18 54-18" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M80 74v56" stroke="#202020" stroke-width="7"/>
+  <path d="M40 63l24 8" stroke="#202020" stroke-width="6" stroke-linecap="round"/>
+  <path d="M104 92h30v26h-30z" fill="#FFEB00" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M110 100h16M110 108h10" stroke="#202020" stroke-width="5" stroke-linecap="round"/>
+  <path d="M42 108c5-4 9-4 14 0" stroke="#FF6257" stroke-width="7" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Category mark: electronics, a television with a signal spark. -->
+  <rect x="22" y="34" width="116" height="76" rx="10" fill="#FF6257" stroke="#202020" stroke-width="7"/>
+  <rect x="36" y="48" width="88" height="48" rx="5" fill="#F6F1E8" stroke="#202020" stroke-width="6"/>
+  <path d="M80 110v16M62 126h36" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <path d="M118 22c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+  <path d="M42 22c-8 6-8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+</svg>
