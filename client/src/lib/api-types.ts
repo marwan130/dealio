@@ -1,6 +1,3 @@
-// Typed shapes for the API responses used by the redesigned feature pages.
-// Field names follow the server's camelCase JSON serialization.
-
 export interface RecentPriceDrop {
   listingId: string;
   productId: string;

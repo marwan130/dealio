@@ -48,10 +48,6 @@ export const sanitizeImageUrl = (c, f) => {
   }
 };
 
-// Images live on retailer CDNs,  when a server mapped image is missing this
-// asks the API to mine one from the tracked product page. The endpoint rate-
-// limits and negative caches, so a render burst collapses to one call per
-// product,  failures cache as "" and retry on the next page visit.
 const productImageCache = new Map();
 
 export async function resolveProductImage(productId, pageUrl, refresh = false) {

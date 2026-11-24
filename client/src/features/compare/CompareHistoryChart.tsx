@@ -106,8 +106,6 @@ export function CompareHistoryChart({ listings: c, currencyCode: f }) {
     X = ["#ff6257", "#4d91d8", "#55a878", "#f28c38"],
     G = (Z) => {
       const re = ae.filter((te) => te.listingId === Z);
-      /* Continuous polyline: the old gap split turned sparse histories into
-       near invisible stubs (a stray "M" dot far from a 20px line). */
       return re
         .map((te, be) => `${be === 0 ? "M" : "L"} ${_(te)} ${M(te)}`)
         .join(" ");

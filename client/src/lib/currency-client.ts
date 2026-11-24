@@ -1,9 +1,6 @@
 // @ts-nocheck
 import { apiFetch } from "./api";
 
-// One server side rate snapshot feeds every displayed price,  the browser derives
-// cross rates locally (target / source) so search results for ANY market render
-// in the currency chosen in settings without further round trips.
 const RATES_STORAGE_KEY = "pt-fx-rates";
 
 let ratesCache = null;
@@ -12,7 +9,6 @@ let ratesPromise = 0;
 
 function snapshotExpiresAt(nextUpdateAtUtc) {
   const next = nextUpdateAtUtc ? Date.parse(nextUpdateAtUtc) : 0;
-  // Cap local reuse at the provider's own freshness horizon, with a sane default.
   const bound = next > Date.now() ? next : Date.now() + 3600 * 1e3;
   return Math.min(bound, Date.now() + 36 * 3600 * 1e3);
 }
