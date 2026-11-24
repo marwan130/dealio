@@ -250,7 +250,7 @@ export function SettingsPage({
                                 !re &&
                                 !G &&
                                 jsxs("span", {
-                                  className: `status ${O ? "status--active" : "status--paused"}`,
+                                  className: `status ${O ? "status--active" : "status--paused"} comic-note ${O ? "comic-note--green" : "comic-note--warm"}`,
                                   children: [
                                     jsx("i", {}),
                                     O
@@ -448,7 +448,8 @@ export function SettingsPage({
                           ],
                         }),
                         jsxs("span", {
-                          className: "status status--active",
+                          className:
+                            "status status--active comic-note comic-note--green",
                           children: [
                             jsx("i", {}),
                             w.settingsNotificationsPerProduct,
