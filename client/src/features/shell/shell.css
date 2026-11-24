@@ -1,9 +1,4 @@
-﻿/* Shell chrome (topbar, sidebar rail) corrections that must out cascade the
-   legacy public stylesheets. Logical properties keep RTL mirroring intact. */
-
-/*  Topbar search button: brand coral, not the legacy blue  */
-
-.topbar .topbar-search-btn,
+﻿.topbar .topbar-search-btn,
 .topbar .topbar-search-btn:focus-visible {
   background: var(--brand) !important;
   border-color: var(--text) !important;
@@ -16,13 +11,6 @@
   color: #202020 !important;
 }
 
-/*  Mobile hamburger: same control family as the search chip 
-
-   The drawer toggle read as a stray white square,  it now sits on the
-   dark surface with the comic 2px ink border and the coral glyph the
-   adjacent search affordances use. It shows below the rail breakpoint,
-   where the legacy sheet turns it on. */
-
 @media (max-width: 760px) {
   .mobile-nav-toggle {
     background: var(--surface-container) !important;
@@ -33,13 +21,6 @@
     background: var(--brand) !important;
   }
 }
-
-/*  Sidebar rail logo 
-
-   Between 761px and 1050px the sidebar collapses to a 76px rail through CSS
-   only (the React tree still renders the expanded branch), so the 241px
-   wordmark gets squeezed into ~52px and turns to mush. Show the "D" mark
-   instead at rail widths,  the wordmark keeps the wide sidebar. */
 
 .sidebar-logo-rail {
   display: none;
@@ -57,17 +38,10 @@
     display: block !important;
   }
 
-  /* The expand/collapse control is hidden by the rail rules,  the brand
-     button still opens the dashboard. */
   .sidebar .sidebar-collapse-btn {
     display: none !important;
   }
 
-  /* In the rail band the legacy sheet pins a 76px margin on .main-area
-     but keeps the flex item's default min-width:auto, so the column
-     refuses to shrink below its content and overflows the viewport
-     (hero/offers/sticky bar cut at the right edge on the product page).
-     Allow the shrink â€” the â‰¤760px band already does the same. */
   .main-area,
   .sidebar ~ .main-area,
   .sidebar--collapsed ~ .main-area {
@@ -75,72 +49,153 @@
   }
 }
 
-/*  Search placeholder clipping 
-
-   Between the rail breakpoint and full desktop the input is too narrow for
-   "Search products",  a mid word truncated placeholder reads as a broken
-   layout. Hide it there â€” the icon carries the affordance. */
-
-@media (max-width: 1050px) {
+@media (max-width: 1050px) and (min-width: 861px) {
   .topbar-search-input-wrap input::placeholder {
-    /* Legacy paints the placeholder with !important,  match the strength. */
     color: transparent !important;
   }
 }
 
-/*  Mobile topbar: wrap instead of clipping 
+.topbar-brand {
+  display: none;
+}
 
-   Below 560px the search field, category dropdown, market dropdown and
-   button don't fit one row: the field truncates and the dropdowns run off
-   the edge. Wrap the search area onto two rows. */
-@media (max-width: 560px) {
+.topbar-search-filters {
+  display: contents;
+}
+
+@media (max-width: 860px) {
+  .topbar {
+    height: auto !important;
+    min-height: 64px;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-block: 8px !important;
+  }
+
+  .topbar .breadcrumbs {
+    display: none !important;
+  }
+
   .topbar-search-area {
-    display: flex !important;
-    flex-wrap: wrap;
-    row-gap: 8px;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    flex: 1 1 auto !important;
+    gap: 8px !important;
     max-width: none !important;
-    margin-inline: 10px !important;
-    /* Legacy forces min-width: max-content below 760px, which pins the
-       area to a single unwrapped line â€” release it. */
     min-width: 0 !important;
+    margin-inline: 0 !important;
   }
 
   .topbar-search-area > .topbar-search-input-wrap {
-    /* Legacy forces flex: 1 !important (app.css 5288) â€” match its
-       strength or the field collapses to a 34px sliver. A zero basis
-       lets it share row 2 with the search button. */
-    flex: 1 1 0% !important;
-    min-width: 90px !important;
+    grid-row: 1;
+    grid-column: 1;
+    min-width: 0 !important;
   }
 
-  .topbar-search-area .custom-dropdown {
-    /* The wrapper div is display: contents, so the two dropdowns are
-       the area's flex items in DOM order. A half width base pairs them
-       on row 1, leaving row 2 for the field + button. */
-    order: -1;
-    flex: 1 1 calc(50% - 4px) !important;
+  .topbar-search-filters {
+    display: grid !important;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .topbar-search-filters .custom-dropdown {
+    width: 100% !important;
     min-width: 0 !important;
-    max-width: none !important;
   }
 
   .topbar-search-btn {
-    /* Shares row 2 with the field: a zero basis lets the input shrink
-       to fit beside it, so the bar stays two rows tall on phones. */
-    flex: 0 0 auto !important;
+    grid-row: 1;
+    grid-column: 2;
     justify-content: center;
   }
 
-  /* The bar is position: fixed at 64px with overflow: auto below 760px,
-     which clips the wrapped rows,  let it grow and compensate the page
-     offset below. */
-  .topbar {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    padding-block: 8px 10px;
+  .topbar .mobile-nav-toggle {
+    align-self: flex-start;
+    margin-block-start: 3px;
   }
 
   .page-wrap {
-    padding-top: 128px !important;
+    padding-top: 144px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    row-gap: 8px !important;
+    padding-inline: 10px !important;
+  }
+
+  .topbar-brand {
+    display: flex !important;
+    flex: 0 0 auto;
+    align-items: center;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .topbar-brand img {
+    display: block;
+    width: auto;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  :root[data-theme="dark"] .topbar-brand img {
+    filter: brightness(0) invert(1);
+  }
+
+  .topbar-search-area {
+    flex: 1 1 100% !important;
+  }
+
+  .topbar .custom-dropdown-btn {
+    padding-inline: 8px !important;
+    font-size: 13px !important;
+  }
+
+  .page-wrap {
+    padding-top: 191px !important;
+  }
+}
+
+.sidebar .nav-item .nav-count,
+.sidebar .nav-item.is-active .nav-count,
+.sidebar--collapsed .nav-item .nav-count,
+.sidebar--collapsed .nav-item.is-active .nav-count {
+  flex: none;
+  align-self: center;
+  display: inline-grid;
+  place-items: center;
+  block-size: 22px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: #2b67a3 !important;
+  color: #ffffff !important;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-theme="dark"] .sidebar .nav-item .nav-count,
+:root[data-theme="dark"] .sidebar .nav-item.is-active .nav-count,
+:root[data-theme="dark"] .sidebar--collapsed .nav-item .nav-count,
+:root[data-theme="dark"] .sidebar--collapsed .nav-item.is-active .nav-count {
+  background: #7fb6ea !important;
+  color: #10151b !important;
+}
+
+@media (min-width: 1051px), (max-width: 760px) {
+  .sidebar .nav-item .nav-count {
+    margin-inline-end: 10px !important;
   }
 }

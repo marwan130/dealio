@@ -44,11 +44,6 @@ import { streamFirstCandidate } from "../../lib/api";
 import { translations } from "../../i18n";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// "Actual back button" behavior: the back controls unwind the browser
-// history so the user returns to exactly the previous page/list, instead
-// of jumping to a fixed destination. Fallback keeps the original fixed
-// detination when the app was entered through a deep link (there is no
-// in app previous entry to go back to: history.state is null then).
 function backOrFallback(fallback) {
   if (
     window.history &&
@@ -304,7 +299,10 @@ export function AppRoot() {
           ((document.documentElement.dataset.theme = Ae),
             document
               .querySelector('meta[name="theme-color"]')
-              ?.setAttribute("content", Ae === "dark" ? "#211f1b" : "#f6f1e8"));
+              ?.setAttribute("content", Ae === "dark" ? "#211f1b" : "#f6f1e8"),
+            document
+              .querySelector('meta[name="color-scheme"]')
+              ?.setAttribute("content", Ae));
         };
       if ((fe(), me === "system"))
         return (
@@ -367,8 +365,6 @@ export function AppRoot() {
           const Ca = It.hostname.replace(/^www\./i, ""),
             la = It.pathname.split("/").filter(Boolean),
             na = (la[la.length - 1] || "").replace(/[-_]+/g, " ").trim();
-          // Topbar link entry goes straight to the details page once the page
-          // resolves,  other entry points keep the preview dialog.
           if (openDetails) {
             (G(true), Ge(H.searchOpeningLink));
           } else
@@ -499,10 +495,6 @@ export function AppRoot() {
     return jsx(VerifyEmailPage, { onContinue: Ne });
   if (location.pathname === "/reset-password")
     return jsx(ResetPasswordPage, { onContinue: Ne });
-  /* The drawer (<=760px viewport) always renders the expanded sidebar: the
-     collapsed rail markup would otherwise strip the label spans out of the
-     DOM entirely, leaving icon rows floating in a wide blank drawer. The
-     user's collapse toggle still applies on desktop widths. */
   const Cz = A && !Sz;
   const yl = DISPLAY_CURRENCIES.includes(Q) ? Q : marketCurrencyOf(ue);
   return jsx(LocaleContext.Provider, {
@@ -564,7 +556,7 @@ export function AppRoot() {
                       })
                   : jsxs(Fragment, {
                       children: [
-                        jsx("button", {
+                        jsxs("button", {
                           className: "sidebar-brand-btn",
                           onClick: () => W("dashboard"),
                           "aria-label": `${APP_NAME} home`,
@@ -593,7 +585,7 @@ export function AppRoot() {
                           title: H.sideCollapse,
                           children: jsx(Icon, { name: "sidebar-toggle" }),
                         }),
-                        jsx("button", {
+                        jsxs("button", {
                           className:
                             "sidebar-brand-btn sidebar-brand-btn--minimized",
                           onClick: () => w(false),
@@ -737,14 +729,14 @@ export function AppRoot() {
                                   Ge(H.signedOut));
                               },
                               title: v ? `${H.signOut} (${v})` : H.signOut,
-                              "aria-label": H.signOut,
+                              "aria-label": v
+                                ? `${H.signOut} (${v})`
+                                : H.signOut,
                               children: [
                                 jsx(Icon, { name: "sign-out" }),
                                 jsx("span", {
                                   className: "side-footer-label",
-                                  children: v
-                                    ? `${H.signOut} (${v})`
-                                    : H.signOut,
+                                  children: H.signOut,
                                 }),
                               ],
                             })
@@ -795,6 +787,16 @@ export function AppRoot() {
                             jsx("span", {}),
                           ],
                         }),
+                        jsx("button", {
+                          type: "button",
+                          className: "topbar-brand",
+                          "aria-label": `${APP_NAME} home`,
+                          onClick: () => W("dashboard"),
+                          children: jsx("img", {
+                            src: "/dealio-cropped.png",
+                            alt: "",
+                          }),
+                        }),
                         jsxs("div", {
                           className: "breadcrumbs",
                           children: [
@@ -842,8 +844,8 @@ export function AppRoot() {
                               ],
                             }),
                             jsxs("div", {
+                              className: "topbar-search-filters",
                               onClick: () => Rt(false),
-                              style: { display: "contents" },
                               children: [
                                 jsx(Dropdown, {
                                   value: Dt,
@@ -923,19 +925,22 @@ export function AppRoot() {
                                 ? jsx(NoticeListSkeleton, { count: 4 })
                                 : jsx(SettingsSkeleton, {})
                     : x
-                      ? jsx(ProductDetailsPage, {
-                          key: x,
-                          id: x,
-                          candidate:
-                            x === "candidate" ? candidateProduct : null,
-                          token: p,
-                          notify: Ge,
-                          onCompare: de,
-                          compareIds: te,
-                          onBack: () => backOrFallback(() => W("products")),
-                          onTrack: Wa,
-                          onSignIn: () => O(true),
-                        })
+                      ? jsx(
+                          ProductDetailsPage,
+                          {
+                            id: x,
+                            candidate:
+                              x === "candidate" ? candidateProduct : null,
+                            token: p,
+                            notify: Ge,
+                            onCompare: de,
+                            compareIds: te,
+                            onBack: () => backOrFallback(() => W("products")),
+                            onTrack: Wa,
+                            onSignIn: () => O(true),
+                          },
+                          x,
+                        )
                       : c === "dashboard"
                         ? jsx(DashboardPage, {
                             token: p,
@@ -990,6 +995,7 @@ export function AppRoot() {
                                   ids: te,
                                   onRemove: (V) => de(V),
                                   onClear: () => be([]),
+                                  onAdd: de,
                                   onOpen: F,
                                   onDiscover: () => W("discover"),
                                   notify: Ge,
@@ -1016,7 +1022,11 @@ export function AppRoot() {
                                       notify: Ge,
                                       onSignIn: () => O(true),
                                     })
-                                  : jsx(NotFoundPage, { onGo: W }),
+                                  : jsx(NotFoundPage, {
+                                      onGo: W,
+                                      onBack: () =>
+                                        backOrFallback(() => W("dashboard")),
+                                    }),
               }),
             ],
           }),
