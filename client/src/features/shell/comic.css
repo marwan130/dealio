@@ -1,23 +1,13 @@
-/* =====================================================================
-   Dealio comic book design language, shared by the four product pages
-   (dashboard, discover, compare, product details):
+:root {
+  color-scheme: light;
+  --accent-blue: #4d91d8;
+  --accent-yellow: #ffeb00;
+}
 
-   - price status cards are drawn like comic panels: a thick var(--text)
-     ink frame plus a hard offset shadow, never a soft blur,
-   - corner radii stay on the platform default system (the same family
-     the notifications page uses: token driven 4/5/6px cards, 12px icon
-     tiles, pill chips), so nothing turns super boxy.
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
 
-   This file loads after the per page stylesheets, so its !important
-   rules out cascade both them and the legacy public stylesheets.
-   ===================================================================== */
-
-/*  1. Comic-panel price status cards  */
-
-/* One recipe everywhere a card reports a price status: 2.5px ink frame,
-   5px 5px 0 offset shadow in the raised surface colour. The dashboard
-   feed tiles keep their own stronger legacy comic frame (3px + 6px
-   shadow),  the nuclear rule above squares them. */
 .page-wrap:is(
     [data-page="dashboard"],
     [data-page="discover"],
@@ -38,8 +28,6 @@
   box-shadow: 5px 5px 0 var(--surface-high) !important;
 }
 
-/* Clickable panels lift like the comic buttons do (translate into the
-   shadow, which grows by the same step) ,  no soft blur appears. */
 .page-wrap:is(
     [data-page="dashboard"],
     [data-page="discover"],
@@ -57,8 +45,1149 @@
   transform: translate(-1px, -1px) !important;
 }
 
-/*  3. Comic buttons inside the four pages  */
+.editorial-photo {
+  --photo-paper: #f6f1e8;
+  --photo-ink: #182733;
+  --photo-accent: #ffeb00;
+  position: relative;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  background: var(--surface-high);
+  isolation: isolate;
+}
 
-/* The platform's primary/tonal/quiet buttons already carry the legacy
-   comic chrome (2px ink border + 3px 3px 0 shadow) and the shared
-   radius system,  nothing to add here. */
+.editorial-photo::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--photo-paper) 30%, transparent) 0.7px,
+    transparent 1.1px
+  );
+  background-position: center;
+  background-size: 4px 4px;
+  content: "";
+  mix-blend-mode: screen;
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.editorial-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editorial-photo figcaption.editorial-photo-fallback {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 14px 14px;
+  background: var(--photo-ink);
+  color: var(--photo-paper);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.editorial-photo figcaption.editorial-photo-fallback a {
+  color: var(--photo-accent);
+  text-underline-offset: 2px;
+}
+
+.page-wrap .empty-state {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.page-wrap .empty-state::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: radial-gradient(
+    /* taste-skill-ignore: halftone dot field */
+    color-mix(in srgb, var(--brand) 34%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 10px 10px;
+  content: "";
+  mask-image: radial-gradient(
+    ellipse 35% 60% at 0% 100%,
+    #000 0%,
+    transparent 100%
+  );
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.page-wrap .empty-state::after {
+  position: absolute;
+  z-index: 0;
+  inset-inline-end: 18px;
+  inset-block-start: 16px;
+  width: 56px;
+  aspect-ratio: 1;
+  background: url("/dealio-context/illustrations/shopping-basket.svg") center /
+    contain no-repeat;
+  content: "";
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.page-wrap .empty-state > * {
+  position: relative;
+  z-index: 1;
+}
+
+.page-wrap .empty-state .empty-ring {
+  background: var(--surface-container);
+}
+
+.page-wrap[data-page="compare"] .empty-state {
+  border: 2px dashed var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-wrap:is([data-page="dashboard"], [data-page="discover"]) .home-cat-tile,
+  .page-wrap:is([data-page="dashboard"], [data-page="discover"]) .home-card {
+    scroll-behavior: auto;
+    transition: none !important;
+  }
+}
+
+.page-wrap {
+  position: relative;
+  isolation: isolate;
+}
+
+.page-wrap::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--text) 26%, transparent) 1.15px,
+      transparent 1.55px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--text) 14%, transparent) 1px,
+      transparent 1.4px
+    );
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    4px 4px;
+  opacity: 0.6;
+  mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 100%);
+}
+
+.page-wrap[data-page="dashboard"]::before {
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    4px 4px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--brand) 30%, transparent) 1.35px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--brand) 16%, transparent) 1.1px,
+      transparent 1.6px
+    );
+  opacity: 0.62;
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+}
+
+.page-wrap[data-page="discover"]::before {
+  background-size: 10px 10px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--brand) 34%, transparent) 1.5px,
+      transparent 2px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--brand) 18%, transparent) 1.4px,
+      transparent 1.9px
+    );
+  background-position:
+    0 0,
+    5px 5px;
+  opacity: 0.7;
+  mask-image: radial-gradient(
+    ellipse 88% 65% at 50% 0%,
+    #000 0%,
+    transparent 100%
+  );
+}
+
+.page-wrap[data-page="product-detail"]::before {
+  background-size: 7px 7px;
+  background-position:
+    0 0,
+    3.5px 3.5px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 30%, transparent) 1.1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 15%, transparent) 1px,
+      transparent 1.4px
+    );
+  opacity: 0.6;
+  mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 100%);
+}
+
+.page-wrap[data-page="compare"]::before {
+  inset: 0 0 auto 0;
+  height: 70%;
+  background-size: 6px 6px;
+  background-position:
+    0 0,
+    3px 3px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--text) 24%, transparent) 1px,
+      transparent 1.4px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--text) 13%, transparent) 0.9px,
+      transparent 1.3px
+    );
+  opacity: 0.5;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 100%);
+}
+
+.page-wrap[data-page="products"]::before {
+  background-size: 7px 7px;
+  background-position:
+    0 0,
+    3.5px 3.5px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--text) 24%, transparent) 1.05px,
+      transparent 1.45px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--text) 13%, transparent) 0.95px,
+      transparent 1.35px
+    );
+  opacity: 0.52;
+  mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 100%);
+}
+
+.page-wrap[data-page="notifications"]::before {
+  background-size: 7px 7px;
+  background-position:
+    0 0,
+    3.5px 3.5px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 34%, transparent) 1.25px,
+      transparent 1.7px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 18%, transparent) 1.05px,
+      transparent 1.5px
+    );
+  opacity: 0.6;
+  mask-image: linear-gradient(
+    160deg,
+    #000 0%,
+    rgb(0 0 0 / 55%) 50%,
+    transparent 100%
+  );
+}
+
+.page-wrap[data-page="settings"]::before {
+  inset: 0 0 auto 0;
+  height: 55%;
+  background-size: 5px 5px;
+  background-position:
+    0 0,
+    2.5px 2.5px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--text) 22%, transparent) 1px,
+      transparent 1.4px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--text) 12%, transparent) 0.9px,
+      transparent 1.3px
+    );
+  opacity: 0.45;
+  mask-image: radial-gradient(
+    ellipse 45% 80% at 0% 0%,
+    #000 0%,
+    transparent 100%
+  );
+}
+
+.page-wrap[data-page="not-found"]::before {
+  background-size: 12px 12px;
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 32%, transparent) 1.8px,
+      transparent 2.4px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--accent-blue) 16%, transparent) 1.5px,
+      transparent 2.1px
+    );
+  background-position:
+    0 0,
+    6px 6px;
+  opacity: 0.55;
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 30%,
+    #000 0%,
+    transparent 100%
+  );
+}
+
+.skeleton-box,
+:root[data-theme="dark"] .skeleton-box {
+  background: var(--surface-muted) !important;
+  border: 1px solid color-mix(in srgb, var(--text) 24%, transparent) !important;
+  animation: skeleton-breathe 1.6s ease-in-out infinite alternate !important;
+}
+
+@keyframes skeleton-breathe {
+  from {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-box,
+  :root[data-theme="dark"] .skeleton-box {
+    animation: none !important;
+  }
+}
+
+.main-area,
+.page-wrap,
+.page-wrap > * {
+  min-inline-size: 0;
+}
+
+.page-wrap,
+.topbar {
+  --skel: clamp(0.78px, 0.105vw, 1.18px);
+}
+
+.skeleton-text {
+  height: calc(14 * var(--skel)) !important;
+  margin-bottom: calc(6 * var(--skel)) !important;
+}
+
+.skeleton-title {
+  height: calc(18 * var(--skel)) !important;
+}
+
+.skeleton-title-2 {
+  height: calc(18 * var(--skel)) !important;
+}
+
+.skeleton-meta-line {
+  height: calc(12 * var(--skel)) !important;
+  width: calc(128 * var(--skel)) !important;
+  margin-bottom: calc(8 * var(--skel)) !important;
+}
+
+.skeleton-price-row {
+  gap: calc(12 * var(--skel)) !important;
+  min-height: calc(26 * var(--skel)) !important;
+}
+
+.skeleton-price {
+  height: calc(24 * var(--skel)) !important;
+}
+
+.skeleton-price-old {
+  height: calc(14 * var(--skel)) !important;
+}
+
+.skeleton-pill {
+  height: calc(28 * var(--skel)) !important;
+  width: calc(80 * var(--skel)) !important;
+  border-radius: 14px !important;
+}
+
+.skeleton-btn {
+  height: calc(34 * var(--skel)) !important;
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.skeleton-link-dash {
+  height: calc(12 * var(--skel)) !important;
+}
+
+.skeleton-deal-card .deal-card-photo-wrap {
+  height: calc(180 * var(--skel)) !important;
+  padding: calc(14 * var(--skel)) !important;
+}
+
+.skeleton-deal-card .deal-card-body {
+  gap: calc(8 * var(--skel)) !important;
+  padding: calc(14 * var(--skel)) !important;
+}
+
+.skeleton-deal-card .deal-card-actions {
+  gap: calc(8 * var(--skel)) !important;
+}
+
+:is(
+  .skeleton-tracking-card,
+  .skeleton-metric-card,
+  .settings-skeleton-panel,
+  .skeleton-deal-card,
+  .home-card-skeleton
+) {
+  border: 1.5px solid color-mix(in srgb, var(--text) 55%, transparent) !important;
+  box-shadow: 3px 3px 0 var(--surface-high) !important;
+}
+
+.page-wrap[data-page="compare"] .compare-skeleton-head .skeleton-box {
+  border: 2px solid var(--text) !important;
+  box-shadow: 4px 4px 0 var(--surface-high) !important;
+}
+
+.skeleton-table {
+  border: 2px solid var(--text) !important;
+  box-shadow: 4px 4px 0 var(--surface-high) !important;
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-container) !important;
+  border: 3px solid var(--text) !important;
+  border-radius: 14px !important;
+  box-shadow: 6px 6px 0 var(--surface-high) !important;
+  overflow: hidden;
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton::before {
+  content: "";
+  flex: 0 0 auto;
+  height: calc(168 * var(--skel));
+  border-bottom: 3px solid var(--text);
+  background: color-mix(
+    in srgb,
+    var(--feed-panel, var(--brand)) 16%,
+    var(--surface-muted)
+  );
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton::after {
+  content: "";
+  flex: 1 1 auto;
+  background:
+    linear-gradient(color-mix(in srgb, var(--text) 26%, transparent) 0 0) left
+      calc(20 * var(--skel)) top calc(22 * var(--skel)) / 62%
+      calc(13 * var(--skel)) no-repeat,
+    linear-gradient(color-mix(in srgb, var(--text) 20%, transparent) 0 0) left
+      calc(20 * var(--skel)) top calc(43 * var(--skel)) / 40%
+      calc(13 * var(--skel)) no-repeat,
+    linear-gradient(color-mix(in srgb, var(--text) 32%, transparent) 0 0) left
+      calc(20 * var(--skel)) bottom calc(20 * var(--skel)) / 44%
+      calc(22 * var(--skel)) no-repeat;
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton:nth-of-type(2) {
+  --feed-panel: var(--accent-blue);
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton:nth-of-type(3) {
+  --feed-panel: var(--green);
+}
+
+.page-wrap[data-page="dashboard"] .feed-skeleton:nth-of-type(4) {
+  --feed-panel: var(--amber);
+}
+
+.page-wrap[data-page="dashboard"]
+  .dashboard-greeting
+  .dashboard-editorial-photo.skeleton-box {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.home-mosaic .home-editorial-photo.skeleton-box {
+  margin: 0 !important;
+}
+
+.home-mosaic .home-cat-tile-skel {
+  pointer-events: none;
+}
+
+.home-mosaic .home-cat-glyph-skel {
+  border-color: color-mix(in srgb, var(--text) 60%, transparent) !important;
+  animation: none !important;
+}
+
+.home-mosaic .home-cat-tile-skel:nth-child(3n + 1) .home-cat-glyph-skel {
+  background: var(--accent-blue) !important;
+}
+
+.home-mosaic .home-cat-tile-skel:nth-child(3n + 2) .home-cat-glyph-skel {
+  background: var(--accent-yellow) !important;
+}
+
+.home-mosaic .home-cat-tile-skel:nth-child(3n + 3) .home-cat-glyph-skel {
+  background: var(--brand) !important;
+}
+
+.dashboard-editorial-photo.skeleton-box {
+  border-radius: 0 calc(var(--radius-lg) - 2px) calc(var(--radius-lg) - 2px) 0 !important;
+}
+
+.greeting-skel-eyebrow {
+  inline-size: min(96px, 28%);
+  block-size: calc(11 * var(--skel));
+}
+
+.greeting-skel-heading {
+  inline-size: min(300px, 68%);
+  block-size: calc(30 * var(--skel));
+}
+
+.greeting-skel-sub {
+  inline-size: min(240px, 58%);
+  block-size: calc(13 * var(--skel));
+}
+
+.greeting-skel-action {
+  inline-size: min(132px, 44%);
+  block-size: calc(42 * var(--skel));
+}
+
+.topbar-skeleton-wrap {
+  min-inline-size: 0 !important;
+}
+
+.topbar-skeleton-left {
+  min-inline-size: 0 !important;
+}
+
+.topbar-skeleton-right {
+  gap: clamp(6px, 1vw, 10px) !important;
+  min-inline-size: 0 !important;
+}
+
+.topbar-skel-left {
+  inline-size: clamp(84px, 11vw, 140px);
+  block-size: calc(20 * var(--skel));
+  border-radius: calc(6 * var(--skel)) !important;
+}
+
+.topbar-skel-search {
+  inline-size: clamp(120px, 20vw, 220px);
+  block-size: calc(38 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.topbar-skel-action {
+  inline-size: clamp(76px, 9vw, 110px);
+  block-size: calc(38 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.topbar-skel-action--wide {
+  inline-size: clamp(92px, 10vw, 130px);
+}
+
+.topbar-skel-icon {
+  inline-size: clamp(44px, 5.2vw, 75px);
+  block-size: calc(38 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+@media (max-width: 1100px) {
+  .topbar-skel-action--wide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar-skeleton-left {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar-skel-action {
+    display: none !important;
+  }
+}
+
+.skeleton-mosaic-heading {
+  inline-size: min(180px, 56%);
+  block-size: calc(24 * var(--skel));
+  border-radius: 6px !important;
+}
+
+.home-cat-glyph-skel {
+  inline-size: calc(34 * var(--skel));
+  block-size: calc(34 * var(--skel));
+  aspect-ratio: 1;
+}
+
+.home-cat-label-skel {
+  inline-size: min(64px, 72%);
+  block-size: calc(12 * var(--skel));
+}
+
+.skeleton-page-wrap .shelf-heading {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.skeleton-shelf-eyebrow {
+  inline-size: min(120px, 40%);
+  block-size: calc(11 * var(--skel));
+}
+
+.skeleton-shelf-heading {
+  inline-size: min(220px, 74%);
+  block-size: calc(24 * var(--skel));
+}
+
+.settings-skeleton-panel {
+  padding: calc(24 * var(--skel)) calc(28 * var(--skel)) !important;
+  gap: calc(14 * var(--skel)) !important;
+  margin-block-end: calc(24 * var(--skel)) !important;
+}
+
+.skeleton-page-heading {
+  inline-size: clamp(120px, 22vw, 180px);
+  block-size: calc(36 * var(--skel));
+  margin-block-end: calc(8 * var(--skel));
+  border-radius: calc(6 * var(--skel)) !important;
+}
+
+.skeleton-page-heading--sm {
+  inline-size: clamp(70px, 14vw, 90px);
+  block-size: calc(28 * var(--skel));
+}
+
+.skeleton-panel-title {
+  inline-size: clamp(96px, 18vw, 120px);
+  block-size: calc(20 * var(--skel));
+}
+
+.skeleton-panel-title--wide {
+  inline-size: clamp(108px, 22vw, 140px);
+}
+
+.skeleton-panel-title--widest {
+  inline-size: clamp(112px, 24vw, 150px);
+}
+
+.skeleton-panel-line {
+  inline-size: min(220px, 78%);
+  block-size: calc(14 * var(--skel));
+}
+
+.skeleton-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(16 * var(--skel));
+}
+
+.skeleton-field {
+  flex: 1 1 calc(160 * var(--skel));
+  max-inline-size: calc(180 * var(--skel));
+  block-size: calc(38 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.pdp-skeleton-hero {
+  display: grid;
+  grid-template-columns: minmax(0, calc(320 * var(--skel))) 1fr;
+  gap: calc(28 * var(--skel));
+  margin-block-end: calc(28 * var(--skel));
+}
+
+.pdp-skeleton-media {
+  inline-size: 100%;
+  aspect-ratio: 1 / 0.82;
+  border-radius: calc(12 * var(--skel)) !important;
+}
+
+.pdp-skeleton-copy {
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--skel));
+  min-inline-size: 0;
+}
+
+.pdp-skeleton-title {
+  inline-size: min(70%, 520px);
+  block-size: calc(32 * var(--skel));
+}
+
+.pdp-skeleton-price {
+  inline-size: min(35%, 240px);
+  block-size: calc(28 * var(--skel));
+}
+
+.pdp-skeleton-body {
+  inline-size: min(90%, 640px);
+  block-size: calc(60 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.pdp-skeleton-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(10 * var(--skel));
+  margin-block-start: auto;
+}
+
+.pdp-skeleton-cta {
+  flex: 1 1 calc(130 * var(--skel));
+  max-inline-size: calc(150 * var(--skel));
+  block-size: calc(40 * var(--skel));
+  border-radius: calc(8 * var(--skel)) !important;
+}
+
+.pdp-skeleton-chart {
+  inline-size: 100%;
+  block-size: calc(220 * var(--skel));
+  border-radius: calc(10 * var(--skel)) !important;
+}
+
+@media (max-width: 760px) {
+  .pdp-skeleton-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pdp-skeleton-media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+.skeleton-table-row {
+  gap: calc(16 * var(--skel)) !important;
+  padding: calc(14 * var(--skel)) calc(16 * var(--skel)) !important;
+}
+
+.skeleton-table-row > .skeleton-box {
+  min-inline-size: 0;
+}
+
+.skeleton-tracking-select {
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--skel));
+}
+
+.skeleton-tracking-check {
+  width: calc(16 * var(--skel));
+  height: calc(16 * var(--skel));
+  border-radius: calc(4 * var(--skel)) !important;
+  flex: 0 0 auto;
+}
+
+.skeleton-tracking-label {
+  height: calc(12 * var(--skel));
+}
+
+.skeleton-tracking-status {
+  height: calc(20 * var(--skel));
+  border-radius: calc(10 * var(--skel)) !important;
+}
+
+.skeleton-tracking-title {
+  height: calc(18 * var(--skel));
+}
+
+.skeleton-tracking-store {
+  height: calc(11 * var(--skel));
+}
+
+.skeleton-tracking-prices {
+  display: flex;
+  align-items: baseline;
+  gap: calc(12 * var(--skel));
+}
+
+.skeleton-tracking-price {
+  height: calc(22 * var(--skel));
+}
+
+.skeleton-tracking-target {
+  height: calc(12 * var(--skel));
+}
+
+.skeleton-tracking-actions {
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--skel));
+  margin-top: auto;
+}
+
+.skeleton-tracking-dash {
+  width: calc(74 * var(--skel));
+  height: calc(12 * var(--skel));
+  border-radius: calc(4 * var(--skel)) !important;
+}
+
+.skeleton-tracking-dash--wide {
+  width: calc(92 * var(--skel));
+}
+
+.notifications-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: calc(16 * var(--skel));
+}
+
+/* The loading list is a pinned sheet of alert slips. It keeps the loaded
+   list's ink frame and adds a paper stamp with the bell, a warm unread
+   sheet, and a small action rail so the wait looks like the page that is
+   about to arrive instead of a row of gray bars. */
+.skeleton-notice-list {
+  display: grid;
+  border: 2px solid var(--text) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--surface-container) !important;
+  box-shadow: 4px 4px 0 var(--surface-high) !important;
+  overflow: hidden !important;
+}
+
+.skeleton-notice-item {
+  display: grid !important;
+  grid-template-columns: calc(40 * var(--skel)) minmax(0, 1fr) !important;
+  gap: calc(13 * var(--skel)) !important;
+  align-items: start !important;
+  padding: calc(13 * var(--skel)) calc(16 * var(--skel)) !important;
+  border: 0 !important;
+  border-block-end: 1.5px solid var(--line) !important;
+  background: var(--surface-container) !important;
+}
+
+.skeleton-notice-item:last-child {
+  border-block-end: 0 !important;
+}
+
+.skeleton-notice-item.is-unread {
+  background: color-mix(
+    in srgb,
+    var(--amber) 6%,
+    var(--surface-container)
+  ) !important;
+}
+
+:root[data-theme="dark"] .skeleton-notice-item.is-unread {
+  background: color-mix(
+    in srgb,
+    var(--amber) 10%,
+    var(--surface-container)
+  ) !important;
+}
+
+.skeleton-notice-toolbar-count {
+  inline-size: calc(120 * var(--skel));
+  block-size: calc(13 * var(--skel));
+  border-radius: calc(4 * var(--skel)) !important;
+}
+
+.skeleton-notice-stamp {
+  display: grid !important;
+  place-items: center !important;
+  inline-size: calc(34 * var(--skel)) !important;
+  block-size: calc(34 * var(--skel)) !important;
+  border: 1.5px solid var(--text) !important;
+  border-radius: 4px 7px 4px 6px !important;
+  background: #f6f1e8 !important;
+  color: color-mix(in srgb, var(--text) 45%, transparent) !important;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--text) 16%, transparent) !important;
+  transform: rotate(-3deg) !important;
+  justify-self: start !important;
+  align-self: start !important;
+}
+
+:root[data-theme="dark"] .skeleton-notice-stamp {
+  background: #211d18 !important;
+}
+
+.skeleton-notice-bell {
+  inline-size: calc(16 * var(--skel));
+  block-size: calc(16 * var(--skel));
+}
+
+.skeleton-notice-item .notice-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  min-inline-size: 0 !important;
+}
+
+.skeleton-notice-item .notice-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: calc(16 * var(--skel)) !important;
+  min-inline-size: 0 !important;
+}
+
+.skeleton-notice-title {
+  flex: 0 1 auto !important;
+  block-size: calc(13 * var(--skel)) !important;
+  border-radius: calc(4 * var(--skel)) !important;
+}
+
+.skeleton-notice-date {
+  flex: 0 0 auto !important;
+  inline-size: calc(62 * var(--skel)) !important;
+  block-size: calc(10 * var(--skel)) !important;
+  border-radius: calc(3 * var(--skel)) !important;
+}
+
+.skeleton-notice-body {
+  display: block !important;
+  block-size: calc(10 * var(--skel)) !important;
+  margin-block-start: calc(8 * var(--skel)) !important;
+  border-radius: calc(4 * var(--skel)) !important;
+}
+
+.skeleton-notice-foot {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: calc(16 * var(--skel)) !important;
+  margin-block-start: calc(8 * var(--skel)) !important;
+}
+
+.skeleton-notice-state {
+  flex: 0 1 auto !important;
+  block-size: calc(10 * var(--skel)) !important;
+  border-radius: calc(3 * var(--skel)) !important;
+}
+
+.skeleton-notice-action {
+  flex: 0 0 auto !important;
+  inline-size: calc(58 * var(--skel)) !important;
+  block-size: calc(10 * var(--skel)) !important;
+  border-radius: calc(3 * var(--skel)) !important;
+  opacity: 0.7 !important;
+}
+
+@media (max-width: 560px) {
+  .skeleton-notice-item {
+    grid-template-columns: calc(36 * var(--skel)) minmax(0, 1fr) !important;
+    gap: calc(11 * var(--skel)) !important;
+    padding: calc(12 * var(--skel)) !important;
+  }
+
+  .skeleton-notice-stamp {
+    inline-size: calc(30 * var(--skel)) !important;
+    block-size: calc(30 * var(--skel)) !important;
+  }
+
+  .skeleton-notice-item .notice-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: calc(6 * var(--skel)) !important;
+  }
+
+  .skeleton-notice-date {
+    inline-size: calc(48 * var(--skel)) !important;
+  }
+}
+
+html {
+  overflow-y: auto !important;
+  scrollbar-gutter: auto !important;
+}
+
+.page-wrap[data-page="dashboard"] .feed-media .product-image--stack {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-position: center !important;
+  background: transparent !important;
+  mix-blend-mode: multiply !important;
+}
+
+:root[data-theme="dark"]
+  .page-wrap[data-page="dashboard"]
+  .feed-media
+  .feed-blob {
+  background: #f6f1e8 !important;
+}
+
+.product-illustration {
+  display: block;
+  width: min(60%, 132px);
+  height: auto;
+  aspect-ratio: 1;
+  padding: 8px;
+  background: #f6f1e8 !important;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.home-deal-media > .product-illustration,
+.home-card-media > .product-illustration,
+.feed-media > .product-illustration,
+.dash-tracked-media > .product-illustration,
+.compare-product-image > .product-illustration {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  padding: 0;
+  background: transparent !important;
+  object-fit: contain;
+}
+
+.compare-tray-item .product-illustration {
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+}
+
+.topbar,
+.topbar.topbar--active {
+  border-bottom: 2px solid var(--text) !important;
+}
+
+.topbar .topbar-search-input-wrap {
+  border: 2px solid var(--text) !important;
+  border-radius: 10px !important;
+}
+
+.topbar .topbar-search-input-wrap:focus-within {
+  border-color: var(--text) !important;
+  box-shadow: 3px 3px 0 var(--surface-high) !important;
+}
+
+.topbar .custom-dropdown-btn {
+  border: 2px solid var(--text) !important;
+  border-radius: 10px !important;
+}
+
+/* =====================================================================
+   Sticky note labels. The status, compare count, spec note, and movement
+   chips used to be flat pills with a thin tinted outline. They now read as
+   small paper notes: a warm or cool sheet, a hard ink edge, a short offset
+   shadow, a slightly hand cut radius, and a gentle tilt. The note is a
+   label, so the type stays small, bold, and tight.
+   ===================================================================== */
+
+.comic-note {
+  --note-paper: #efe7d4;
+  --note-tilt: -0.9deg;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  inline-size: fit-content !important;
+  max-inline-size: 100% !important;
+  padding: 6px 13px 5px !important;
+  border: 1.5px solid var(--text) !important;
+  border-radius: 2px 7px 3px 6px !important;
+  background: var(--note-paper) !important;
+  box-shadow: 2px 2px 0 var(--text) !important;
+  transform: rotate(var(--note-tilt)) !important;
+  transform-origin: 50% 100% !important;
+  color: var(--text) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+}
+
+.comic-note--green {
+  --note-paper: #dcf0e0;
+}
+
+.comic-note--warm {
+  --note-paper: #f7e7b6;
+}
+
+.comic-note--blue {
+  --note-paper: #dbe9fb;
+}
+
+.comic-note--neutral {
+  --note-paper: #efe7d4;
+}
+
+:root[data-theme="dark"] .comic-note {
+  --note-paper: #38322a;
+}
+
+:root[data-theme="dark"] .comic-note--green {
+  --note-paper: #23402f;
+}
+
+:root[data-theme="dark"] .comic-note--warm {
+  --note-paper: #4a3e20;
+}
+
+:root[data-theme="dark"] .comic-note--blue {
+  --note-paper: #24313f;
+}
+
+/* The legacy dark status rules outrank a single class. Repeat the note
+   colours at matching specificity so the paper ground and ink label win
+   in dark mode too. */
+:root .comic-note,
+:root .comic-note.status,
+:root .comic-note.status.status--active,
+:root .comic-note.status.status--paused {
+  background: var(--note-paper) !important;
+  color: var(--text) !important;
+}
+
+.comic-note.status {
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.comic-note.status i {
+  flex: none;
+}
+
+/* The open topbar dropdown is one ticket, not a button stacked on a panel.
+   The hard shadow is cast by the whole open control through a filter, so
+   it wraps the button and the list as a single silhouette. */
+.topbar .custom-dropdown.is-open {
+  filter: drop-shadow(3px 3px 0 var(--text));
+}
+
+.topbar .custom-dropdown.is-open .custom-dropdown-btn,
+.topbar .custom-dropdown.is-open .custom-dropdown-menu {
+  box-shadow: none !important;
+}
+
+.topbar .custom-dropdown.is-open .custom-dropdown-btn {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+:root .topbar .custom-dropdown.is-open .custom-dropdown-menu {
+  border-color: var(--text) !important;
+  border-top: 0 !important;
+  border-radius: 0 0 10px 10px !important;
+  background: var(--surface-container) !important;
+}

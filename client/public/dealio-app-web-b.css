@@ -768,18 +768,202 @@ h3,
 
 .deal-card,
 .product-card,
-.settings-panel,
-.tracking-card {
+.settings-panel {
   border-radius: 6px !important;
   border: 1.5px solid var(--line-strong) !important;
   background: var(--surface-container) !important;
   box-shadow: none !important;
 }
 
+/*  Saved product cards use the dashboard tracked card language: an ink
+    frame with an offset shadow, a coloured media plate carrying the drawn
+    package, and the price at display size. The legacy rule gave them a
+    hairline border and no media, which read as a default card stack. */
+.tracking-card {
+  --tile-panel: var(--brand);
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 2.5px solid var(--text) !important;
+  border-radius: 10px !important;
+  background: var(--surface-container) !important;
+  box-shadow: 5px 5px 0 var(--surface-high) !important;
+  overflow: hidden;
+}
+
+.tracking-card--c1 {
+  --tile-panel: var(--accent-blue);
+}
+
+.tracking-card--c2 {
+  --tile-panel: #6fbf8e;
+}
+
+.tracking-card--c3 {
+  --tile-panel: #f0b429;
+}
+
+.tracking-card-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 112px;
+  border-bottom: 2.5px solid var(--text);
+  background: var(--tile-panel);
+  overflow: hidden;
+}
+
+.tracking-card-media::after {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    /* taste-skill-ignore: halftone dot field print texture */
+    color-mix(in srgb, #f6f1e8 28%, transparent) 1px,
+    transparent 1.4px
+  );
+  background-size: 6px 6px;
+  content: "";
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tracking-card-media img {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  max-width: 58%;
+  height: 74px;
+  object-fit: contain;
+}
+
+.tracking-card .check-filter {
+  position: absolute;
+  z-index: 2;
+  top: 9px;
+  inset-inline-end: 9px;
+  padding: 3px;
+  border: 2px solid var(--text);
+  border-radius: 5px;
+  background: #f6f1e8;
+}
+
+.tracking-card .check-filter input {
+  display: block;
+  margin: 0;
+}
+
+.tracking-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  flex: 1 1 auto;
+  padding: 14px;
+}
+
+.tracking-card-body .product-link {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: start;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.tracking-card-body small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tracking-card-pricing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-block-start: 2px;
+}
+
+.tracking-card-pricing .price-display strong {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.tracking-card-target {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tracking-card-actions {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/*  Compare reads blue in both list views, the same blue the sticky bar,
+    the tray and the compare focus rings use. The paper theme needs the
+    deeper step so small text still clears contrast. */
+:root {
+  --compare-text: #2b67a3;
+}
+
+:root[data-theme="dark"] {
+  --compare-text: #7fb6ea;
+}
+
+/*  The dark theme recolours every text button coral with a two class
+    selector, which outranks a bare .compare-text. Naming the button class
+    alongside the compare class puts compare back on top of that rule in
+    both themes. */
+:root .compare-text,
+:root .text-button.compare-text,
+:root[data-theme="dark"] .compare-text,
+:root[data-theme="dark"] .text-button.compare-text {
+  color: var(--compare-text) !important;
+}
+
+:root .compare-text:hover,
+:root .compare-text:focus-visible,
+:root .text-button.compare-text:hover,
+:root .text-button.compare-text:focus-visible,
+:root[data-theme="dark"] .compare-text:hover,
+:root[data-theme="dark"] .compare-text:focus-visible,
+:root[data-theme="dark"] .text-button.compare-text:hover,
+:root[data-theme="dark"] .text-button.compare-text:focus-visible {
+  color: var(--compare-text) !important;
+  text-decoration: underline;
+}
+
+@media (max-width: 1050px) {
+  .tracking-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .tracking-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .tracking-card-media {
+    height: 96px;
+  }
+}
+
 .table-wrap,
 .compare-table-wrap {
   border-radius: 6px !important;
-  border: 1.5px solid var(--line) !important;
+  /* The table is a card in this system, so it wears the same 2px ink frame
+     as the cards and controls around it instead of a hairline. */
+  border: 2px solid var(--text) !important;
   overflow: hidden !important;
 }
 
@@ -807,13 +991,13 @@ h3,
 
 :root[data-theme="dark"] .table-wrap,
 :root[data-theme="dark"] .compare-table-wrap {
-  border-color: var(--line) !important;
+  border-color: var(--text) !important;
 }
 
 :root[data-theme="dark"] th {
   background: var(--surface-muted) !important;
   color: var(--text-soft) !important;
-  border-bottom: 1.5px solid var(--line) !important;
+  border-bottom: 2px solid var(--text) !important;
 }
 
 .data-note {
@@ -1031,24 +1215,6 @@ h3,
 .nav-item.is-active .glyph {
   color: var(--text) !important;
   stroke: var(--text) !important;
-}
-
-.sidebar .nav-item.is-active::after,
-.nav-item.is-active::after {
-  content: "" !important;
-  position: absolute !important;
-  inset-inline-end: -11px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: 3px !important;
-  height: 24px !important;
-  background: var(--brand) !important;
-  border-radius: 3px 0 0 3px !important;
-  pointer-events: none !important;
-}
-
-.sidebar--collapsed .nav-item.is-active::after {
-  inset-inline-end: -7px !important;
 }
 
 .sidebar .nav-item.is-active .nav-count,
@@ -1299,26 +1465,6 @@ h3,
   outline: 0 !important;
 }
 
-.sidebar .nav-item.is-active::after,
-.sidebar--collapsed .nav-item.is-active::after,
-.nav-item.is-active::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  inset-inline-end: -11px !important;
-  inset-block: 50% auto !important;
-  width: 3px !important;
-  height: 24px !important;
-  transform: translateY(-50%) !important;
-  border-radius: 3px 0 0 3px !important;
-  background: var(--brand) !important;
-  pointer-events: none !important;
-}
-
-.sidebar--collapsed .nav-item.is-active::after {
-  inset-inline-end: -7px !important;
-}
-
 :root[data-theme="dark"] .sidebar .nav-item.is-active,
 :root[data-theme="dark"] .sidebar--collapsed .nav-item.is-active,
 :root[data-theme="dark"] .nav-item.is-active {
@@ -1551,10 +1697,9 @@ h3,
 
 .match-review-card {
   display: grid;
-  grid-template-columns: minmax(140px, 0.8fr) minmax(220px, 1.2fr) minmax(
-      190px,
-      0.8fr
-    ) auto;
+  grid-template-columns:
+    minmax(140px, 0.8fr) minmax(220px, 1.2fr) minmax(190px, 0.8fr)
+    auto;
   align-items: center;
   gap: 16px;
   width: 100%;
@@ -1701,21 +1846,23 @@ h3,
   flex-wrap: wrap !important;
   align-items: flex-end !important;
   justify-content: flex-start !important;
-  gap: 12px 16px !important;
+  gap: 10px 8px !important;
 }
 
 .my-products-toolbar .table-search {
-  width: min(260px, 100%) !important;
-  height: 38px !important;
-  border-radius: 8px !important;
-  border: 1px solid var(--line) !important;
+  width: 176px !important;
+  min-width: 152px !important;
+  max-width: 100% !important;
+  height: 42px !important;
+  border-radius: 9px !important;
+  border: 2px solid var(--line) !important;
   background: var(--surface-container) !important;
   padding: 0 12px !important;
   box-sizing: border-box !important;
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  flex: none !important;
+  gap: 6px !important;
+  flex: 0 1 176px !important;
 }
 
 .my-products-toolbar .table-search input,
@@ -1725,10 +1872,14 @@ h3,
   box-shadow: none !important;
   background: transparent !important;
   font-family: inherit !important;
-  font-size: 13px !important;
-  height: 100% !important;
+  font-size: 14px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  min-width: 0 !important;
   width: 100% !important;
   padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .my-products-toolbar .sort-control {
@@ -1739,9 +1890,20 @@ h3,
   flex: none !important;
 }
 
+/*  Five filters share one row with the search field and the view switch,
+    so each box trades a little padding for label room. The tighter frame
+    keeps "All categories" and "Product name" whole at 13px. */
 .my-products-toolbar .filter-dropdown {
-  width: 150px !important;
-  min-width: 150px !important;
+  width: 140px !important;
+  min-width: 140px !important;
+}
+
+.my-products-toolbar .filter-dropdown .custom-dropdown-btn {
+  padding: 0 10px !important;
+  gap: 6px !important;
+  font:
+    650 13px "DM Sans",
+    sans-serif !important;
 }
 
 .notifications-toolbar .filter-dropdown {
@@ -1799,14 +1961,14 @@ h3,
 }
 
 .view-mode-switch button.is-selected {
-  background: #315cba !important;
-  color: #ffffff !important;
+  background: #ffeb00 !important;
+  color: #202020 !important;
   font-weight: 700 !important;
 }
 
 .view-mode-switch button.is-selected:hover {
-  background: #254a9c !important;
-  color: #ffffff !important;
+  background: #fff35a !important;
+  color: #202020 !important;
 }
 
 .view-mode-switch .glyph {
@@ -1986,15 +2148,17 @@ h3,
 }
 
 .filtered-export-actions {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
   gap: 10px !important;
   width: 100% !important;
 }
 .filtered-export-actions > .button--export {
-  width: 100% !important;
+  flex: 0 1 210px !important;
+  width: auto !important;
   min-width: 0 !important;
-  padding-inline: 8px !important;
+  padding-inline: 10px !important;
 }
 .settings-account-export-actions {
   display: flex !important;
@@ -2311,10 +2475,9 @@ h3,
   background: var(--surface-muted) !important;
   color: var(--text-soft) !important;
 }
+/* Row rules stay hairlines, the frame and the header rule carry the ink. */
 :root[data-theme="dark"] .table-wrap td,
-:root[data-theme="dark"] .compare-table td,
-:root[data-theme="dark"] .table-wrap th,
-:root[data-theme="dark"] .compare-table th {
+:root[data-theme="dark"] .compare-table td {
   border-color: var(--line) !important;
 }
 :root[data-theme="dark"] .table-wrap tbody tr:hover {
@@ -2327,8 +2490,7 @@ h3,
   color: #ffaaa2 !important;
 }
 :root[data-theme="dark"] .settings-nav a:hover,
-:root[data-theme="dark"] .settings-nav a:focus-visible,
-:root[data-theme="dark"] .row-actions {
+:root[data-theme="dark"] .settings-nav a:focus-visible {
   background: #ffeb00 !important;
   color: #202020 !important;
 }
@@ -3347,6 +3509,56 @@ input[type="number"] {
   margin-bottom: 0 !important;
 }
 
+/*  Dashboard sections keep a single rhythm step between them. Without it
+    the alerts heading sat straight on the card shadow and the two empty
+    plates fused into one long panel. */
+.page-wrap[data-page="dashboard"] > * + .dash-alerts,
+.page-wrap[data-page="dashboard"] > * + .dash-feed,
+.page-wrap[data-page="dashboard"] > * + .guest-panel {
+  margin-top: 18px !important;
+}
+
+/*  Section empties sit between live sections, so they take a compact
+    printed plate rather than a near full screen well. The basket replaces
+    the stray corner watermark and the blank dot so the panel explains
+    itself before the copy is read. */
+.page-wrap[data-page="dashboard"]
+  :is(.dash-feed, .dash-alerts, .dash-tracked-grid)
+  .empty-state {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 220px !important;
+  height: auto !important;
+  margin-block: 0 !important;
+  padding: 26px 24px !important;
+}
+
+.page-wrap[data-page="dashboard"]
+  :is(.dash-feed, .dash-alerts, .dash-tracked-grid)
+  .empty-state::after {
+  display: none;
+}
+
+.page-wrap[data-page="dashboard"]
+  :is(.dash-feed, .dash-alerts, .dash-tracked-grid)
+  .empty-state
+  .empty-ring {
+  width: 58px;
+  height: 58px;
+  border: 2px solid var(--text);
+  border-radius: 12px;
+  background: #f6f1e8 url("/dealio-context/illustrations/shopping-basket.svg")
+    center / 38px no-repeat;
+}
+
+.page-wrap[data-page="dashboard"]
+  :is(.dash-feed, .dash-alerts, .dash-tracked-grid)
+  .empty-state
+  .empty-ring
+  > * {
+  display: none;
+}
+
 .custom-dropdown {
   min-width: 0 !important;
 }
@@ -3490,11 +3702,20 @@ input[type="month"]::-webkit-calendar-picker-indicator {
     sans-serif !important;
   box-shadow: none !important;
 }
+/* A drawn calendar rather than a glyph: the trigger used a box drawing
+   character that shipped double encoded and rendered as mojibake. The mask
+   keeps the strokes crisp at any size and takes its colour from the label. */
 .dealio-date-trigger::after {
-  content: "â–¦";
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
   color: var(--brand);
-  font-size: 18px;
-  line-height: 1;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 .dealio-date-trigger:hover {
   border-color: var(--brand) !important;
@@ -3879,12 +4100,77 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-block: 0 !important;
 }
 
+/*  The tracking table carries eight columns, so it scrolls inside its own
+    frame instead of pushing the page sideways on a phone. Position relative
+    also keeps the visually hidden header text inside the scroller, where it
+    used to escape to the page edge and widen the document. */
+.page-wrap[data-page="products"] .table-wrap {
+  position: relative;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+
+/*  Narrow windows get tighter cells so a swipe moves the table along in
+    readable steps instead of throwing a full column past the frame. */
+@media (max-width: 719px) {
+  .page-wrap[data-page="products"] .table-wrap th,
+  .page-wrap[data-page="products"] .table-wrap td {
+    padding: 9px 8px !important;
+  }
+}
+
+/*  Eight columns plus the view switch push the table a hair past its frame
+    on a desktop window, clipping the row actions. Trim the horizontal cell
+    padding by the same step the actions column overflows. */
+@media (min-width: 720px) {
+  .page-wrap[data-page="products"] .table-wrap th,
+  .page-wrap[data-page="products"] .table-wrap td {
+    padding-inline: 13px !important;
+  }
+}
+
+/*  The table keeps every row on one line. The product name is the one
+    column that can overrun, so it ends on an ellipsis instead of a cut
+    word. The legacy link is an inline flex box, which cannot ellipsize
+    a bare text node. */
+.page-wrap[data-page="products"] .table-wrap .product-link {
+  display: inline-block;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
 .page-wrap[data-page="products"] .my-products-heading > .button {
   transform: translateY(9px);
 }
 
 @media (max-width: 720px) {
+  .page-wrap[data-page="products"] .my-products-heading {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    text-align: start !important;
+  }
+
+  .page-wrap[data-page="products"]
+    .my-products-heading
+    > .my-products-heading-copy {
+    grid-column: auto;
+    grid-row: auto;
+    text-align: start !important;
+  }
+
   .page-wrap[data-page="products"] .my-products-heading > .button {
+    grid-column: auto;
+    grid-row: auto;
+    align-self: flex-start;
+    justify-self: start;
+    margin-inline: 0 !important;
     transform: none;
   }
 }
@@ -4064,18 +4350,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .feed-skeleton {
   border-radius: 14px;
-  min-height: 260px;
+  min-height: calc(260 * var(--skel));
   animation: skeleton-throb 1.1s ease-in-out infinite alternate;
 }
 
 .feed-skeleton--feature {
   grid-column: span 2;
-  grid-row: span 2;
-  min-height: 536px;
-}
-
-.feed-skeleton--wide {
-  grid-column: span 2;
+  min-height: calc(340 * var(--skel));
 }
 
 .feed-tile {
@@ -4194,14 +4475,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 
 .feed-tile--feature {
   grid-column: span 2;
-  grid-row: span 2;
 }
 .feed-tile--feature .feed-media {
-  min-height: 340px;
-  padding: 40px 42px 30px;
+  min-height: 240px;
+  padding: 30px 34px 24px;
 }
 .feed-tile--feature .feed-media .product-image {
-  max-height: 300px;
+  max-height: 210px;
 }
 .feed-tile--feature .feed-name {
   font-size: clamp(22px, 2.6vw, 30px);
@@ -4211,13 +4491,6 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 .feed-tile--feature .feed-body {
   padding: 16px 20px 18px;
-}
-
-.feed-tile--wide {
-  grid-column: span 2;
-}
-.feed-tile--wide .feed-media {
-  min-height: 200px;
 }
 
 .feed-body {
@@ -4341,45 +4614,18 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   background: var(--surface-muted);
 }
 
-.feed-tile--flat {
-  grid-column: span 2;
-  display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  align-items: stretch;
-  min-height: 0;
-}
-
-.feed-tile--flat .feed-body {
-  display: flex;
-}
-
+/*  Imageless tiles keep the same panel anatomy as photo tiles; the slot
+    shows the comic package illustration instead of a photo, so the grid
+    holds one rhythm whatever the catalog returns. */
 .feed-tile--flat .feed-media {
-  min-height: 96px;
-  padding: 12px;
-  border-inline-end: 3px solid var(--text);
-}
-
-.feed-tile--flat .feed-blob {
-  width: 64px;
+  padding: 22px;
 }
 .feed-tile--flat .feed-media .product-image {
-  max-height: 64px;
-  max-width: 64px;
+  max-height: 132px;
+  max-width: 132px;
 }
-.feed-tile--flat .feed-body {
-  padding: 10px 14px 11px;
-  gap: 5px;
-}
-.feed-tile--flat .feed-name {
-  font-size: 15px;
-  -webkit-line-clamp: 1;
-}
-.feed-tile--flat .price-display strong {
-  font-size: 17px;
-}
-.feed-tile--flat .feed-movement {
-  font-size: 11.5px;
-  padding: 2px 8px;
+.feed-tile--flat .feed-blob {
+  width: 76%;
 }
 
 .feed-status {
@@ -4423,9 +4669,24 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   }
 }
 
+/*  Two columns, the slot rhythm the loader draws: the first tile is a
+    full width feature, the rest sit two across. A lone remainder spans the
+    row instead of leaving a hole, and an exact pair always shares the row
+    evenly rather than one tile taking the whole width. */
 @media (min-width: 720px) {
   .feed-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feed-grid--pair .feed-tile,
+  .feed-grid--pair .feed-skeleton {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .feed-grid:not(.feed-grid--pair) .feed-tile:last-child:nth-child(even),
+  .feed-grid:not(.feed-grid--pair) .feed-skeleton:last-child:nth-child(even) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -5778,8 +6039,7 @@ fully off canvas either way,  its width comes from the same drawer rules. */
   }
 }
 
-.settings-category-nav button,
-.view-mode-switch button {
+.settings-category-nav button {
   border: 2px solid var(--text) !important;
   border-radius: 6px !important;
   background: var(--surface-container) !important;
@@ -5793,16 +6053,14 @@ fully off canvas either way,  its width comes from the same drawer rules. */
     color 0.14s ease !important;
 }
 
-.settings-category-nav button:hover,
-.view-mode-switch button:hover {
+.settings-category-nav button:hover {
   transform: none !important;
   background: var(--surface-muted) !important;
   color: var(--text) !important;
   box-shadow: 3px 3px 0 var(--text) !important;
 }
 
-.settings-category-nav button.is-active,
-.view-mode-switch button.is-selected {
+.settings-category-nav button.is-active {
   border-color: var(--text) !important;
   background: var(--brand) !important;
   color: var(--on-brand) !important;
@@ -5818,21 +6076,87 @@ fully off canvas either way,  its width comes from the same drawer rules. */
   min-height: 48px !important;
 }
 
+/*  Table / cards switch: one framed segmented control rather than two
+    loose chips. The frame and its offset shadow belong to the group, and
+    the selected segment fills with the signature yellow so the state reads
+    at a glance. Ink text on yellow clears contrast in both themes, and
+    coral stays reserved for actions. */
 .view-mode-switch {
   width: 176px !important;
   min-width: 176px !important;
   max-width: 176px !important;
   height: 48px !important;
   padding: 3px !important;
-  gap: 8px !important;
-  border: 0 !important;
-  background: transparent !important;
+  gap: 0 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 9px !important;
+  background: var(--surface-container) !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
 }
 
 .view-mode-switch button {
-  height: 40px !important;
-  min-height: 40px !important;
+  height: 38px !important;
+  min-height: 38px !important;
   padding: 0 7px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+  font:
+    700 13px "DM Sans",
+    sans-serif !important;
+}
+
+.view-mode-switch button:hover {
+  transform: none !important;
+  background: var(--surface-muted) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+
+.view-mode-switch button.is-selected {
+  background: #ffeb00 !important;
+  color: #202020 !important;
+  box-shadow: inset 0 0 0 2px #202020 !important;
+}
+
+.view-mode-switch button.is-selected:hover {
+  background: #fff35a !important;
+  color: #202020 !important;
+  box-shadow: inset 0 0 0 2px #202020 !important;
+}
+
+.view-mode-switch .glyph {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+/*  The switch carries the same small caption as the filter controls, so it
+    reads as part of the toolbar instead of an unlabelled chip. On tablet and
+    up it rides the first line beside the search field, where the view choice
+    stays visible while the filter row wraps underneath. */
+.view-mode-control {
+  align-self: flex-end !important;
+}
+
+.view-mode-control .view-mode-switch {
+  margin-inline-start: 0 !important;
+}
+
+@media (min-width: 720px) {
+  .my-products-toolbar .table-search {
+    order: 0;
+  }
+
+  .my-products-toolbar .sort-control:not(.view-mode-control) {
+    order: 1;
+  }
+
+  .my-products-toolbar .view-mode-control {
+    order: 2;
+    margin-inline-start: auto !important;
+  }
 }
 
 .page-wrap[data-page="discover"] .discover-toolbar {
@@ -6438,13 +6762,6 @@ visibility,  hide = fade first, then flip. */
   transform: none !important;
   pointer-events: auto !important;
   transition-delay: 0s !important;
-}
-
-/* The active item accent bar nudged 4px inward when collapsed,  unify
-   the offset so it never nudges during (or after) a toggle. */
-.sidebar .nav-item.is-active::after,
-.sidebar--collapsed .nav-item.is-active::after {
-  inset-inline-end: -9px !important;
 }
 
 /* 4a) Forced-rail band (761px 1050px): the sidebar is always the rail
