@@ -149,12 +149,16 @@ export function NotificationsPage({
           jsxs("div", {
             className: "notifications-header-actions",
             children: [
-              jsx("span", {
-                className: "results-count notifications-unread-count",
-                children: p.notificationsUnread(
-                  N.filter((_) => !_.isRead).length,
-                ),
-              }),
+              U
+                ? jsx("span", {
+                    className: "skeleton-box skeleton-notice-toolbar-count",
+                  })
+                : jsx("span", {
+                    className: "results-count notifications-unread-count",
+                    children: p.notificationsUnread(
+                      N.filter((_) => !_.isRead).length,
+                    ),
+                  }),
               jsxs("button", {
                 className: "button button--mark-all-read",
                 disabled: !N.some((_) => !_.isRead),

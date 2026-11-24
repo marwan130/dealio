@@ -263,74 +263,80 @@ export function SkeletonTable({ rows: c = 5 }) {
 }
 
 export function NoticeListSkeleton({ count: c = 4 }) {
-  return jsxs("div", {
+  return jsx("div", {
     className: "notifications-skeleton",
     "aria-hidden": "true",
-    children: [
-      jsx("div", {
-        className: "page-heading notifications-heading",
-        children: jsxs("div", {
-          className: "skeleton-notice-heading-copy",
-          children: [
-            jsx("span", { className: "skeleton-box skeleton-notice-eyebrow" }),
-            jsx("span", {
-              className: "skeleton-box skeleton-notice-page-title",
-            }),
-          ],
-        }),
-      }),
-      jsxs("div", {
-        className: "toolbar notifications-toolbar",
-        children: [
-          jsx("span", { className: "skeleton-box skeleton-notice-filter" }),
-          jsx("span", { className: "skeleton-box skeleton-notice-filter" }),
-          jsx("span", { className: "skeleton-box skeleton-notice-count" }),
-          jsx("span", { className: "skeleton-box skeleton-notice-markall" }),
-        ],
-      }),
-      jsxs("div", {
-        className: "notice-list skeleton-notice-list",
-        children: Array.from({ length: c }).map((f, x) =>
-          jsxs(
-            "div",
-            {
-              className: "notice-item skeleton-notice-item",
-              children: [
-                jsx("span", {
-                  className: "skeleton-box notice-icon skeleton-notice-icon",
-                }),
-                jsxs("div", {
-                  className: "notice-copy",
+    children: jsx("div", {
+      className: "skeleton-notice-list",
+      children: Array.from({ length: c }).map((f, x) =>
+        jsxs(
+          "div",
+          {
+            className: `skeleton-notice-item${x % 2 === 0 ? " is-unread" : ""}`,
+            children: [
+              jsx("span", {
+                className: "skeleton-notice-stamp",
+                children: jsx("svg", {
+                  className: "skeleton-notice-bell",
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: "1.7",
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
                   children: [
-                    jsxs("div", {
-                      className: "notice-top",
-                      children: [
-                        jsx("span", {
-                          className: "skeleton-box skeleton-notice-title",
-                          style: { width: `${44 + (x % 3) * 8}%` },
-                        }),
-                        jsx("span", {
-                          className: "skeleton-box skeleton-notice-date",
-                        }),
-                      ],
-                    }),
-                    jsx("span", {
-                      className: "skeleton-box skeleton-notice-body",
-                      style: { width: `${72 + (x % 2) * 12}%` },
-                    }),
-                    jsx("span", {
-                      className: "skeleton-box skeleton-notice-state",
-                      style: { width: `${30 + (x % 2) * 7}%` },
-                    }),
+                    jsx(
+                      "path",
+                      { d: "M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" },
+                      "bell",
+                    ),
+                    jsx(
+                      "path",
+                      { d: "M13.7 21a2 2 0 0 1-3.4 0" },
+                      "clapper",
+                    ),
                   ],
                 }),
-              ],
-            },
-            x,
-          ),
+              }),
+              jsxs("div", {
+                className: "notice-copy",
+                children: [
+                  jsxs("div", {
+                    className: "notice-top",
+                    children: [
+                      jsx("span", {
+                        className: "skeleton-box skeleton-notice-title",
+                        style: { width: `${42 + (x % 3) * 9}%` },
+                      }),
+                      jsx("span", {
+                        className: "skeleton-box skeleton-notice-date",
+                      }),
+                    ],
+                  }),
+                  jsx("span", {
+                    className: "skeleton-box skeleton-notice-body",
+                    style: { width: `${64 + (x % 2) * 14}%` },
+                  }),
+                  jsxs("div", {
+                    className: "skeleton-notice-foot",
+                    children: [
+                      jsx("span", {
+                        className: "skeleton-box skeleton-notice-state",
+                        style: { width: `${28 + (x % 3) * 6}%` },
+                      }),
+                      jsx("span", {
+                        className: "skeleton-box skeleton-notice-action",
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          },
+          x,
         ),
-      }),
-    ],
+      ),
+    }),
   });
 }
 
