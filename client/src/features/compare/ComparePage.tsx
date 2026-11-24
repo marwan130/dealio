@@ -1,10 +1,13 @@
 // @ts-nocheck
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { CompareHistoryChart } from "./CompareHistoryChart";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { Icon } from "../../components/ui/Icon";
 import { Price } from "../../components/ui/Price";
-import { ProductImage } from "../../components/ui/ProductImage";
+import {
+  PRODUCT_ILLUSTRATION_FALLBACK,
+  ProductImage,
+} from "../../components/ui/ProductImage";
 import { SkeletonTable } from "../../components/ui/skeletons";
 import { apiFetch } from "../../lib/api";
 import { useLocale } from "../../lib/i18n-context";
@@ -15,6 +18,7 @@ export function ComparePage({
   ids,
   onRemove,
   onClear,
+  onAdd,
   onOpen,
   onDiscover,
   notify,
@@ -23,10 +27,14 @@ export function ComparePage({
   const [products, setProducts] = useState([]);
   const [offers, setOffers] = useState({});
   const [trackings, setTrackings] = useState({});
-  // AI spec sheets, keyed per product (null = researched, none found).
   const [specs, setSpecs] = useState({});
   const [researching, setResearching] = useState({});
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const [searchFailed, setSearchFailed] = useState(false);
+  const searchInput = useRef(null);
 
   useEffect(() => {
     let active = true;
@@ -44,7 +52,6 @@ export function ComparePage({
         const [product, listings, sheet] = await Promise.all([
           apiFetch(`/v1/products/${id}`).catch(() => null),
           apiFetch(`/v1/listings/by-product/${id}`).catch(() => []),
-          // 404 until someone researches this product. Expected, not an error.
           apiFetch(`/v1/products/${id}/specs`).catch(() => null),
         ]);
         return { id, product, listings, sheet };
@@ -61,15 +68,14 @@ export function ComparePage({
         if (!token) return setTrackings({});
         try {
           const rows = await apiFetch("/v1/tracking");
-          if (active)
-            setTrackings(
-              rows
-                .filter((row) => ids.includes(row.productId))
-                .reduce((grouped, row) => {
-                  (grouped[row.productId] ||= []).push(row);
-                  return grouped;
-                }, {}),
-            );
+          if (active) {
+            const grouped: Record<string, typeof rows> = {};
+            for (const row of rows) {
+              if (!ids.includes(row.productId)) continue;
+              (grouped[row.productId] ||= []).push(row);
+            }
+            setTrackings(grouped);
+          }
         } catch {
           if (active) setTrackings({});
         }
@@ -81,18 +87,67 @@ export function ComparePage({
     };
   }, [ids, token, notify, copy.compareError]);
 
+  useEffect(() => {
+    const term = searchTerm.trim();
+    if (term.length < 2) {
+      setSearchResults([]);
+      setSearching(false);
+      setSearchFailed(false);
+      return;
+    }
+    let active = true;
+    setSearching(true);
+    setSearchFailed(false);
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams({ query: term, Size: "6" });
+      apiFetch(`/v1/products?${params}`)
+        .then((page) => {
+          if (!active) return;
+          setSearchResults(Array.isArray(page?.content) ? page.content : []);
+        })
+        .catch(() => {
+          if (!active) return;
+          setSearchResults([]);
+          setSearchFailed(true);
+        })
+        .finally(() => {
+          if (active) setSearching(false);
+        });
+    }, 300);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [searchTerm]);
+
+  const addableResults = searchResults.filter(
+    (item) => !ids.includes(item.productId),
+  );
+
+  const focusSearch = () => {
+    searchInput.current?.scrollIntoView({
+      block: "center",
+      behavior: "smooth",
+    });
+    searchInput.current?.focus({ preventScroll: true });
+  };
+
+  const addFromSearch = (productId) => {
+    onAdd(productId);
+    setSearchTerm("");
+    setSearchResults([]);
+  };
+
   const currentOffers = (productId) =>
     (offers[productId] || []).filter(
       (offer) =>
         offer.isActive && !offer.isExcluded && offer.currentPrice != null,
     );
   const bestOffer = (productId) =>
-    [...currentOffers(productId)].sort(
+    currentOffers(productId).toSorted(
       (a, b) => a.currentPrice - b.currentPrice,
     )[0];
 
-  // On-demand AI research: one free tier call per product, ever (the
-  // server caches the sheet). Guests see a sign-in hint instead.
   const researchSpecs = async (productId) => {
     if (!token || researching[productId]) return;
     setResearching((state) => ({ ...state, [productId]: true }));
@@ -108,9 +163,6 @@ export function ComparePage({
     }
   };
 
-  // GSMArena-style spec sheet: rows are attributes, columns are products,
-  // and the cheapest product's price cell is flagged. Computed once so
-  // the "best price" chip can be painted on exactly one column.
   const pricedProducts = products.filter(
     (product) => product.lowestPrice != null,
   );
@@ -222,9 +274,6 @@ export function ComparePage({
     },
   ];
 
-  // AI-gathered spec sheet, GSMArena-style: rows are the union of the
-  // researched field labels, columns without a sheet offer the research
-  // action. The sheet is explicitly marked as AI-gathered.
   const specLabels = [
     ...new Set(
       products
@@ -278,7 +327,7 @@ export function ComparePage({
           <h1>{copy.compareHeading}</h1>
         </div>
         <div className="compare-heading-side">
-          <span className="compare-limit">
+          <span className="compare-limit comic-note comic-note--blue">
             {ids.length} of 3 {copy.navCompare}
           </span>
           {ids.length > 0 && onClear ? (
@@ -288,6 +337,95 @@ export function ComparePage({
           ) : null}
         </div>
       </div>
+      {ids.length < 3 ? (
+        <section
+          className="compare-search"
+          aria-label={copy.compareSearchLabel}
+        >
+          <div className="compare-search-bar">
+            <Icon name="search" />
+            <input
+              ref={searchInput}
+              type="search"
+              className="compare-search-input"
+              value={searchTerm}
+              placeholder={copy.compareSearchPlaceholder}
+              aria-label={copy.compareSearchPlaceholder}
+              autoComplete="off"
+              onChange={(event) => setSearchTerm(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") setSearchTerm("");
+              }}
+            />
+            {searching ? (
+              <span className="compare-search-status" role="status">
+                {copy.compareSearching}
+              </span>
+            ) : searchTerm ? (
+              <button
+                type="button"
+                className="compare-search-clear"
+                aria-label={copy.compareClearAll}
+                onClick={() => {
+                  setSearchTerm("");
+                  searchInput.current?.focus();
+                }}
+              >
+                <Icon name="close" />
+              </button>
+            ) : null}
+          </div>
+          {searchTerm.trim().length >= 2 ? (
+            addableResults.length ? (
+              <ul className="compare-search-results">
+                {addableResults.map((item) => (
+                  <li key={item.productId}>
+                    <span className="compare-search-thumb">
+                      <ProductImage
+                        source={item.primaryImage}
+                        baseUrl=""
+                        productId={item.productId}
+                        alt={item.name}
+                        loading="lazy"
+                        fallback={PRODUCT_ILLUSTRATION_FALLBACK}
+                      />
+                    </span>
+                    <span className="compare-search-info">
+                      <strong>{item.name}</strong>
+                      <small>
+                        {[item.brand, item.category]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </small>
+                    </span>
+                    <span className="compare-search-price">
+                      <Price
+                        amount={item.lowestPrice}
+                        currencyCode={item.currencyCode || item.currency}
+                      />
+                    </span>
+                    <button
+                      type="button"
+                      className="button button--small compare-search-add"
+                      aria-label={`${copy.compareAddProduct} ${item.name}`}
+                      onClick={() => addFromSearch(item.productId)}
+                    >
+                      <Icon name="plus" />
+                      {copy.compareAddProduct}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : searching ? null : (
+              <p className="compare-search-empty" role="status">
+                {searchFailed
+                  ? copy.compareSearchFailed
+                  : copy.compareSearchEmpty(searchTerm.trim())}
+              </p>
+            )
+          ) : null}
+        </section>
+      ) : null}
       {loading ? (
         <div className="compare-table-wrap">
           <div className="compare-skeleton-head">
@@ -326,21 +464,13 @@ export function ComparePage({
                           <Icon name="close" />
                         </button>
                         <div className="compare-head-image">
-                          {product.primaryImage ? (
-                            <ProductImage
-                              source={product.primaryImage}
-                              baseUrl={product.productUrl || ""}
-                              productId={product.productId}
-                              alt={product.name}
-                            />
-                          ) : (
-                            <span
-                              className="compare-head-thumb-fallback"
-                              aria-hidden="true"
-                            >
-                              {product.name.trim().charAt(0).toUpperCase()}
-                            </span>
-                          )}
+                          <ProductImage
+                            source={product.primaryImage}
+                            baseUrl={product.productUrl || ""}
+                            productId={product.productId}
+                            alt={product.name}
+                            fallback={PRODUCT_ILLUSTRATION_FALLBACK}
+                          />
                         </div>
                         <button
                           className="compare-head-name"
@@ -367,7 +497,7 @@ export function ComparePage({
                 })}
                 {ids.length < 3 ? (
                   <th scope="col" className="compare-add-col">
-                    <button className="compare-add-tile" onClick={onDiscover}>
+                    <button className="compare-add-tile" onClick={focusSearch}>
                       <Icon name="plus" />
                       {copy.compareAddColumn}
                     </button>
@@ -401,9 +531,6 @@ export function ComparePage({
               ))}
             </tbody>
           </table>
-          {/* Phones only see the first product at the scrollport's edge , 
-             name the horizontal scroll instead of leaving a mid glyph cut
-             that reads as a broken layout. */}
           <p className="compare-swipe-hint">{copy.compareSwipeHint}</p>
         </div>
       ) : (
