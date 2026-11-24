@@ -162,7 +162,7 @@ export function TrackingsTable({
                   }),
                   jsx("td", {
                     children: jsxs("span", {
-                      className: `status ${z.isActive ? "status--active" : "status--paused"}`,
+                      className: `status ${z.isActive ? "status--active" : "status--paused"} comic-note ${z.isActive ? "comic-note--green" : "comic-note--warm"}`,
                       children: [
                         jsx("i", {}),
                         z.isActive ? w.statusTracking : w.statusPaused,
@@ -174,7 +174,7 @@ export function TrackingsTable({
                     children: [
                       A &&
                         jsx("button", {
-                          className: "text-button",
+                          className: "text-button compare-text",
                           type: "button",
                           onClick: () => A(z.productId),
                           children: _

@@ -1,121 +1,43 @@
 import { translations } from "./i18n";
 
-type Point = HTMLButtonElement & { x?: number; y?: number; day?: string };
 const localizedText = () => {
   const strings = document.documentElement.lang.toLowerCase().startsWith("ar")
     ? translations.ar
     : translations.en;
   return {
     activity: strings.productNavActivity,
-    offers: strings.productNavOffers,
-    history: strings.productNavHistory,
-    lowest: strings.productLowestVerified,
+    alerts: strings.productTabAlerts,
     checks: strings.productLastChecked,
     compare: strings.discoverCompare,
+    removeCompare: strings.discoverRemoveCompare,
     empty: strings.productActivityEmpty,
   };
 };
-
-function enhanceChart(section: HTMLElement) {
-  const text = localizedText();
-  const plot = section.querySelector<HTMLElement>(".chart-plot");
-  if (!plot) return;
-  const points = [...plot.querySelectorAll<Point>("button.chart-point")]
-    .map((point) => {
-      point.x = Number.parseFloat(point.style.left);
-      point.y = Number.parseFloat(point.style.top);
-      point.day = point.getAttribute("aria-label")?.split(" · ")[0] || "";
-      return point;
-    })
-    .filter(
-      (point) =>
-        Number.isFinite(point.x) && Number.isFinite(point.y) && point.day,
-    );
-  const lowestByDay = new Map<string, Point>();
-  for (const point of points) {
-    const current = lowestByDay.get(point.day!);
-    if (!current || point.y! > current.y!) lowestByDay.set(point.day!, point);
-  }
-  const lowest = [...lowestByDay.values()].sort((a, b) => a.x! - b.x!);
-  if (!lowest.length) return;
-  const xGaps = lowest
-    .slice(1)
-    .map((point, index) => point.x! - lowest[index].x!)
-    .filter((gap) => gap > 0)
-    .sort((a, b) => a - b);
-  const typicalGap = xGaps.length
-    ? xGaps[Math.floor((xGaps.length - 1) / 2)]
-    : 100;
-  const path = lowest
-    .map(
-      (point, index) =>
-        `${index === 0 || point.x! - lowest[index - 1].x! > typicalGap * 2.5 ? "M" : "L"} ${point.x} ${point.y}`,
-    )
-    .join(" ");
-  plot
-    .querySelectorAll(".chart-series")
-    .forEach((series) => ((series as SVGElement).style.display = "none"));
-  let svg = plot.querySelector<SVGSVGElement>(".chart-series--lowest");
-  if (!svg) {
-    svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 100 100");
-    svg.setAttribute("preserveAspectRatio", "none");
-    svg.setAttribute("aria-hidden", "true");
-    svg.classList.add("chart-series", "chart-series--lowest");
-    plot.prepend(svg);
-  }
-  let line = svg.querySelector("path");
-  if (!line) {
-    line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    line.setAttribute("fill", "none");
-    line.setAttribute("stroke", "var(--brand)");
-    line.setAttribute("stroke-width", "2.6");
-    line.setAttribute("stroke-linecap", "round");
-    line.setAttribute("stroke-linejoin", "round");
-    svg.append(line);
-  }
-  line.setAttribute("d", path);
-  // Re-runs hide every series above, which also hides the lowest line the
-  // first pass drew. Restore it, but only when actually hidden so repeated
-  // observer passes do not mutate style attributes forever.
-  if (svg.style.display) svg.style.display = "";
-  points.forEach((point) =>
-    point.classList.toggle("chart-point--other", !lowest.includes(point)),
-  );
-  const legend = section.querySelector<HTMLElement>(".history-legend");
-  if (legend && legend.dataset.dealioLowest !== "true") {
-    legend.replaceChildren();
-    const label = document.createElement("span");
-    const swatch = document.createElement("i");
-    swatch.className = "legend-dot legend-dot--0";
-    label.append(swatch, document.createTextNode(text.lowest));
-    legend.append(label);
-    legend.dataset.dealioLowest = "true";
-  }
-}
 
 function catalogSignature(items: Element[]) {
   return items.map((el) => (el.textContent || "").trim()).join("¦");
 }
 
+function toneForTrust(trust: string) {
+  if (trust === "stale") return "stale";
+  if (trust === "unverified") return "unverified";
+  if (trust === "inactive") return "inactive";
+  return "verified";
+}
+
 function addActivity(offers: HTMLElement) {
   const text = localizedText();
-  const rows = [...offers.querySelectorAll("tbody tr")];
+  const rows = [
+    ...offers.querySelectorAll<HTMLTableRowElement>("tbody tr[data-offer-row]"),
+  ];
   const trackingCards = [
     ...document.querySelectorAll<HTMLElement>(".tracking-preference-card"),
   ];
-  // The PDP hydrates progressively: #offers can mount before its rows and
-  // tracking cards exist, and the first pass used to lock in an empty
-  // "no activity" list that later fills never updated. Only render/rebuild
-  // once content is actually available, so the observer can fill it in a
-  // later pass instead of flashing an empty section.
   if (!rows.length && !trackingCards.length) {
     document.getElementById("activity")?.remove();
     return;
   }
   let section = document.getElementById("activity") || null;
-  // Signature of what currently matters,  rebuilding the same content again
-  // would itself fire the MutationObserver and loop forever.
   const signature = `${catalogSignature(trackingCards)}|${catalogSignature(rows)}`;
   if (!section) {
     section = document.createElement("section");
@@ -123,10 +45,10 @@ function addActivity(offers: HTMLElement) {
     section.id = "activity";
     section.dataset.dealioActivity = signature;
     const heading = document.createElement("h2");
+    heading.id = "activity-heading";
     heading.textContent = text.activity;
+    section.setAttribute("aria-labelledby", "activity-heading");
     section.append(heading);
-    // Reading order: offers, history, preferences, then the change log . 
-    // the activity feed outranks nothing.
     const alerts = document.querySelector(".tracking-preference-section");
     if (alerts) alerts.after(section);
     else offers.before(section);
@@ -138,39 +60,69 @@ function addActivity(offers: HTMLElement) {
   section.querySelectorAll(":scope > p").forEach((p) => p.remove());
   const list = document.createElement("ol");
   list.className = "product-activity-list";
+  const offerStores = new Set(
+    rows.map((row) => (row.dataset.offerStore || "").trim().toLowerCase()),
+  );
   trackingCards.forEach((card) => {
-    const item = document.createElement("li");
-    item.textContent =
+    const title =
       card
         .querySelector(".tracking-preference-title strong")
         ?.textContent?.trim() || "";
-    if (item.textContent) list.append(item);
+    if (!title || offerStores.has(title.toLowerCase())) return;
+    const item = document.createElement("li");
+    const dot = document.createElement("span");
+    dot.className = "product-activity-dot";
+    dot.dataset.tone = "verified";
+    dot.setAttribute("aria-hidden", "true");
+    const copy = document.createElement("div");
+    copy.className = "product-activity-copy";
+    const label = document.createElement("strong");
+    label.textContent = title;
+    const meta = document.createElement("span");
+    meta.className = "product-activity-meta";
+    meta.textContent = text.alerts;
+    copy.append(label, meta);
+    item.append(dot, copy);
+    list.append(item);
   });
   rows.forEach((row) => {
-    const cells = [...row.querySelectorAll("td")];
-    if (cells.length < 4) return;
+    const store = (row.dataset.offerStore || "").trim();
+    const checked = (row.dataset.offerChecked || "").trim() || "—";
+    const trust = row.dataset.offerTrust || "";
+    const priceCell = row.querySelector<HTMLElement>("td.price-cell");
+    if (!priceCell) return;
     const item = document.createElement("li");
-    const labelPiece = cells[0].cloneNode(true) as HTMLElement;
-    labelPiece
-      .querySelectorAll(".offer-best-flag")
-      .forEach((node) => node.remove());
+    const dot = document.createElement("span");
+    dot.className = "product-activity-dot";
+    dot.dataset.tone = toneForTrust(trust);
+    dot.setAttribute("aria-hidden", "true");
+    const copy = document.createElement("div");
+    copy.className = "product-activity-copy";
     const label = document.createElement("strong");
-    label.textContent = labelPiece.textContent?.trim() || "";
-    // The price cell is a composed component (price + converted-price +
-    // trust flag). Reading the whole cell concatenates them,  take the
-    // pieces separately and join with real separators.
-    const pricePiece = cells[1].cloneNode(true) as HTMLElement;
+    label.textContent = store || "—";
+    const meta = document.createElement("span");
+    meta.className = "product-activity-meta";
+    meta.textContent = `${text.checks}: ${checked}`;
+    copy.append(label, meta);
+    const pricePiece = priceCell.cloneNode(true) as HTMLElement;
     pricePiece
       .querySelectorAll(".converted-price")
       .forEach((node) => node.remove());
     const flag = pricePiece.querySelector(".offer-flag");
-    const flagText = flag?.textContent?.trim()
-      ? ` · ${flag.textContent.trim()}`
-      : "";
+    const flagText = flag?.textContent?.trim() || "";
     flag?.remove();
-    const detail = document.createElement("span");
-    detail.textContent = `${pricePiece.textContent?.trim() || ""}${flagText} · ${text.checks}: ${cells[2].textContent?.trim() || "—"}`;
-    item.append(label, detail);
+    const value = document.createElement("div");
+    value.className = "product-activity-value";
+    const amount = document.createElement("strong");
+    amount.textContent = pricePiece.textContent?.trim() || "—";
+    value.append(amount);
+    if (flagText) {
+      const state = document.createElement("span");
+      state.className = "product-activity-state";
+      state.textContent = flagText;
+      value.append(state);
+    }
+    item.append(dot, copy, value);
     list.append(item);
   });
   if (!list.children.length) {
@@ -180,14 +132,51 @@ function addActivity(offers: HTMLElement) {
   } else section.append(list);
 }
 
-function addStickyNavigation(
-  hero: HTMLElement,
-  offers: HTMLElement,
-  history: HTMLElement | null,
-) {
+function syncCompareState(bar: HTMLElement, inCompare: boolean) {
+  const text = localizedText();
+  const compare = bar.querySelector<HTMLButtonElement>(
+    ".sticky-product-compare",
+  );
+  if (!compare) return;
+  compare.textContent = "";
+  compare.append(
+    compareGlyph(),
+    Object.assign(document.createElement("span"), {
+      textContent: inCompare ? text.removeCompare : text.compare,
+    }),
+  );
+  compare.toggleAttribute("data-in-compare", inCompare);
+  compare.setAttribute("aria-pressed", String(inCompare));
+  bar.dataset.dealioCompare = inCompare ? "in" : "out";
+}
+
+function compareGlyph() {
+  const glyph = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  glyph.setAttribute("viewBox", "0 0 24 24");
+  glyph.setAttribute("aria-hidden", "true");
+  glyph.setAttribute("fill", "none");
+  glyph.setAttribute("stroke", "currentColor");
+  glyph.setAttribute("stroke-width", "2");
+  glyph.setAttribute("stroke-linecap", "round");
+  glyph.setAttribute("stroke-linejoin", "round");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3");
+  glyph.append(path);
+  return glyph;
+}
+
+function addStickyNavigation(hero: HTMLElement) {
   const text = localizedText();
   const name = hero.querySelector("h1")?.textContent?.trim();
   if (!name) return;
+  const heroCompare = hero.querySelector<HTMLButtonElement>(
+    ".product-hero-cta .button--tonal",
+  );
+  if (!heroCompare) {
+    document.querySelector(".sticky-product-bar")?.remove();
+    return;
+  }
+  const inCompare = heroCompare.dataset.compareState === "in";
 
   const priceText = (
     hero.querySelector(".product-hero-price strong")?.textContent ?? ""
@@ -198,27 +187,26 @@ function addStickyNavigation(
   const existingBar = document.querySelector<HTMLElement>(
     ".sticky-product-bar",
   );
-  if (existingBar && existingBar.dataset.dealioSticky === signature) return;
-  existingBar?.remove();
+  if (existingBar) {
+    if (existingBar.dataset.dealioSticky === signature) {
+      if (existingBar.dataset.dealioCompare !== (inCompare ? "in" : "out")) {
+        syncCompareState(existingBar, inCompare);
+      }
+      return;
+    }
+    existingBar.remove();
+  }
   const bar = document.createElement("div");
   bar.className = "sticky-product-bar";
   bar.dataset.dealioSticky = signature;
+  bar.dataset.dealioCompare = inCompare ? "in" : "out";
   const identity = document.createElement("div");
   identity.className = "sticky-product-identity";
-  const image = hero.querySelector<HTMLImageElement>(".product-hero-image img");
-  if (image) {
-    const thumb = image.cloneNode(true) as HTMLImageElement;
-    thumb.alt = "";
-    thumb.setAttribute("aria-hidden", "true");
-    identity.append(thumb);
-  }
   const title = document.createElement("strong");
   title.textContent = name;
   identity.append(title);
   const price = hero.querySelector(".product-hero-price strong");
-  if (price) {
-    // Strip the secondary converted-price line so the sticky bar shows
-    // only the headline amount.
+  if (price && priceText && priceText !== "—") {
     const clone = price.cloneNode(true) as HTMLElement;
     clone.querySelectorAll(".converted-price").forEach((node) => node.remove());
     const value = document.createElement("span");
@@ -229,29 +217,18 @@ function addStickyNavigation(
   actions.className = "sticky-product-actions";
   const compare = document.createElement("button");
   compare.type = "button";
-  compare.className = "button button--tonal";
-  compare.textContent = text.compare;
-  compare.addEventListener("click", () =>
-    hero
-      .querySelector<HTMLButtonElement>(".product-hero-actions button")
-      ?.click(),
+  compare.className = "sticky-product-compare";
+  compare.setAttribute("aria-pressed", String(inCompare));
+  compare.toggleAttribute("data-in-compare", inCompare);
+  compare.append(
+    compareGlyph(),
+    Object.assign(document.createElement("span"), {
+      textContent: inCompare ? text.removeCompare : text.compare,
+    }),
   );
+  compare.addEventListener("click", () => heroCompare.click());
   actions.append(compare);
-  const nav = document.createElement("nav");
-  nav.setAttribute("aria-label", text.activity);
-  const links: [string, HTMLElement | null][] = [
-    [text.offers, offers],
-    [text.history, history],
-    [text.activity, document.getElementById("activity")],
-  ];
-  links.forEach(([label, target]) => {
-    if (!target) return;
-    const link = document.createElement("a");
-    link.href = `#${target.id}`;
-    link.textContent = label;
-    nav.append(link);
-  });
-  bar.append(identity, nav, actions);
+  bar.append(identity, actions);
   hero.after(bar);
 }
 
@@ -274,30 +251,23 @@ function enhanceProductDetails() {
     existingBar.remove();
     document.getElementById("activity")?.remove();
   }
-  const history =
-    [...document.querySelectorAll<HTMLElement>(".content-section")].find(
-      (section) =>
-        section.querySelector(
-          ".range-select, .history-chart, .history-observation-list",
-        ),
-    ) || null;
-  if (history) history.id = "history";
-  enhanceChart(history || offers);
   addActivity(offers);
-  addStickyNavigation(hero, offers, history);
+  addStickyNavigation(hero);
 }
 
-const observer = new MutationObserver(() => enhanceProductDetails());
+let queued = false;
+const observer = new MutationObserver(() => {
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(() => {
+    queued = false;
+    if (document.querySelector(".product-detail-page")) enhanceProductDetails();
+  });
+});
 observer.observe(document.documentElement, { childList: true, subtree: true });
 enhanceProductDetails();
-document.addEventListener("change", (event) => {
-  if ((event.target as HTMLElement).closest(".history-store-controls"))
-    requestAnimationFrame(enhanceProductDetails);
-});
 window.addEventListener("pt-locale-changed", () => {
   document.getElementById("activity")?.remove();
   document.querySelector(".sticky-product-bar")?.remove();
-  const legend = document.querySelector<HTMLElement>(".history-legend");
-  if (legend) delete legend.dataset.dealioLowest;
   requestAnimationFrame(enhanceProductDetails);
 });

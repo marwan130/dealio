@@ -1,9 +1,3 @@
-/* Product details page: two column hero (gallery + sticky buy box),
-   anchored sections, and a mobile bottom buy bar.
-   Uses the global tokens from client/public/dealio-app-web.css and logical
-   CSS properties so Arabic RTL mirrors cleanly. The legacy .product-hero
-   rules in the public stylesheet are intentionally overridden here. */
-
 .product-detail-page {
   display: flex;
   flex-direction: column;
@@ -11,10 +5,6 @@
   padding-block-end: 40px;
 }
 
-/* Back button. The legacy stylesheet paints .product-detail-back and
-   .discover-back-button as the same yellow comic chip (2px ink border,
-   7px hand cut radius, 3px 3px 0 shadow) ,  keep exactly that and only
-   pin the page layout bits the chip needs inside this flex column. */
 .product-detail-page .product-detail-back {
   align-self: flex-start;
 }
@@ -22,8 +12,6 @@
 [dir="rtl"] .product-detail-page .product-detail-back svg {
   transform: scaleX(-1);
 }
-
-/*  Hero: gallery + buy box  */
 
 .product-detail-page .product-hero {
   display: grid;
@@ -42,11 +30,6 @@
 }
 
 .product-hero-image {
-  /* The legacy sheet positions layered .product-image--stack frames
-     absolutely (dealio-app-web-b.css 2125) assuming a relative wrap,  below
-     900px the sticky media panel goes static and the frames would escape
-     to the page root ,  painting the photo full bleed over the back link
-     while the panel itself stays empty. Contain them here. */
   position: relative;
   min-height: 300px;
   border-radius: 14px;
@@ -68,6 +51,15 @@
   color: var(--text-muted);
   font-family: Anton, "DM Sans", sans-serif;
   font-size: 64px;
+}
+
+.product-hero-image-fallback > .product-illustration {
+  inline-size: 100%;
+  block-size: 100%;
+  aspect-ratio: auto;
+  padding: 0;
+  background: transparent !important;
+  object-fit: contain;
 }
 
 .product-hero-main {
@@ -106,8 +98,6 @@
   color: var(--line);
 }
 
-/* Price hierarchy: current large, old struck through, discount badge. */
-
 .product-hero-price {
   display: flex;
   flex-wrap: wrap;
@@ -126,10 +116,6 @@
   letter-spacing: 0.01em !important;
 }
 
-/* The current price reads in DM Sans rather than the global Anton display
-   face: it sits inside a sentence context buy box, not on a badge.
-   Scoped to the direct child: the "was" del also lives in this block and
-   must not inherit the 30px headline treatment. */
 .product-detail-page .product-hero-price > strong {
   font-family: "DM Sans", Roboto, sans-serif !important;
   font-size: 30px !important;
@@ -146,14 +132,9 @@
   color: var(--text-muted) !important;
   font-size: 14px !important;
   font-weight: 400 !important;
-  /* The <del> element strikes all of its text by default ,  the "Was"
-     label must stay plain,  only the price value below keeps the line. */
   text-decoration: none !important;
 }
 
-/* The struck through previous price stays small and muted: it must never
-   compete with the current price (the global stylesheet sizes any strong
-   inside the price block like a headline). */
 .product-detail-page .product-hero-old-price strong,
 .product-detail-page .product-hero-old-price .price-display strong {
   font-family: inherit !important;
@@ -174,18 +155,14 @@
   color: inherit !important;
 }
 
-/* Converted-original sub lines: hidden in the hero (the market currency
-   appears once in the details facts row instead). */
 .product-detail-page .product-hero-price .converted-price {
   display: none !important;
 }
 
-/* History chart scale labels (min / mid / max). */
 .product-detail-page .chart-scale span {
   font-size: 11px !important;
 }
 
-/* Keep the offers count clear of the screen edge. */
 .product-detail-page .product-offer-controls {
   margin-inline-end: 8px;
 }
@@ -210,11 +187,39 @@
 }
 
 .product-hero-cta {
-  margin-block-start: 8px;
+  display: grid;
+  gap: 10px;
+  inline-size: 240px;
+  max-inline-size: 100%;
+  margin-block-start: 10px;
 }
 
 .product-hero-cta .button {
-  min-width: 200px;
+  inline-size: 100%;
+  min-width: 0;
+  justify-content: center;
+}
+
+.product-detail-page .product-hero-cta .button--tonal {
+  background: var(--accent-blue, #4d91d8) !important;
+  border-color: var(--text) !important;
+  color: #10151b !important;
+}
+
+.product-detail-page .product-hero-cta .button--tonal:hover,
+.product-detail-page .product-hero-cta .button--tonal:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--accent-blue, #4d91d8) 82%,
+    #ffffff
+  ) !important;
+  color: #10151b !important;
+}
+
+.product-detail-page .product-hero-cta .button--tonal[data-compare-state="in"] {
+  background: var(--surface-high) !important;
+  border-color: var(--accent-blue, #4d91d8) !important;
+  color: var(--compare-text) !important;
 }
 
 .product-hero-actions {
@@ -222,6 +227,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+  margin-block-start: 10px;
 }
 
 .product-detail-movement {
@@ -254,38 +260,140 @@
   font-size: 12px;
 }
 
-/*  In-page section nav  */
-
-.product-section-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.product-tabs {
+  display: grid;
+  gap: 14px;
+  margin-block: 18px 22px;
 }
 
-.product-section-nav a {
-  padding: 7px 14px;
-  border: 1px solid var(--line);
+.product-tabs [role="tabpanel"][hidden] {
+  display: none !important;
+}
+
+.product-tablist {
+  display: inline-flex;
+  justify-self: start;
+  gap: 4px;
+  padding: 4px;
+  border: 2px solid var(--text);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--surface-container);
+  box-shadow: 3px 3px 0 var(--text);
+}
+
+.product-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.product-tab:hover {
+  color: var(--text);
+}
+
+.product-tab[aria-selected="true"] {
+  background: var(--accent-yellow, #ffeb00);
+  color: #17150f;
+  box-shadow: inset 0 0 0 2px var(--text);
+}
+
+.product-tab:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.product-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 20px;
+  block-size: 20px;
+  padding-inline: 5px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-offers-toolbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 10px;
+}
+
+.product-offers-heading {
+  margin: 0;
   color: var(--text-muted);
   font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  scroll-margin-block-start: 90px;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+  font-weight: 700;
 }
 
-.product-section-nav a:hover,
-.product-section-nav a:focus-visible {
-  border-color: var(--brand);
-  color: var(--brand);
+.product-history-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-end: 12px;
 }
 
-/*  Details section facts  */
+.chart-zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+}
 
-/* The global stylesheet sets table headers at 10px,  11px keeps them legible. */
+.chart-zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 30px;
+  block-size: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.chart-zoom-btn:hover:not(:disabled) {
+  background: var(--surface-high);
+}
+
+.chart-zoom-btn:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+.chart-zoom-btn:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.chart-zoom-btn .glyph {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
 .product-detail-page .offers-table th {
   font-size: 11px !important;
   letter-spacing: 0.3px !important;
@@ -325,13 +433,135 @@
   max-width: 72ch;
 }
 
-/*  Mobile bottom buy bar  */
+.product-specs {
+  margin-block: 18px 20px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-container);
+}
+
+.product-specs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+  margin-block-end: 10px;
+  padding-block-end: 12px;
+  border-block-end: 1px solid var(--line);
+}
+
+.product-specs-head h3 {
+  margin: 0;
+  color: var(--text);
+  font-family: Anton, "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.product-specs-note {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.product-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0 20px;
+  margin: 0;
+}
+
+.product-spec-grid > div {
+  display: grid;
+  grid-template-columns: minmax(84px, 40%) minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding-block: 8px;
+  border-block-end: 1px solid var(--line);
+}
+
+.product-spec-grid dt {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 650;
+}
+
+.product-spec-grid dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.product-specs-source {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.product-specs-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 20px;
+  padding: 2px 0;
+}
+
+.product-specs-empty strong {
+  display: block;
+  color: var(--text);
+  font-size: 13.5px;
+}
+
+.product-specs-empty p {
+  margin: 4px 0 0;
+  max-width: 58ch;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.product-specs-empty .button {
+  flex: none;
+  white-space: nowrap;
+}
+
+.product-specs-signin {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+@media (max-width: 640px) {
+  .product-specs {
+    padding: 14px;
+  }
+
+  .product-spec-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .product-specs-empty {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
 
 .product-mobile-buybar {
   display: none;
 }
-
-/*  Responsive  */
 
 @media (max-width: 900px) {
   .product-detail-page .product-hero {
@@ -349,23 +579,11 @@
   }
 }
 
-/* The sticky bar's product thumbnail is an absolutely positioned layered
-   image ,  out of the flex flow, so the title slid under it. Reserve its
-   38px + gap at the row start. */
-.product-detail-page .sticky-product-identity {
-  padding-inline-start: 48px;
-}
-
-/* The truncated title runs straight into the red price ,  the price
-   anchors to the identity block's far end instead. */
 .product-detail-page .sticky-product-identity > span {
   margin-inline-start: auto;
   padding-inline-start: 16px;
 }
 
-/* Tablet/phone topbar: the page title crumb wrapped onto two lines and
-   crowded the search icon ,  one ellipsized line, like the legacy
-   ≤560px rule. */
 @media (max-width: 1050px) {
   .topbar .breadcrumbs {
     min-width: 0;
@@ -385,8 +603,6 @@
     padding-block-end: 84px;
   }
 
-  /* The DOM enhancement's sticky top bar is replaced by the bottom buy bar
-     on phones (documented behavior change). */
   .sticky-product-bar {
     display: none !important;
   }
@@ -433,10 +649,34 @@
     min-height: 40px;
   }
 
-  .product-section-nav {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-block-end: 4px;
+  .product-mobile-compare {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    inline-size: 42px;
+    block-size: 42px;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--compare-text);
+    cursor: pointer;
+  }
+
+  .product-mobile-compare svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+
+  .product-mobile-compare[data-in-compare] {
+    background: var(--accent-blue);
+    border-color: var(--text);
+    color: #10151b;
+  }
+
+  .product-mobile-compare:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
   }
 }
 
@@ -445,15 +685,6 @@
     scroll-behavior: smooth;
   }
 }
-
-/* ===========================================================================
-   PDP redesign: flat sections, row card offers, pill toggles.
-   The legacy sheets wrap every section in a bordered box and style the
-   offers as a full table,  the platform language is flat sections with
-   1.5px border cards, so the boxes go and the rows become cards.
-   =========================================================================== */
-
-/*  Flat sections: strip the section box + table frame  */
 
 .product-detail-page .content-section {
   border: 0 !important;
@@ -471,8 +702,6 @@
   overflow: visible !important;
 }
 
-/* Empty states inside PDP sections are secondary notes, not heroes , 
-   collapse the legacy viewport height min heights. */
 .product-detail-page .empty-state {
   min-height: 0 !important;
   height: auto !important;
@@ -484,13 +713,6 @@
   align-items: center;
 }
 
-/*  Hero price hierarchy  */
-
-/* The current price reads in DM Sans rather than the global Anton display
-   face: it sits inside a sentence context buy box, not on a badge. The
-   Price component wraps the text in an inline-grid, so the winning rule
-   must target the inner strong ,  the legacy ".product-hero-price strong"
-   Anton rule (0,1,1 !important) loses to this (0,3,1) one. */
 .product-detail-page .product-hero-price > strong .price-display > strong {
   color: var(--text) !important;
   font-family: "DM Sans", Roboto, sans-serif !important;
@@ -501,9 +723,6 @@
   font-variant-numeric: tabular-nums !important;
 }
 
-/* Secondary "Original AED" conversions are noise on the hero, in the
-   struck old price, in target chips, in offers and in the mobile buy
-   bar ,  hide them here. */
 .product-detail-page .product-hero-old-price .converted-price,
 .product-detail-page .product-detail-targets .converted-price,
 .product-detail-page .offer-price .converted-price,
@@ -513,15 +732,10 @@
   display: none !important;
 }
 
-/* The "was" <del> contains a nested <strong> from the Price component, 
-   strike it directly (the inline-grid wrapper stops decoration
-   propagation) and drop the heavy weight. */
 .product-detail-page .product-hero-old-price strong {
   font-weight: 600;
   text-decoration: line-through;
 }
-
-/*  Offers: row cards instead of a bordered table  */
 
 .product-detail-page .offers-table,
 .product-detail-page .offers-table tbody {
@@ -564,7 +778,6 @@
   background: transparent !important;
 }
 
-/* The store name anchors the row,  let it take the leading space. */
 .product-detail-page .offers-table td:first-child {
   flex: 1 1 220px;
   min-width: 0;
@@ -574,7 +787,6 @@
   overflow-wrap: anywhere;
 }
 
-/* The best offer is framed by the brand, not an amber wash. */
 .product-detail-page .offers-table .offer-row--best {
   border-color: var(--brand) !important;
   background: color-mix(
@@ -597,9 +809,6 @@
   margin-inline-start: 0;
 }
 
-/* Price cell: the amount is the loudest element in the row, with the
-   trust flag as a quiet sub line. The .offer-price wrapper is the flex
-   row that used to run "EGP 7,275.60VERIFIED" together ,  stack it. */
 .product-detail-page .offers-table .offer-price {
   display: flex;
   flex-direction: column;
@@ -622,14 +831,11 @@
   color: var(--text-soft);
 }
 
-/* The remaining cells read as quiet metadata. */
 .product-detail-page .offers-table td:nth-child(3) {
   color: var(--text-muted);
   font-size: 12px;
 }
 
-/* An offer without enough history reads "Insufficient history" as a bare
-   string at body size,  give it the scored pill's quiet sibling treatment. */
 .product-detail-page .offers-table .deal-quality:not(.deal-quality--scored) {
   color: var(--text-muted) !important;
   font-size: 11px !important;
@@ -637,9 +843,6 @@
   font-family: "DM Sans", Roboto, sans-serif !important;
 }
 
-/* Empty states inside the page (no offers, no history, alerts): the legacy
-   dashed dropzone with a yellow ring reads as a broken upload box , 
-   flatten to a quiet panel with the brand dot. */
 .product-detail-page .empty-state {
   min-height: 0 !important;
   padding: 24px 20px !important;
@@ -667,8 +870,6 @@
   text-transform: none !important;
 }
 
-/*  Tracking activity: flat rows with hairline separators  */
-
 .product-activity {
   border: 0 !important;
   background: transparent !important;
@@ -676,25 +877,97 @@
 
 .product-activity .product-activity-list {
   list-style: none;
-  margin: 0;
+  margin: 10px 0 0;
   padding: 0;
   display: grid;
+  border-top: 1px solid var(--line);
 }
 
 .product-activity .product-activity-list li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 4px 18px;
-  padding: 11px 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 14px 2px;
 }
 
 .product-activity .product-activity-list li + li {
   border-top: 1px solid var(--line);
 }
 
-/*  Target & email preferences: flat rows, pill toggles  */
+.product-activity-dot {
+  inline-size: 10px;
+  block-size: 10px;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  background: var(--accent-blue);
+}
+
+.product-activity-dot[data-tone="stale"] {
+  background: var(--accent-yellow);
+}
+
+.product-activity-dot[data-tone="unverified"] {
+  background: var(--surface-container);
+}
+
+.product-activity-dot[data-tone="inactive"] {
+  border-color: var(--line-strong);
+  background: var(--surface-high);
+}
+
+.product-activity-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.product-activity-copy strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.product-activity-meta {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-activity-value {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  text-align: end;
+}
+
+.product-activity-value strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.product-activity-state {
+  padding: 2px 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .product-activity .product-activity-list li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .product-activity-value {
+    grid-column: 2;
+    justify-items: start;
+    text-align: start;
+  }
+}
 
 .product-detail-page .tracking-preference-grid {
   gap: 0 !important;
@@ -714,8 +987,6 @@
   border-top: 1px solid var(--line) !important;
 }
 
-/* History store filters: platform pill toggles. Unchecked means the
-   series is hidden ,  fade the pill instead of removing it. */
 .product-detail-page .history-store-controls {
   display: flex;
   flex-wrap: wrap;
@@ -758,7 +1029,6 @@
   opacity: 0.5;
 }
 
-/* Email preferences become the same pill toggles. */
 .product-detail-page .email-preferences {
   display: flex !important;
   flex-wrap: wrap;
@@ -808,12 +1078,6 @@
   color: var(--brand);
 }
 
-/*  Chart & hero polish  */
-
-/* The movement banner states the percentage once ,  the sentence carries
-   it,  the chip repeated it. The banner itself renders as the dashboard
-   feed's movement pill: directional glyph, semantic green/amber, date
-   only (the time of day read as noise). */
 .product-detail-page .product-detail-movement strong {
   display: none;
 }
@@ -852,18 +1116,215 @@
   content: "▲";
 }
 
-/* The chart's y-axis ticks were 11px muted ,  a squint. One step up in
-   both size and brightness makes them comfortably legible. */
+.product-detail-page .product-history-section .history-chart {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 20px;
+  gap: 8px 12px;
+  block-size: 400px;
+  padding: 16px 18px 12px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 14px;
+  background: var(--surface-container);
+}
+
 .product-detail-page .product-history-section .chart-scale {
-  font-size: 12px;
+  position: relative;
+  display: block;
+  padding: 0;
+  font-size: 11.5px;
+  line-height: 1.2;
 }
 
 .product-detail-page .product-history-section .chart-scale span {
-  font-size: 12px !important;
+  position: absolute;
+  inset-inline-end: 10px;
   color: var(--text) !important;
+  font-size: 11.5px !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transform: translateY(-50%);
 }
 
-/* Endpoint date labels used to clip at the plot edges. */
+.product-detail-page .product-history-section .chart-scale span:nth-child(1) {
+  top: 8%;
+}
+
+.product-detail-page .product-history-section .chart-scale span:nth-child(2) {
+  top: 50%;
+}
+
+.product-detail-page .product-history-section .chart-scale span:nth-child(3) {
+  top: 92%;
+}
+
+.product-detail-page .product-history-section .chart-plot {
+  position: relative;
+  min-width: 0;
+  block-size: 100%;
+  border: 0;
+  border-inline-start: 1.5px solid var(--line-strong);
+  border-block-end: 1.5px solid var(--line-strong);
+  border-radius: 0;
+  background-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--text) 13%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 100% 25%;
+  background-position: 0 0;
+}
+
+.product-detail-page .product-history-section .chart-series {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+.product-detail-page .product-history-section .chart-point {
+  inline-size: 10px;
+  block-size: 10px;
+  border: 2px solid var(--surface-container);
+  border-radius: 50%;
+  outline: 0;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 34%, transparent);
+  cursor: default;
+}
+
+.product-detail-page .product-history-section .chart-point::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+
+.product-detail-page .product-history-section .chart-point:hover,
+.product-detail-page .product-history-section .chart-point:focus-visible {
+  z-index: 3;
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.product-detail-page .product-history-section .chart-point-tip {
+  position: absolute;
+  inset-block-end: calc(100% + 12px);
+  inset-inline-start: 50%;
+  z-index: 4;
+  display: grid;
+  gap: 2px;
+  inline-size: max-content;
+  min-inline-size: 0;
+  max-inline-size: min(240px, 58vw);
+  padding: 8px 10px;
+  border: 1.5px solid var(--text);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 3px 3px 0 var(--text);
+  color: var(--text);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: start;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.product-detail-page .product-history-section .chart-point-tip strong {
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-detail-page .product-history-section .chart-point-tip > span {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+}
+
+.product-detail-page
+  .product-history-section
+  .chart-point-tip
+  > span:last-child {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="start"]
+  .chart-point-tip {
+  inset-inline-start: 0;
+  transform: translate(0, 4px);
+}
+
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="end"]
+  .chart-point-tip {
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+  transform: translate(0, 4px);
+}
+
+.product-detail-page
+  .product-history-section
+  .chart-point:hover
+  .chart-point-tip,
+.product-detail-page
+  .product-history-section
+  .chart-point:focus-visible
+  .chart-point-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="start"]:hover
+  .chart-point-tip,
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="start"]:focus-visible
+  .chart-point-tip,
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="end"]:hover
+  .chart-point-tip,
+.product-detail-page
+  .product-history-section
+  .chart-point[data-align="end"]:focus-visible
+  .chart-point-tip {
+  transform: translate(0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-detail-page .product-history-section .chart-point-tip {
+    transition: none;
+  }
+}
+
+.product-detail-page .product-history-section .chart-date-labels {
+  position: static;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-inline: 8%;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
 .product-detail-page .chart-date-labels span {
   max-width: 46%;
   overflow: hidden;
@@ -871,10 +1332,75 @@
   white-space: nowrap;
 }
 
+.chart-checks {
+  margin-block-start: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-container);
+}
+
+.chart-checks-heading {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chart-checks ul {
+  display: grid;
+  gap: 0;
+  max-block-size: 208px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.chart-checks li {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 2px;
+  border-block-start: 1px solid var(--line);
+  font-size: 12.5px;
+}
+
+.chart-checks li:first-child {
+  border-block-start: 0;
+}
+
+.chart-checks-date {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-checks-store {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-checks strong {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 700px) {
+  .product-detail-page .product-history-section .history-chart {
+    grid-template-columns: 74px minmax(0, 1fr);
+    block-size: 340px;
+    padding: 12px 12px 10px;
+  }
+
+  .chart-checks li {
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+}
+
 @media (max-width: 1050px) {
-  /* Tablet and below: cap the media height so the buy block stays in
-     the first viewport (the full bleed image slab filled the whole
-     768px fold before this). */
   .product-detail-page .product-hero-media,
   .product-detail-page .product-hero-image {
     max-height: 320px;

@@ -311,34 +311,44 @@ export function MyProductsPage({
                 ],
               }),
               jsxs("div", {
-                className: "view-mode-switch",
-                role: "group",
-                "aria-label": S.myProductsViewLabel,
+                className: "sort-control view-mode-control",
                 children: [
-                  jsxs("button", {
-                    type: "button",
-                    className: te === "table" ? "is-selected" : "",
-                    "aria-pressed": te === "table",
-                    onClick: () => {
-                      (be("table"),
-                        localStorage.setItem("pt-product-view", "table"));
-                    },
-                    children: [
-                      jsx(Icon, { name: "list" }),
-                      jsx("span", { children: S.myProductsTable }),
-                    ],
+                  jsx("span", {
+                    className: "sort-control-label",
+                    id: "my-products-view-label",
+                    children: S.myProductsViewLabel,
                   }),
-                  jsxs("button", {
-                    type: "button",
-                    className: te === "cards" ? "is-selected" : "",
-                    "aria-pressed": te === "cards",
-                    onClick: () => {
-                      (be("cards"),
-                        localStorage.setItem("pt-product-view", "cards"));
-                    },
+                  jsxs("div", {
+                    className: "view-mode-switch",
+                    role: "group",
+                    "aria-labelledby": "my-products-view-label",
                     children: [
-                      jsx(Icon, { name: "grid" }),
-                      jsx("span", { children: S.myProductsCards }),
+                      jsxs("button", {
+                        type: "button",
+                        className: te === "table" ? "is-selected" : "",
+                        "aria-pressed": te === "table",
+                        onClick: () => {
+                          (be("table"),
+                            localStorage.setItem("pt-product-view", "table"));
+                        },
+                        children: [
+                          jsx(Icon, { name: "list" }),
+                          jsx("span", { children: S.myProductsTable }),
+                        ],
+                      }),
+                      jsxs("button", {
+                        type: "button",
+                        className: te === "cards" ? "is-selected" : "",
+                        "aria-pressed": te === "cards",
+                        onClick: () => {
+                          (be("cards"),
+                            localStorage.setItem("pt-product-view", "cards"));
+                        },
+                        children: [
+                          jsx(Icon, { name: "grid" }),
+                          jsx("span", { children: S.myProductsCards }),
+                        ],
+                      }),
                     ],
                   }),
                 ],
@@ -417,12 +427,25 @@ export function MyProductsPage({
                     })
                   : jsx("div", {
                       className: "tracking-cards",
-                      children: Q.map((B) =>
+                      children: Q.map((B, index) =>
                         jsxs(
                           "article",
                           {
-                            className: "tracking-card",
+                            className: `tracking-card tracking-card--c${index % 4}`,
                             children: [
+                              jsx("div", {
+                                className: "tracking-card-media",
+                                "aria-hidden": true,
+                                children: jsx("img", {
+                                  src:
+                                    index % 2 === 0
+                                      ? "/dealio-context/illustrations/product-box.svg"
+                                      : "/dealio-context/illustrations/package-box.svg",
+                                  alt: "",
+                                  loading: "lazy",
+                                  decoding: "async",
+                                }),
+                              }),
                               jsxs("label", {
                                 className: "check-filter",
                                 children: [
@@ -443,62 +466,90 @@ export function MyProductsPage({
                                             ),
                                       ),
                                   }),
-                                  S.myProductsSelectLabel(B.productName),
-                                ],
-                              }),
-                              jsxs("span", {
-                                className: `status ${B.isActive ? "status--active" : "status--paused"}`,
-                                children: [
-                                  jsx("i", {}),
-                                  B.isActive
-                                    ? S.statusTracking
-                                    : S.statusPaused,
-                                ],
-                              }),
-                              jsx("button", {
-                                className: "product-link",
-                                onClick: () => f(B.productId),
-                                children: B.productName,
-                              }),
-                              jsxs("small", {
-                                children: [
-                                  B.storeName || "\u2014",
-                                  B.marketCountry
-                                    ? ` \xB7 ${B.marketCountry}`
-                                    : "",
-                                ],
-                              }),
-                              jsx(Price, {
-                                amount: B.currentPrice,
-                                currencyCode:
-                                  B.currentPriceCurrencyCode || B.currencyCode,
-                              }),
-                              jsxs("span", {
-                                children: [
-                                  S.myProductsSortTargetPrice + " ",
-                                  jsx(Price, {
-                                    amount: B.targetPrice,
-                                    currencyCode: B.currencyCode,
+                                  jsx("span", {
+                                    className: "sr-only",
+                                    children: S.myProductsSelectLabel(
+                                      B.productName,
+                                    ),
                                   }),
                                 ],
                               }),
                               jsxs("div", {
-                                className: "tracking-card-actions",
+                                className: "tracking-card-body",
                                 children: [
-                                  jsx("button", {
-                                    className: "text-button",
-                                    onClick: () => p(B.productId),
-                                    children: N.includes(B.productId)
-                                      ? S.discoverRemoveCompare
-                                      : S.discoverAddCompare,
-                                  }),
-                                  jsxs("button", {
-                                    className: "text-button",
-                                    onClick: () => f(B.productId),
+                                  jsxs("span", {
+                                    className: `status ${B.isActive ? "status--active" : "status--paused"} comic-note ${B.isActive ? "comic-note--green" : "comic-note--warm"}`,
                                     children: [
-                                      S.myProductsViewProduct,
-                                      " ",
-                                      jsx(Icon, { name: "arrow" }),
+                                      jsx("i", {}),
+                                      B.isActive
+                                        ? S.statusTracking
+                                        : S.statusPaused,
+                                    ],
+                                  }),
+                                  jsx("button", {
+                                    className: "product-link",
+                                    onClick: () => f(B.productId),
+                                    children: B.productName,
+                                  }),
+                                  jsxs("small", {
+                                    children: [
+                                      B.storeName || "\u2014",
+                                      B.marketCountry
+                                        ? ` \xB7 ${B.marketCountry}`
+                                        : "",
+                                    ],
+                                  }),
+                                  jsxs("div", {
+                                    className: "tracking-card-pricing",
+                                    children: [
+                                      jsx(Price, {
+                                        amount:
+                                          B.currentPriceInDisplayCurrency ??
+                                          B.currentPrice,
+                                        currencyCode:
+                                          B.currentPriceInDisplayCurrency !=
+                                          null
+                                            ? o
+                                            : B.currentPriceCurrencyCode ||
+                                              B.currencyCode,
+                                      }),
+                                      jsxs("span", {
+                                        className: "tracking-card-target",
+                                        children: [
+                                          S.myProductsSortTargetPrice + " ",
+                                          jsx(Price, {
+                                            amount:
+                                              B.targetPriceInDisplayCurrency ??
+                                              B.targetPrice,
+                                            currencyCode:
+                                              B.targetPriceInDisplayCurrency !=
+                                              null
+                                                ? o
+                                                : B.currencyCode,
+                                          }),
+                                        ],
+                                      }),
+                                    ],
+                                  }),
+                                  jsxs("div", {
+                                    className: "tracking-card-actions",
+                                    children: [
+                                      jsx("button", {
+                                        className: "text-button compare-text",
+                                        onClick: () => p(B.productId),
+                                        children: N.includes(B.productId)
+                                          ? S.discoverRemoveCompare
+                                          : S.discoverAddCompare,
+                                      }),
+                                      jsxs("button", {
+                                        className: "text-button",
+                                        onClick: () => f(B.productId),
+                                        children: [
+                                          S.myProductsViewProduct,
+                                          " ",
+                                          jsx(Icon, { name: "arrow" }),
+                                        ],
+                                      }),
                                     ],
                                   }),
                                 ],

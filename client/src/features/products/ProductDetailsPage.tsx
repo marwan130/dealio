@@ -3,7 +3,10 @@ import { Dropdown } from "../../components/ui/Dropdown";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { Icon } from "../../components/ui/Icon";
 import { Price } from "../../components/ui/Price";
-import { ProductImage } from "../../components/ui/ProductImage";
+import {
+  PRODUCT_ILLUSTRATION_FALLBACK,
+  ProductImage,
+} from "../../components/ui/ProductImage";
 import { apiFetch, asUuid } from "../../lib/api";
 import { convertCurrency } from "../../lib/currency-client";
 import type {
@@ -24,18 +27,16 @@ import "./product-details.css";
 
 const SERIES_COLORS = ["#ff6257", "#4d91d8", "#55a878", "#f28c38"];
 const HISTORY_PAGE_SIZE = 200;
+const MAX_CHART_ZOOM = 8;
 const DAY_MS = 864e5;
 const STALE_AFTER_DAYS = 14;
 
-// The chart date labels use month/day style,  the minified format helper only
-// declares the dateStyle/timeStyle subset, so the options pass through a cast.
 type DateFormatOptions = Parameters<typeof formatDateTime>[1];
 const CHART_DATE_OPTIONS = {
   month: "short",
   day: "numeric",
 } as unknown as DateFormatOptions;
 
-// Search-result offer passed when the page renders before a catalog id exists.
 interface SearchCandidate {
   name?: string;
   description?: string;
@@ -47,7 +48,6 @@ interface SearchCandidate {
   isVerified?: boolean;
 }
 
-// Payload handed to the track price dialog (same shape as before the redesign).
 interface TrackPayload {
   name?: string;
   productUrl?: string;
@@ -57,6 +57,11 @@ interface TrackPayload {
   price?: number | null;
   isVerified?: boolean;
   existingProductId?: string;
+}
+
+interface SpecSheet {
+  fields?: { label: string; value: string }[];
+  updatedAt?: string | null;
 }
 
 interface ProductDetailsPageProps {
@@ -80,9 +85,6 @@ interface Movement {
 
 type OfferTrust = "inactive" | "noprice" | "stale" | "unverified" | "verified";
 
-// Offer trust from the actual backend status model: HasVerifiedPrice tells
-// whether the price was verified on the last scrape, LastScrapedAt how
-// recently, and a listing with no stored observation has nothing to show.
 function offerTrust(listing: ListingResponse): OfferTrust {
   if (!listing.isActive) return "inactive";
   if (listing.currentPrice == null) return "noprice";
@@ -99,10 +101,6 @@ function offerTrust(listing: ListingResponse): OfferTrust {
 
 type StoreObservation = PriceObservation & { storeName: string };
 
-// Hero movement derived from already fetched observations only. Each store is
-// compared strictly against itself (same store, same currency, 24h–30d gap),
-// so no price trains against a rival store, and the label is anchored to the
-// store that currently holds the floor.
 function heroMovement(observations: StoreObservation[]): Movement | null {
   if (!observations.length) return null;
   const byCurrency = new Map<string, StoreObservation[]>();
@@ -145,8 +143,6 @@ function heroMovement(observations: StoreObservation[]): Movement | null {
     });
   }
   if (!movements.length) return null;
-  // Prefer the decrease at the store now holding the lowest price,  fall back
-  // to the first detected movement otherwise.
   const floorStoreName = [...byStore.entries()]
     .map(
       ([store, list]) =>
@@ -197,6 +193,10 @@ export function ProductDetailsPage({
   const [pageError, setPageError] = useState("");
   const [range, setRange] = useState("30");
   const [hiddenStores, setHiddenStores] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<"offers" | "history">("offers");
+  const [chartZoom, setChartZoom] = useState(1);
+  const [specSheet, setSpecSheet] = useState<SpecSheet | null>(null);
+  const [specsResearching, setSpecsResearching] = useState(false);
 
   async function saveTarget(
     tracking: TrackingResponse,
@@ -254,6 +254,20 @@ export function ProductDetailsPage({
       notify(err instanceof Error ? err.message : v.actionFailed);
     }
   }
+  async function researchSpecs() {
+    if (!token || !asUuid(id) || specsResearching) return;
+    setSpecsResearching(true);
+    try {
+      const sheet = await apiFetch(`/v1/products/${id}/specs/generate`, {
+        method: "POST",
+      });
+      if (sheet) setSpecSheet(sheet);
+    } catch {
+      notify(v.compareSpecsFailed);
+    } finally {
+      setSpecsResearching(false);
+    }
+  }
 
   useEffect(() => {
     let alive = true;
@@ -263,9 +277,8 @@ export function ProductDetailsPage({
     setOffers([]);
     setOffersLoaded(false);
     setTrackings([]);
+    setSpecSheet(null);
     if (!asUuid(id)) {
-      // "candidate" is a search-result offer with no catalog id yet,  the page
-      // renders from the card data instead of /v1/products/:id.
       if (id === "candidate" && candidate?.productUrl) {
         setProduct({
           productId: null,
@@ -295,13 +308,15 @@ export function ProductDetailsPage({
         const loaded = await apiFetch(`/v1/products/${id}`);
         if (!alive) return;
         setProduct(loaded);
-        const [listings, trackingRows] = await Promise.all([
+        const [listings, trackingRows, sheet] = await Promise.all([
           apiFetch(`/v1/listings/by-product/${id}`).catch(() => []),
           token
             ? apiFetch("/v1/tracking").catch(() => [])
             : Promise.resolve([]),
+          apiFetch(`/v1/products/${id}/specs`).catch(() => null),
         ]);
         if (!alive) return;
+        setSpecSheet(sheet || null);
         setTrackings(
           Array.isArray(trackingRows)
             ? trackingRows.filter((t: TrackingResponse) => t.productId === id)
@@ -327,9 +342,6 @@ export function ProductDetailsPage({
     };
   }, [id, token, candidate, v.productDetailsUnavailable]);
 
-  // Per-offer price history. Very long histories are sampled (start /
-  // middle / end pages) so the shape of the whole range stays visible
-  // without hammering the API.
   useEffect(() => {
     if (!offers.length) {
       setHistories({});
@@ -450,10 +462,8 @@ export function ProductDetailsPage({
         ? v.productPriceSource(product.storeName ?? "")
         : v.productOfferUnverified;
 
-  // Struck-through "old price" in the buy box: the observation recorded for the
-  // best offer right before its latest one, from the already fetched history.
   const currentOfferHistory = currentOffer
-    ? [...(histories[currentOffer.listingId] ?? [])].sort(
+    ? (histories[currentOffer.listingId] ?? []).toSorted(
         (a, b) => +new Date(a.recordedAt) - +new Date(b.recordedAt),
       )
     : [];
@@ -509,18 +519,39 @@ export function ProductDetailsPage({
   );
   const storeNames = [...new Set(observations.map((obs) => obs.storeName))];
   const chartCurrencies = [...new Set(visible.map((obs) => obs.currencyCode))];
-  const minPrice = visible.length
-    ? Math.min(...visible.map((o) => o.price))
-    : 0;
-  const maxPrice = visible.length
-    ? Math.max(...visible.map((o) => o.price))
-    : 0;
-  const minTime = visible.length ? +new Date(visible[0].recordedAt) : 0;
-  const maxTime = visible.length
+
+  const spanStart = visible.length ? +new Date(visible[0].recordedAt) : 0;
+  const spanEnd = visible.length
     ? +new Date(visible[visible.length - 1].recordedAt)
     : 0;
-  // The x range insets the first/last samples 8% from the plot edges ,  at
-  // 5% the endpoint marker sat close enough to the border to read clipped.
+  const windowAt = (factor: number) =>
+    factor <= 1
+      ? visible
+      : visible.filter(
+          (obs) =>
+            +new Date(obs.recordedAt) >=
+            spanEnd - (spanEnd - spanStart) / factor,
+        );
+
+  const zoom =
+    visible.length < 2 || windowAt(chartZoom).length >= 2 ? chartZoom : 1;
+  const chartRows = windowAt(zoom);
+  const canZoomIn =
+    zoom < MAX_CHART_ZOOM &&
+    spanEnd > spanStart &&
+    windowAt(zoom * 2).length >= 2;
+
+  const minPrice = chartRows.length
+    ? Math.min(...chartRows.map((o) => o.price))
+    : 0;
+  const maxPrice = chartRows.length
+    ? Math.max(...chartRows.map((o) => o.price))
+    : 0;
+  const minTime = chartRows.length ? +new Date(chartRows[0].recordedAt) : 0;
+  const maxTime = chartRows.length
+    ? +new Date(chartRows[chartRows.length - 1].recordedAt)
+    : 0;
+
   const xPct = (obs: StoreObservation) =>
     maxTime === minTime
       ? 50
@@ -530,11 +561,6 @@ export function ProductDetailsPage({
       ? 50
       : 92 - ((obs.price - minPrice) / (maxPrice - minPrice)) * 84;
 
-  // History rows are stored in the listing currency (often AED) while the
-  // hero shows the display market currency (e.g. EGP) through the Price
-  // component's display currency conversion. Load the same server side
-  // rate snapshot here and label the chart in the display currency so the
-  // page speaks one money language.
   const displayCurrency = useContext(DisplayCurrencyContext);
   const chartTarget =
     displayCurrency || heroCurrency || chartCurrencies[0] || "";
@@ -562,30 +588,13 @@ export function ProductDetailsPage({
       ? formatDisplayValue(price * rate, chartTarget)
       : formatDisplayValue(price, code);
   };
-  const seriesPath = (storeName: string) => {
-    const rows = visible.filter((obs) => obs.storeName === storeName);
-    const gaps = rows
-      .slice(1)
+
+  const seriesPath = () =>
+    chartRows
       .map(
-        (obs, index) =>
-          +new Date(obs.recordedAt) - +new Date(rows[index].recordedAt),
+        (obs, index) => `${index === 0 ? "M" : "L"} ${xPct(obs)} ${yPct(obs)}`,
       )
-      .filter((gap) => gap > 0)
-      .sort((a, b) => a - b);
-    const typicalGap = gaps.length
-      ? gaps[Math.floor((gaps.length - 1) / 2)]
-      : 0;
-    return rows
-      .map((obs, index) => {
-        const leap =
-          index > 0 &&
-          typicalGap > 0 &&
-          +new Date(obs.recordedAt) - +new Date(rows[index - 1].recordedAt) >
-            typicalGap * 2.5;
-        return `${index === 0 || leap ? "M" : "L"} ${xPct(obs)} ${yPct(obs)}`;
-      })
       .join(" ");
-  };
   const bestListingId =
     visibleOffers.find(
       (listing) =>
@@ -613,13 +622,17 @@ export function ProductDetailsPage({
     return <div className="loading-surface">{v.productDetailsLoading}</div>;
   }
 
-  const sectionNavItems = [
-    { href: "#offers", label: v.productTabOffers },
-    { href: "#history", label: v.productTabHistory },
-    ...(product.description
-      ? [{ href: "#details", label: v.productTabDetails }]
-      : []),
-    { href: "#alerts", label: v.productTabAlerts },
+  const tabs = [
+    {
+      key: "offers" as const,
+      label: v.productNavOffers,
+      count: visibleOffers.length,
+    },
+    {
+      key: "history" as const,
+      label: v.productNavHistory,
+      count: visible.length,
+    },
   ];
 
   return (
@@ -629,11 +642,6 @@ export function ProductDetailsPage({
         {v.compareBackToProducts}
       </button>
 
-      {/*
-        product-hero and its inner class hooks (.product-hero-image img,
-        .product-hero-price strong, .product-hero-actions button) feed
-        product details enhancements.ts (sticky top bar + activity section).
-      */}
       <header className="product-hero">
         <div className="product-hero-media">
           <div className="product-hero-image">
@@ -644,6 +652,7 @@ export function ProductDetailsPage({
                 productId={product.productId ?? undefined}
                 alt={product.name}
                 layered
+                fallback={PRODUCT_ILLUSTRATION_FALLBACK}
               />
             ) : (
               <div
@@ -651,12 +660,13 @@ export function ProductDetailsPage({
                 role="img"
                 aria-label={v.productImageMissing}
               >
-                <span aria-hidden="true">
-                  {(product.brand || product.name || "?")
-                    .trim()
-                    .charAt(0)
-                    .toUpperCase()}
-                </span>
+                <img
+                  className="product-illustration"
+                  src={PRODUCT_ILLUSTRATION_FALLBACK}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
               </div>
             )}
           </div>
@@ -703,7 +713,7 @@ export function ProductDetailsPage({
           <p className="product-hero-price-source">{heroPriceLabel}</p>
           {movement ? (
             <p
-              className={`product-detail-movement product-detail-movement--${movement.dir}`}
+              className={`product-detail-movement product-detail-movement--${movement.dir} comic-note ${movement.dir === "down" ? "comic-note--green" : "comic-note--warm"}`}
             >
               <strong>
                 {movement.dir === "down" ? "↓" : "↑"} {movement.percent}%
@@ -713,8 +723,6 @@ export function ProductDetailsPage({
                   ? v.productMovementDown(movement.percent, movement.since)
                   : v.productMovementUp(movement.percent, movement.since)}
               </span>
-              {/* Store name intentionally omitted: "Verified at" above and the
-                    offer row already carry it ,  one mention per surface. */}
             </p>
           ) : null}
           <div className="product-hero-cta">
@@ -727,11 +735,10 @@ export function ProductDetailsPage({
                 {v.discoverTrackPrice}
               </button>
             ) : null}
-          </div>
-          <div className="product-hero-actions">
             {isCatalog ? (
               <button
                 className="button button--tonal"
+                data-compare-state={compareIds.includes(id) ? "in" : "out"}
                 onClick={() => onCompare(id)}
               >
                 {compareIds.includes(id)
@@ -739,18 +746,18 @@ export function ProductDetailsPage({
                   : v.discoverAddCompare}
               </button>
             ) : null}
+          </div>
+          <div className="product-hero-actions">
             <a
               className="quiet-link"
               href={isCatalog ? "#offers" : (product.productUrl ?? "#")}
               target={isCatalog ? undefined : "_blank"}
               rel="noreferrer"
+              onClick={isCatalog ? () => setActiveTab("offers") : undefined}
             >
               {v.compareViewProduct} <Icon name="external" />
             </a>
           </div>
-          {/* The label only makes sense once a target exists,  for signed out
-              visitors the preferences section below carries the sign-in
-              prompt, so no chip here. */}
           {trackings.length ? (
             <div className="product-detail-targets">
               <strong>{v.colTargetPrice}</strong>
@@ -774,343 +781,473 @@ export function ProductDetailsPage({
         </div>
       </header>
 
-      <nav
-        className="product-section-nav"
-        aria-label={v.breadcrumbProductDetails}
-      >
-        {sectionNavItems.map((item) => (
-          <a key={item.href} href={item.href}>
-            {item.label}
-          </a>
-        ))}
-      </nav>
+      <div className="product-tabs">
+        <div
+          className="product-tablist"
+          role="tablist"
+          aria-label={v.breadcrumbProductDetails}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              role="tab"
+              id={`tab-${tab.key}`}
+              data-tab={tab.key}
+              className="product-tab"
+              aria-selected={activeTab === tab.key}
+              aria-controls={`panel-${tab.key}`}
+              tabIndex={activeTab === tab.key ? 0 : -1}
+              onClick={() => setActiveTab(tab.key)}
+              onKeyDown={(event) => {
+                if (
+                  !["ArrowLeft", "ArrowRight", "Home", "End"].includes(
+                    event.key,
+                  )
+                )
+                  return;
+                event.preventDefault();
+                const current =
+                  event.currentTarget.dataset.tab === "history"
+                    ? "history"
+                    : "offers";
+                const next =
+                  event.key === "Home"
+                    ? "offers"
+                    : event.key === "End"
+                      ? "history"
+                      : current === "offers"
+                        ? "history"
+                        : "offers";
+                setActiveTab(next);
+                event.currentTarget.parentElement
+                  ?.querySelector<HTMLButtonElement>(`[data-tab="${next}"]`)
+                  ?.focus();
+              }}
+            >
+              {tab.label}
+              {tab.count ? (
+                <span className="product-tab-count" aria-hidden="true">
+                  {tab.count}
+                </span>
+              ) : null}
+            </button>
+          ))}
+        </div>
 
-      <section className="content-section product-detail-section" id="offers">
-        <div className="section-heading">
-          <div>
-            <h2>{v.storeOffersHeading}</h2>
-          </div>
-          <div className="product-offer-controls">
+        <section
+          className="content-section product-detail-section product-offers-section"
+          id="offers"
+          role="tabpanel"
+          aria-labelledby="tab-offers"
+          hidden={activeTab !== "offers"}
+        >
+          <div className="product-offers-toolbar">
+            <p className="product-offers-heading">{v.storeOffersHeading}</p>
             <span className="results-count">
               {v.productOffersCount(visibleOffers.length)}
             </span>
           </div>
-        </div>
-        {visibleOffers.length ? (
-          <div className="table-wrap">
-            <table className="offers-table">
-              <thead>
-                <tr>
-                  <th>{v.colStore}</th>
-                  <th>{v.colCurrentPrice}</th>
-                  <th>{v.productLastChecked}</th>
-                  <th>{v.dealQualityHeading}</th>
-                  <th>{v.colStatus}</th>
-                  <th>{v.productMonitoring}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleOffers.map((listing) => {
-                  const trust = offerTrust(listing);
-                  const isBest = listing.listingId === bestListingId;
-                  return (
-                    <tr
-                      key={listing.listingId}
-                      className={isBest ? "offer-row--best" : ""}
-                    >
-                      <td>
-                        <a
-                          className="product-link"
-                          href={listing.productUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {listing.storeName}
-                          <Icon name="external" />
-                        </a>
-                        {isBest ? (
-                          <span className="offer-best-flag">
-                            {v.productOfferBest}
-                          </span>
-                        ) : null}
-                      </td>
-                      <td className="price-cell">
-                        <div className="offer-price">
-                          <Price
-                            amount={listing.currentPrice}
-                            currencyCode={listing.currencyCode}
-                            className={undefined}
-                          />
-                          <span
-                            className={`offer-flag offer-flag--${trust}`}
-                            title={
-                              trust === "verified"
-                                ? v.productOfferVerifiedHint
+          {visibleOffers.length ? (
+            <div className="table-wrap">
+              <table className="offers-table">
+                <thead>
+                  <tr>
+                    <th>{v.colStore}</th>
+                    <th>{v.colCurrentPrice}</th>
+                    <th>{v.productLastChecked}</th>
+                    <th>{v.dealQualityHeading}</th>
+                    <th>{v.colStatus}</th>
+                    <th>{v.productMonitoring}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleOffers.map((listing) => {
+                    const trust = offerTrust(listing);
+                    const isBest = listing.listingId === bestListingId;
+                    return (
+                      <tr
+                        key={listing.listingId}
+                        className={isBest ? "offer-row--best" : ""}
+                        data-offer-row=""
+                        data-offer-store={listing.storeName}
+                        data-offer-checked={formatDateOnly(
+                          listing.lastScrapedAt,
+                        )}
+                        data-offer-trust={trust}
+                      >
+                        <td>
+                          <a
+                            className="product-link"
+                            href={listing.productUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {listing.storeName}
+                            <Icon name="external" />
+                          </a>
+                          {isBest ? (
+                            <span className="offer-best-flag">
+                              {v.productOfferBest}
+                            </span>
+                          ) : null}
+                        </td>
+                        <td className="price-cell">
+                          <div className="offer-price">
+                            <Price
+                              amount={listing.currentPrice}
+                              currencyCode={listing.currencyCode}
+                              className={undefined}
+                            />
+                            <span
+                              className={`offer-flag offer-flag--${trust}`}
+                              title={
+                                trust === "verified"
+                                  ? v.productOfferVerifiedHint
+                                  : trust === "stale"
+                                    ? v.productOfferStaleHint
+                                    : trust === "unverified"
+                                      ? v.productOfferUnverifiedHint
+                                      : v.productOfferNoPriceHint
+                              }
+                            >
+                              {trust === "verified"
+                                ? v.productOfferVerified
                                 : trust === "stale"
-                                  ? v.productOfferStaleHint
+                                  ? v.productOfferStale
                                   : trust === "unverified"
-                                    ? v.productOfferUnverifiedHint
-                                    : v.productOfferNoPriceHint
+                                    ? v.productOfferUnverified
+                                    : trust === "inactive"
+                                      ? v.productInactiveListing
+                                      : v.productOfferNoPrice}
+                            </span>
+                          </div>
+                        </td>
+                        <td>{formatDateOnly(listing.lastScrapedAt)}</td>
+                        <td>
+                          <span
+                            className={`deal-quality${listing.dealQuality?.score != null ? " deal-quality--scored" : ""}`}
+                            title={v.dealQualityTooltip}
+                            aria-label={
+                              listing.dealQuality?.score != null
+                                ? `${v.dealQualityScoreLabel(listing.dealQuality.score)}. ${v.dealQualityTooltip}`
+                                : v.dealQualityInsufficient
                             }
                           >
-                            {trust === "verified"
-                              ? v.productOfferVerified
-                              : trust === "stale"
-                                ? v.productOfferStale
-                                : trust === "unverified"
-                                  ? v.productOfferUnverified
-                                  : trust === "inactive"
-                                    ? v.productInactiveListing
-                                    : v.productOfferNoPrice}
+                            {listing.dealQuality?.score != null
+                              ? v.dealQualityScoreLabel(
+                                  listing.dealQuality.score,
+                                )
+                              : v.dealQualityInsufficient}
                           </span>
-                        </div>
-                      </td>
-                      <td>{formatDateOnly(listing.lastScrapedAt)}</td>
-                      <td>
-                        <span
-                          className={`deal-quality${listing.dealQuality?.score != null ? " deal-quality--scored" : ""}`}
-                          title={v.dealQualityTooltip}
-                          aria-label={
-                            listing.dealQuality?.score != null
-                              ? `${v.dealQualityScoreLabel(listing.dealQuality.score)}. ${v.dealQualityTooltip}`
-                              : v.dealQualityInsufficient
-                          }
-                        >
-                          {listing.dealQuality?.score != null
-                            ? v.dealQualityScoreLabel(listing.dealQuality.score)
-                            : v.dealQualityInsufficient}
-                        </span>
-                      </td>
-                      <td>
-                        <span
-                          className={`status ${listing.isActive ? "status--active" : "status--paused"}`}
-                        >
-                          <i />
-                          {listing.isActive
-                            ? v.productActiveListing
-                            : v.productInactiveListing}
-                        </span>
-                      </td>
-                      <td>
-                        {token && trackings.length > 0 ? (
-                          <button
-                            className="text-button"
-                            disabled={!listing.isActive}
-                            onClick={() => toggleOfferExclusion(listing)}
+                        </td>
+                        <td>
+                          <span
+                            className={`status ${listing.isActive ? "status--active" : "status--paused"}`}
                           >
-                            {listing.isExcluded
-                              ? v.productIncludeOffer
-                              : v.productExcludeOffer}
-                          </button>
-                        ) : listing.isExcluded ? (
-                          <span className="status status--paused">
                             <i />
-                            {v.productExcluded}
+                            {listing.isActive
+                              ? v.productActiveListing
+                              : v.productInactiveListing}
                           </span>
-                        ) : null}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <EmptyState
-            title={v.productNoStoredOffers}
-            body={v.productNoStoredOffersBody}
-            action={undefined}
-          />
-        )}
-      </section>
+                        </td>
+                        <td>
+                          {token && trackings.length > 0 ? (
+                            <button
+                              className="text-button"
+                              disabled={!listing.isActive}
+                              onClick={() => toggleOfferExclusion(listing)}
+                            >
+                              {listing.isExcluded
+                                ? v.productIncludeOffer
+                                : v.productExcludeOffer}
+                            </button>
+                          ) : listing.isExcluded ? (
+                            <span className="status status--paused comic-note comic-note--warm">
+                              <i />
+                              {v.productExcluded}
+                            </span>
+                          ) : null}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState
+              title={v.productNoStoredOffers}
+              body={v.productNoStoredOffersBody}
+              action={undefined}
+            />
+          )}
+        </section>
 
-      <section
-        className="content-section product-detail-section product-history-section"
-        id="history"
-      >
-        <div className="section-heading product-history-heading">
-          <div>
-            <h2>{v.priceHistory}</h2>
-          </div>
-          <Dropdown
-            className="filter-dropdown range-select"
-            ariaLabel={v.priceHistory}
-            placeholder={undefined}
-            value={range}
-            options={[
-              { value: "7", label: v.productHistoryPeriod7 },
-              { value: "30", label: v.compareHistoryPeriod30 },
-              { value: "90", label: v.compareHistoryPeriod90 },
-              { value: "365", label: v.compareHistoryPeriod365 },
-              { value: "all", label: v.compareHistoryPeriodAll },
-            ]}
-            onChange={(next: string) => setRange(next)}
-          />
-        </div>
-
-        {storeNames.length > 1 ? (
-          <div
-            className="history-store-controls"
-            role="group"
-            aria-label={v.productHistoryByStore}
-          >
-            {storeNames.map((storeName, index) => (
-              <label key={storeName}>
-                <input
-                  type="checkbox"
-                  checked={!hiddenStores.includes(storeName)}
-                  onChange={() =>
-                    setHiddenStores((current) =>
-                      current.includes(storeName)
-                        ? current.filter((s) => s !== storeName)
-                        : [...current, storeName],
-                    )
-                  }
-                />
-                <i className={`legend-dot legend-dot--${index % 4}`} />
-                {storeName}
-              </label>
-            ))}
-          </div>
-        ) : null}
-
-        {historyLoading ? (
-          <div
-            className="skeleton-box"
-            style={{ height: "220px", borderRadius: "8px", margin: "14px 0" }}
-          />
-        ) : historyError && !visible.length ? (
-          <EmptyState
-            title={v.compareHistoryHeading}
-            body={historyError}
-            action={
-              <button
-                className="button button--quiet"
-                onClick={() => setHistoryReloadTick((tick) => tick + 1)}
+        <section
+          className="content-section product-detail-section product-history-section"
+          id="history"
+          role="tabpanel"
+          aria-labelledby="tab-history"
+          hidden={activeTab !== "history"}
+        >
+          <div className="product-history-toolbar">
+            <Dropdown
+              className="filter-dropdown range-select"
+              ariaLabel={v.priceHistory}
+              placeholder={undefined}
+              value={range}
+              options={[
+                { value: "7", label: v.productHistoryPeriod7 },
+                { value: "30", label: v.compareHistoryPeriod30 },
+                { value: "90", label: v.compareHistoryPeriod90 },
+                { value: "365", label: v.compareHistoryPeriod365 },
+                { value: "all", label: v.compareHistoryPeriodAll },
+              ]}
+              onChange={(next: string) => setRange(next)}
+            />
+            {visible.length && chartCurrencies.length === 1 ? (
+              <div
+                className="chart-zoom"
+                role="group"
+                aria-label={v.productChartZoom}
               >
-                {v.tryAgain}
-              </button>
-            }
-          />
-        ) : visible.length ? (
-          <>
-            {historyError ? (
-              <p className="verification-note" role="status">
-                {v.productHistoryPartial}
-              </p>
+                <button
+                  type="button"
+                  className="chart-zoom-btn"
+                  aria-label={v.productChartZoomOut}
+                  title={v.productChartZoomOut}
+                  disabled={zoom <= 1}
+                  onClick={() => setChartZoom(Math.max(1, zoom / 2))}
+                >
+                  <Icon name="minus" />
+                </button>
+                <button
+                  type="button"
+                  className="chart-zoom-btn"
+                  aria-label={v.productChartZoomIn}
+                  title={v.productChartZoomIn}
+                  disabled={!canZoomIn}
+                  onClick={() =>
+                    setChartZoom(Math.min(MAX_CHART_ZOOM, zoom * 2))
+                  }
+                >
+                  <Icon name="plus" />
+                </button>
+              </div>
             ) : null}
-            {historySampled ? (
-              <p className="verification-note" role="status">
-                {v.productHistorySampled}
-              </p>
-            ) : null}
-            {chartCurrencies.length === 1 ? (
-              <>
-                <div className="history-chart">
-                  <div className="chart-scale" aria-hidden="true">
-                    <span>{chartDisplay(maxPrice, chartCurrencies[0])}</span>
-                    <span>
-                      {chartDisplay(
-                        (minPrice + maxPrice) / 2,
-                        chartCurrencies[0],
+          </div>
+          <p className="sr-only" aria-live="polite">
+            {v.productChartWindow(chartRows.length, visible.length)}
+          </p>
+
+          {storeNames.length > 1 ? (
+            <div
+              className="history-store-controls"
+              role="group"
+              aria-label={v.productHistoryByStore}
+            >
+              {storeNames.map((storeName, index) => (
+                <label key={storeName}>
+                  <input
+                    type="checkbox"
+                    checked={!hiddenStores.includes(storeName)}
+                    onChange={() =>
+                      setHiddenStores((current) =>
+                        current.includes(storeName)
+                          ? current.filter((s) => s !== storeName)
+                          : [...current, storeName],
+                      )
+                    }
+                  />
+                  <i className={`legend-dot legend-dot--${index % 4}`} />
+                  {storeName}
+                </label>
+              ))}
+            </div>
+          ) : null}
+
+          {historyLoading ? (
+            <div
+              className="skeleton-box"
+              style={{ height: "220px", borderRadius: "8px", margin: "14px 0" }}
+            />
+          ) : historyError && !visible.length ? (
+            <EmptyState
+              title={v.compareHistoryHeading}
+              body={historyError}
+              action={
+                <button
+                  className="button button--quiet"
+                  onClick={() => setHistoryReloadTick((tick) => tick + 1)}
+                >
+                  {v.tryAgain}
+                </button>
+              }
+            />
+          ) : visible.length ? (
+            <>
+              {historyError ? (
+                <p className="verification-note" role="status">
+                  {v.productHistoryPartial}
+                </p>
+              ) : null}
+              {historySampled ? (
+                <p className="verification-note" role="status">
+                  {v.productHistorySampled}
+                </p>
+              ) : null}
+              {chartCurrencies.length === 1 ? (
+                <>
+                  <div className="history-chart" id="price-history-chart">
+                    <div className="chart-scale" aria-hidden="true">
+                      <span>{chartDisplay(maxPrice, chartCurrencies[0])}</span>
+                      <span>
+                        {chartDisplay(
+                          (minPrice + maxPrice) / 2,
+                          chartCurrencies[0],
+                        )}
+                      </span>
+                      <span>{chartDisplay(minPrice, chartCurrencies[0])}</span>
+                    </div>
+                    <div
+                      className="chart-plot"
+                      role="group"
+                      aria-label={v.productHistoryChartLabel(
+                        formatShortDateOrDash(chartRows[0].recordedAt),
+                        formatShortDateOrDash(
+                          chartRows[chartRows.length - 1].recordedAt,
+                        ),
+                        chartDisplay(minPrice, chartCurrencies[0]),
+                        chartDisplay(maxPrice, chartCurrencies[0]),
                       )}
-                    </span>
-                    <span>{chartDisplay(minPrice, chartCurrencies[0])}</span>
-                  </div>
-                  <div
-                    className="chart-plot"
-                    role="group"
-                    aria-label={v.productHistoryChartLabel(
-                      formatShortDateOrDash(visible[0].recordedAt),
-                      formatShortDateOrDash(
-                        visible[visible.length - 1].recordedAt,
-                      ),
-                      chartDisplay(minPrice, chartCurrencies[0]),
-                      chartDisplay(maxPrice, chartCurrencies[0]),
-                    )}
-                  >
-                    {storeNames.map((storeName, index) => (
+                    >
                       <svg
-                        key={storeName}
                         className="chart-series"
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
                         aria-hidden="true"
                       >
                         <path
-                          d={seriesPath(storeName)}
+                          d={seriesPath()}
                           fill="none"
-                          stroke={SERIES_COLORS[index % SERIES_COLORS.length]}
-                          strokeWidth={index === 0 ? 2.4 : 1.6}
+                          stroke={SERIES_COLORS[0]}
+                          strokeWidth={2.4}
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
-                    ))}
-                    {visible.map((obs, index) => (
-                      <button
-                        key={`${obs.id}-${index}`}
-                        type="button"
-                        className="chart-point"
-                        style={{
-                          left: `${xPct(obs)}%`,
-                          top: `${yPct(obs)}%`,
-                          backgroundColor:
-                            SERIES_COLORS[
-                              Math.max(0, storeNames.indexOf(obs.storeName)) %
-                                SERIES_COLORS.length
-                            ],
-                        }}
-                        title={`${chartDisplay(obs.price, obs.currencyCode)} · ${formatShortDateOrDash(obs.recordedAt)} · ${obs.storeName}`}
-                        aria-label={`${formatShortDateOrDash(obs.recordedAt)} · ${chartDisplay(obs.price, obs.currencyCode)} · ${obs.storeName}`}
-                      />
-                    ))}
-                    <div className="chart-date-labels">
+                      {chartRows.map((obs, index) => (
+                        <button
+                          key={`${obs.id}-${index}`}
+                          type="button"
+                          className="chart-point"
+                          tabIndex={-1}
+                          data-align={
+                            index === 0
+                              ? "start"
+                              : index === chartRows.length - 1
+                                ? "end"
+                                : "center"
+                          }
+                          style={{
+                            left: `${xPct(obs)}%`,
+                            top: `${yPct(obs)}%`,
+                            backgroundColor:
+                              SERIES_COLORS[
+                                Math.max(0, storeNames.indexOf(obs.storeName)) %
+                                  SERIES_COLORS.length
+                              ],
+                          }}
+                          aria-label={`${chartDisplay(obs.price, obs.currencyCode)} · ${formatShortDateOrDash(obs.recordedAt)} · ${obs.storeName}`}
+                        >
+                          <span className="chart-point-tip" aria-hidden="true">
+                            <strong>
+                              {chartDisplay(obs.price, obs.currencyCode)}
+                            </strong>
+                            <span>{formatShortDateOrDash(obs.recordedAt)}</span>
+                            <span>{obs.storeName}</span>
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="chart-date-labels" aria-hidden="true">
                       <span>
                         {formatDateTime(
-                          visible[0].recordedAt,
+                          chartRows[0].recordedAt,
                           CHART_DATE_OPTIONS,
                         )}
                       </span>
+                      {chartRows.length > 2 ? (
+                        <span>
+                          {formatDateTime(
+                            chartRows[Math.floor((chartRows.length - 1) / 2)]
+                              .recordedAt,
+                            CHART_DATE_OPTIONS,
+                          )}
+                        </span>
+                      ) : null}
                       <span>
                         {formatDateTime(
-                          visible[visible.length - 1].recordedAt,
+                          chartRows[chartRows.length - 1].recordedAt,
                           CHART_DATE_OPTIONS,
                         )}
                       </span>
                     </div>
                   </div>
-                </div>
-                <div className="history-legend">
-                  {storeNames.map((storeName, index) => (
-                    <span key={storeName}>
-                      <i className={`legend-dot legend-dot--${index % 4}`} />
-                      {storeName}
-                    </span>
+                  <div className="history-legend">
+                    {storeNames.map((storeName, index) => (
+                      <span key={storeName}>
+                        <i className={`legend-dot legend-dot--${index % 4}`} />
+                        {storeName}
+                      </span>
+                    ))}
+                  </div>
+                  {chartRows.length > 0 ? (
+                    <div className="chart-checks">
+                      <p className="chart-checks-heading">
+                        {v.productChartChecks}
+                      </p>
+                      <ul>
+                        {chartRows.toReversed().map((obs, index) => (
+                          <li key={`${obs.id}-${obs.storeName}-${index}`}>
+                            <span className="chart-checks-date">
+                              {formatDateOnly(obs.recordedAt)}
+                            </span>
+                            <span className="chart-checks-store">
+                              {obs.storeName}
+                            </span>
+                            <strong>
+                              {chartDisplay(obs.price, obs.currencyCode)}
+                            </strong>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <div className="history-observation-list">
+                  {visible.map((obs) => (
+                    <p key={`${obs.id}-${obs.recordedAt}`}>
+                      {chartDisplay(obs.price, obs.currencyCode)} ·{" "}
+                      {formatShortDateOrDash(obs.recordedAt)} · {obs.storeName}
+                    </p>
                   ))}
                 </div>
-              </>
-            ) : (
-              <div className="history-observation-list">
-                {visible.map((obs) => (
-                  <p key={`${obs.id}-${obs.recordedAt}`}>
-                    {chartDisplay(obs.price, obs.currencyCode)} ·{" "}
-                    {formatShortDateOrDash(obs.recordedAt)} · {obs.storeName}
-                  </p>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <EmptyState
-            title={v.productHistoryEmpty}
-            body={v.productHistoryEmptyBody}
-            action={undefined}
-          />
-        )}
-      </section>
+              )}
+            </>
+          ) : (
+            <EmptyState
+              title={v.productHistoryEmpty}
+              body={v.productHistoryEmptyBody}
+              action={undefined}
+            />
+          )}
+        </section>
+      </div>
 
-      {product.description ? (
+      {isCatalog || product.description ? (
         <section
           className="content-section product-detail-section product-details-section"
           id="details"
@@ -1135,8 +1272,71 @@ export function ProductDetailsPage({
                 <strong>{currentOffer.storeName}</strong>
               </div>
             ) : null}
+            <div>
+              <span>{v.compareBrand}</span>
+              <strong>{product.brand || v.compareUnavailable}</strong>
+            </div>
+            <div>
+              <span>{v.compareCategory}</span>
+              <strong>{product.category || v.compareUnavailable}</strong>
+            </div>
           </div>
-          <p className="product-details-description">{product.description}</p>
+
+          {isCatalog ? (
+            <div className="product-specs">
+              <div className="product-specs-head">
+                <h3>{v.productSpecsHeading}</h3>
+                {specSheet?.fields?.length ? (
+                  <span className="product-specs-note comic-note comic-note--blue">
+                    {v.compareSpecsAiNote}
+                  </span>
+                ) : null}
+              </div>
+              {specSheet?.fields?.length ? (
+                <>
+                  <dl className="product-spec-grid">
+                    {specSheet.fields.map((field, index) => (
+                      <div key={`${field.label}-${index}`}>
+                        <dt>{field.label}</dt>
+                        <dd>{field.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {specSheet.updatedAt ? (
+                    <p className="product-specs-source">
+                      {v.productSpecsUpdated(
+                        formatDateOnly(specSheet.updatedAt),
+                      )}
+                    </p>
+                  ) : null}
+                </>
+              ) : token ? (
+                <div className="product-specs-empty">
+                  <div>
+                    <strong>{v.productSpecsEmpty}</strong>
+                    <p>{v.productSpecsEmptyBody}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="button button--tonal button--small"
+                    disabled={specsResearching}
+                    onClick={researchSpecs}
+                  >
+                    <Icon name="search" />
+                    {specsResearching
+                      ? v.compareResearching
+                      : v.compareResearchSpecs}
+                  </button>
+                </div>
+              ) : (
+                <p className="product-specs-signin">{v.compareSpecsSignIn}</p>
+              )}
+            </div>
+          ) : null}
+
+          {product.description ? (
+            <p className="product-details-description">{product.description}</p>
+          ) : null}
         </section>
       ) : null}
 
@@ -1233,7 +1433,6 @@ export function ProductDetailsPage({
         )}
       </section>
 
-      {/* Mobile buy bar: replaces the enhancement sticky top bar below 760px. */}
       <div className="product-mobile-buybar">
         <div className="product-mobile-buybar-info">
           <strong>
@@ -1244,6 +1443,22 @@ export function ProductDetailsPage({
             />
           </strong>
         </div>
+        {isCatalog ? (
+          <button
+            type="button"
+            className="product-mobile-compare"
+            aria-pressed={compareIds.includes(id)}
+            aria-label={
+              compareIds.includes(id)
+                ? v.discoverRemoveCompare
+                : v.discoverAddCompare
+            }
+            data-in-compare={compareIds.includes(id) ? "" : undefined}
+            onClick={() => onCompare(id)}
+          >
+            <Icon name="compare" />
+          </button>
+        ) : null}
         {canTrack ? (
           <button
             className="button button--primary"
