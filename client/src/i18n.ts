@@ -156,6 +156,10 @@ export interface Strings {
   dealCategoryAudio: string;
   dealCategoryFashion: string;
   dealCategoryBeauty: string;
+  dealCategorySports: string;
+  dealCategoryToys: string;
+  dealCategoryBooks: string;
+  dealCategoryGroceries: string;
   allCategories: string;
   searchCategoryMobilePhones: string;
   searchCategoryLaptops: string;
@@ -306,6 +310,12 @@ export interface Strings {
   compareSpecsSignIn: string;
   compareSpecsFailed: string;
   compareBestBadge: string;
+  compareSearchLabel: string;
+  compareSearchPlaceholder: string;
+  compareSearching: string;
+  compareSearchEmpty: (term: string) => string;
+  compareSearchFailed: string;
+  compareAddProduct: string;
   storeOffersHeading: string;
   dealQualityHeading: string;
   dealQualityInsufficient: string;
@@ -327,6 +337,10 @@ export interface Strings {
   productIncluded: string;
   productNoStoredOffers: string;
   productNoStoredOffersBody: string;
+  productSpecsHeading: string;
+  productSpecsEmpty: string;
+  productSpecsEmptyBody: string;
+  productSpecsUpdated: (date: string) => string;
   productHistoryPeriod7: string;
   productHistoryByStore: string;
   productHistoryPartial: string;
@@ -344,6 +358,11 @@ export interface Strings {
   productNavActivity: string;
   productActivityEmpty: string;
   productLowestVerified: string;
+  productChartChecks: string;
+  productChartZoom: string;
+  productChartZoomIn: string;
+  productChartZoomOut: string;
+  productChartWindow: (shown: number, total: number) => string;
   productHistoryEmpty: string;
   productHistoryEmptyBody: string;
   productHistoryLoadFailed: string;
@@ -563,8 +582,9 @@ export interface Strings {
   dashProgressToTarget: (pct: number) => string;
   dashProgressReached: string;
   dashAlertsPanelHeading: string;
-  dashAlertsPanelEyebrow: string;
-  dashAlertsEmpty: string;
+  dashAlertsEmptyTitle: string;
+  dashAlertsEmptyBody: string;
+  dashAlertsLoadError: string;
   dashAlertsViewAll: string;
   productWasLabel: string;
   productBestPriceLabel: string;
@@ -592,7 +612,7 @@ const en: Strings = {
   sideExpand: "Expand sidebar",
 
   breadcrumbProductDetails: "Product details",
-  globalSearchPlaceholder: "Product name or store URL",
+  globalSearchPlaceholder: "Product name or URL",
   globalSearchLabel: "Search products",
   searchVerifying: "Verifying…",
   clearSearch: "Clear search",
@@ -759,6 +779,10 @@ const en: Strings = {
   dealCategoryAudio: "Audio",
   dealCategoryFashion: "Fashion",
   dealCategoryBeauty: "Beauty & Health",
+  dealCategorySports: "Sports & Outdoors",
+  dealCategoryToys: "Toys & Games",
+  dealCategoryBooks: "Books & Media",
+  dealCategoryGroceries: "Groceries",
   allCategories: "All categories",
   searchCategoryMobilePhones: "Mobile phones",
   searchCategoryLaptops: "Laptops",
@@ -870,7 +894,7 @@ const en: Strings = {
   compareSwipeHint: "Swipe sideways to see the other products",
   compareEmpty: "No products to compare",
   compareEmptyBody:
-    "Use \u201cAdd to compare\u201d on any product to add it here.",
+    "Search above, or use \u201cAdd to compare\u201d on any product.",
   compareRemove: "Remove from comparison",
   compareViewProduct: "View product",
   compareLatestPrice: "Latest price",
@@ -923,6 +947,12 @@ const en: Strings = {
   compareSpecsSignIn: "Sign in to research specs",
   compareSpecsFailed: "Could not research specs right now. Try again later.",
   compareBestBadge: "Best price",
+  compareSearchLabel: "Search the catalog to add a product",
+  compareSearchPlaceholder: "Search products by name or brand",
+  compareSearching: "Searching…",
+  compareSearchEmpty: (term) => `No products match “${term}”.`,
+  compareSearchFailed: "Search is unavailable right now. Try again.",
+  compareAddProduct: "Add",
   storeOffersHeading: "Store offers",
   dealQualityHeading: "Deal score",
   dealQualityInsufficient: "Insufficient history",
@@ -946,6 +976,11 @@ const en: Strings = {
   productNoStoredOffers: "No stored offers",
   productNoStoredOffersBody:
     "No store listings are currently linked to this product.",
+  productSpecsHeading: "Specifications",
+  productSpecsEmpty: "No specs researched yet",
+  productSpecsEmptyBody:
+    "Research key specifications for this product. The result is cached for everyone.",
+  productSpecsUpdated: (date) => `Researched ${date}`,
   productHistoryPeriod7: "7 days",
   productHistoryByStore: "Show price history by store",
   productHistoryPartial:
@@ -961,6 +996,12 @@ const en: Strings = {
   productNavActivity: "Tracking activity",
   productActivityEmpty: "No tracking activity yet.",
   productLowestVerified: "Lowest verified offer by day",
+  productChartChecks: "Price checks in this range",
+  productChartZoom: "Chart zoom",
+  productChartZoomIn: "Zoom in",
+  productChartZoomOut: "Zoom out",
+  productChartWindow: (shown, total) =>
+    `Showing ${shown} of ${total} price checks.`,
   productHistoryEmpty: "No price history is available for these offers.",
   productHistoryEmptyBody:
     "Price observations will appear after these stores are checked.",
@@ -1204,9 +1245,9 @@ const en: Strings = {
   dashProgressToTarget: (pct) => `${pct}% of the way to your target`,
   dashProgressReached: "Price reached your target",
   dashAlertsPanelHeading: "Recent alerts",
-  dashAlertsPanelEyebrow: "ALERTS",
-  dashAlertsEmpty:
-    "No alerts yet. Alerts appear when a tracked price reaches its target.",
+  dashAlertsEmptyTitle: "No alerts yet",
+  dashAlertsEmptyBody: "Alerts appear when a tracked price reaches its target.",
+  dashAlertsLoadError: "Could not load alerts.",
   dashAlertsViewAll: "View all",
   productWasLabel: "Was",
   productBestPriceLabel: "Best current price",
@@ -1400,6 +1441,10 @@ const ar: Strings = {
   dealCategoryAudio: "صوتيات",
   dealCategoryFashion: "أزياء",
   dealCategoryBeauty: "الجمال والصحة",
+  dealCategorySports: "الرياضة والهواء الطلق",
+  dealCategoryToys: "دمى وألعاب",
+  dealCategoryBooks: "كتب ووسائط",
+  dealCategoryGroceries: "بقالة",
   allCategories: "كل الفئات",
   searchCategoryMobilePhones: "هواتف محمولة",
   searchCategoryLaptops: "أجهزة محمولة",
@@ -1509,7 +1554,7 @@ const ar: Strings = {
   compareSubheading: "",
   compareSwipeHint: "اسحب جانبيًا لعرض بقية المنتجات",
   compareEmpty: "لا توجد منتجات للمقارنة",
-  compareEmptyBody: 'استخدم "إضافة للمقارنة" في أي منتج لإضافته هنا.',
+  compareEmptyBody: 'ابحث في الأعلى، أو استخدم "إضافة للمقارنة" في أي منتج.',
   compareRemove: "حذف من المقارنة",
   compareViewProduct: "عرض المنتج",
   compareLatestPrice: "آخر سعر",
@@ -1561,6 +1606,12 @@ const ar: Strings = {
   compareSpecsSignIn: "سجّل الدخول للبحث عن المواصفات",
   compareSpecsFailed: "تعذّر البحث عن المواصفات الآن. حاول لاحقاً.",
   compareBestBadge: "أفضل سعر",
+  compareSearchLabel: "ابحث في الكتالوج لإضافة منتج",
+  compareSearchPlaceholder: "ابحث عن منتج بالاسم أو العلامة التجارية",
+  compareSearching: "جارٍ البحث…",
+  compareSearchEmpty: (term) => `لا توجد منتجات تطابق «${term}».`,
+  compareSearchFailed: "البحث غير متاح الآن. حاول مرة أخرى.",
+  compareAddProduct: "أضف",
   storeOffersHeading: "عروض المتاجر",
   dealQualityHeading: "تقييم الصفقة",
   dealQualityInsufficient: "سجل الأسعار غير كافٍ",
@@ -1583,6 +1634,11 @@ const ar: Strings = {
   productIncluded: "مضمّن",
   productNoStoredOffers: "لا توجد عروض محفوظة",
   productNoStoredOffersBody: "لا توجد حالياً قوائم متجر مرتبطة بهذا المنتج.",
+  productSpecsHeading: "المواصفات",
+  productSpecsEmpty: "لم تُجمع المواصفات بعد",
+  productSpecsEmptyBody:
+    "ابحث عن المواصفات الأساسية لهذا المنتج. تُحفظ النتيجة لجميع المستخدمين.",
+  productSpecsUpdated: (date) => `جُمّعت في ${date}`,
   productHistoryPeriod7: "٧ أيام",
   productHistoryByStore: "عرض سجل الأسعار حسب المتجر",
   productHistoryPartial:
@@ -1597,6 +1653,12 @@ const ar: Strings = {
   productNavActivity: "نشاط المتابعة",
   productActivityEmpty: "لا يوجد نشاط متابعة بعد.",
   productLowestVerified: "أقل عرض تم التحقق منه يومياً",
+  productChartChecks: "فحوصات السعر في هذه الفترة",
+  productChartZoom: "تكبير المخطط",
+  productChartZoomIn: "تكبير",
+  productChartZoomOut: "تصغير",
+  productChartWindow: (shown, total) =>
+    `عرض ${shown} من ${total} من فحوصات السعر.`,
   productHistoryEmpty: "لا يتوفر سجل أسعار لهذه العروض.",
   productHistoryEmptyBody: "ستظهر ملاحظات الأسعار بعد التحقق من هذه المتاجر.",
   productHistoryLoadFailed: "تعذّر تحميل سجل الأسعار.",
@@ -1836,9 +1898,9 @@ const ar: Strings = {
   dashProgressToTarget: (pct) => `${pct}% من الطريق نحو هدفك`,
   dashProgressReached: "وصل السعر إلى هدفك",
   dashAlertsPanelHeading: "التنبيهات الأخيرة",
-  dashAlertsPanelEyebrow: "التنبيهات",
-  dashAlertsEmpty:
-    "لا توجد تنبيهات بعد. تظهر التنبيهات عند وصول سعر متتبع إلى هدفه.",
+  dashAlertsEmptyTitle: "لا توجد تنبيهات بعد",
+  dashAlertsEmptyBody: "تظهر التنبيهات عند وصول سعر متتبع إلى هدفه.",
+  dashAlertsLoadError: "تعذر تحميل التنبيهات.",
   dashAlertsViewAll: "عرض الكل",
   productWasLabel: "كان",
   productBestPriceLabel: "أفضل سعر حالي",
