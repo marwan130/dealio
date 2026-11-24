@@ -1,7 +1,10 @@
 // @ts-nocheck
 import { Icon } from "../../components/ui/Icon";
 import { Price } from "../../components/ui/Price";
-import { ProductImage } from "../../components/ui/ProductImage";
+import {
+  PRODUCT_ILLUSTRATION_FALLBACK,
+  ProductImage,
+} from "../../components/ui/ProductImage";
 import { apiFetch } from "../../lib/api";
 import { formatDateTime } from "../../lib/format";
 import { formatNumber } from "../../lib/format";
@@ -76,21 +79,15 @@ export function RecentDropsSection({ drops: c, onOpen: f, onDiscover: x }) {
                     children: [
                       jsx("div", {
                         className: "recent-deal-photo",
-                        children: S
-                          ? jsx(ProductImage, {
-                              source: S,
-                              productId: v.productId,
-                              alt: v.productName,
-                              layered: true,
-                            })
-                          : jsx("span", {
-                              className: "recent-deal-photo-fallback",
-                              "aria-hidden": "true",
-                              children: (v.brand || v.productName || "?")
-                                .trim()
-                                .charAt(0)
-                                .toUpperCase(),
-                            }),
+                        children: (
+                          <ProductImage
+                            source={S}
+                            productId={v.productId}
+                            alt={v.productName}
+                            layered
+                            fallback={PRODUCT_ILLUSTRATION_FALLBACK}
+                          />
+                        ),
                       }),
                       jsxs("div", {
                         className: "recent-deal-body",

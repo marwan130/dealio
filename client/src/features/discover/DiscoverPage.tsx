@@ -52,8 +52,6 @@ export function DiscoverPage({
     visibleCandidateCount = useRef(0),
     loadMoreInFlight = useRef(false),
     sentinelLeftViewport = useRef(true);
-  // Price inputs are typed in the currency chosen in settings,  the market's
-  // own currency only appears when no display currency is set.
   const displayCurrency = useContext(DisplayCurrencyContext);
   const pageRef = useRef(ie);
   pageRef.current = ie;
@@ -74,15 +72,6 @@ export function DiscoverPage({
     }, 350);
     return () => clearTimeout(h);
   }, [he, T]);
-  // Slot counting needs the rendered column count of the results grid: the
-  // grid is `auto-fill`, so the number of columns in the last row (and the
-  // hole we must fill) changes with the viewport width. Skeleton slots round
-  // the card count up to a full multiple of that column count ,  otherwise the
-  // last row ends short and shows a patch of empty grid. Slots stay mounted
-  // while a page is streaming OR the sentinel has more pages queued, so they
-  // never vanish between two pages and reappear a beat later.
-  // The grid mounts lazily with the first result, so the measurer hangs off a
-  // callback ref and re-observes every time the node appears, not just once.
   const searchGridRef = useRef(null),
     gridRoRef = useRef(null),
     [gridColumns, sg] = useState(4);
@@ -137,13 +126,6 @@ export function DiscoverPage({
           ...(x ? { Market: x } : {}),
           ...(f ? { CategoryId: f } : {}),
         });
-        // Bounds typed in the display currency must reach the server in the
-        // market's own units: the backend compares each offer against the market
-        // currency (EGP fallback when no market is chosen). Same snapshot based
-        // cross rates Price components display with (currency-client). When the
-        // rate snapshot is unavailable, the bounds are dropped instead of sent in
-        // the wrong currency ,  the server keeps everything, matching its policy
-        // of not hiding offers whose conversion fails.
         const referenceCurrency = marketCurrencyOf(x) || "EGP";
         let priceMin = W,
           priceMax = F;
@@ -162,7 +144,6 @@ export function DiscoverPage({
                 ? convertCurrency(F, displayCurrency, referenceCurrency)
                 : null,
             ]);
-            // Half-converted pairs mix units, so both bounds go or neither does.
             if (
               (W != null && cMin?.amount == null) ||
               (F != null && cMax?.amount == null)
@@ -190,7 +171,10 @@ export function DiscoverPage({
             const xt = JSON.parse(lt.data);
             xt.sessionId && sessionStorage.setItem(ht, xt.sessionId);
           } catch (error) {
-            console.warn("Unreadable search progress event, the session id was not stored", error);
+            console.warn(
+              "Unreadable search progress event, the session id was not stored",
+              error,
+            );
           }
         };
         (await new Promise((lt) => {
@@ -231,7 +215,10 @@ export function DiscoverPage({
                   );
                 });
               } catch (error) {
-                console.warn("Unreadable discovery candidate event, that candidate was dropped", error);
+                console.warn(
+                  "Unreadable discovery candidate event, that candidate was dropped",
+                  error,
+                );
               }
           }),
             at.addEventListener("progress", Ft),
@@ -262,7 +249,10 @@ export function DiscoverPage({
                   const Ue = JSON.parse(nt.data);
                   (Ft(nt), se(Ue.payload?.hasMore === true));
                 } catch (error) {
-                  console.warn("Unreadable discovery completed event, defaulting to more pages available", error);
+                  console.warn(
+                    "Unreadable discovery completed event, defaulting to more pages available",
+                    error,
+                  );
                 }
                 (sessionStorage.removeItem(ht), O(de), Ia());
               }
@@ -287,14 +277,6 @@ export function DiscoverPage({
       },
       [x, f, o, displayCurrency],
     );
-  // Auto-load-more cried silently when the two streams raced: the sentinel
-  // element mounts lazily with the results grid, while `completed` can set
-  // hasMore either before or after it exists. A plain effect keyed on `ae`
-  // skipped attaching whenever the ref was still null and never retried, so
-  // the second page never loaded for the rest of the session. Both attach
-  // points (element mount + every `ae` flip) read `ae` through a ref so the
-  // gate uses the latest value,  `syncSentinelObserver` disconnects any stale
-  // observer first.
   aeRef.current = ae;
   const syncSentinelObserver = useCallback(() => {
     loadMoreObserver.current?.disconnect();
@@ -355,7 +337,10 @@ export function DiscoverPage({
             });
           })
           .catch((error) =>
-            console.warn("Product images for the discovered list could not be fetched", error),
+            console.warn(
+              "Product images for the discovered list could not be fetched",
+              error,
+            ),
           )
           .finally(() => {
             h && me(false);
@@ -368,20 +353,11 @@ export function DiscoverPage({
   const pe = useMemo(() => {
       let h = x ? A.filter((F) => F.marketCode === x) : A;
       if (he == null && T == null) return h;
-      // Offers stream in their own store currency while the bounds are typed in
-      // the display currency, so each priced offer is normalized with the same
-      // snapshot cross rates (currency-client) instead of compared raw. Without
-      // a display currency the typed numbers already mean the market's units,
-      // so they compare directly. An offer whose rate pair is not loaded yet
-      // stays ,  the server already filtered the range in market units, and this
-      // pass must not hide more than that.
       const shown = (F) => {
         if (F.price == null || F.price <= 0) return false;
         if (!displayCurrency)
           return (he == null || F.price >= he) && (T == null || F.price <= T);
         const r = cachedCrossRate(F.currency || "", displayCurrency);
-        // Rates not loaded yet: leave the offer visible rather than compare in
-        // mismatched units ,  the server already decided the range.
         if (r == null) return true;
         const bound = F.price * r;
         return (he == null || bound >= he) && (T == null || bound <= T);
@@ -424,7 +400,7 @@ export function DiscoverPage({
           children: jsxs("div", {
             children: [
               c &&
-                jsx("button", {
+                jsxs("button", {
                   type: "button",
                   className: "discover-back-button",
                   onClick: back,
@@ -659,7 +635,7 @@ export function DiscoverPage({
                                     }),
                                     F &&
                                       jsx("button", {
-                                        className: `button ${U.includes(F) ? "button--tonal" : "button--quiet"} button--small`,
+                                        className: `button ${U.includes(F) ? "button--tonal" : "button--quiet"} button--small compare-text`,
                                         onClick: () => v(F),
                                         children: U.includes(F)
                                           ? o.discoverCompared

@@ -4,9 +4,12 @@ import { Icon } from "../../components/ui/Icon";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import { MetricStat } from "../../components/ui/MetricStat";
 import { Price } from "../../components/ui/Price";
-import { ProductImage } from "../../components/ui/ProductImage";
+import {
+  ProductImage,
+  productIllustration,
+} from "../../components/ui/ProductImage";
+import { EditorialPhoto } from "../../components/ui/EditorialPhoto";
 import { RecentDropsSection } from "../discover/RecentDropsSection";
-import { SkeletonTable } from "../../components/ui/skeletons";
 import { apiFetch } from "../../lib/api";
 import type {
   NotificationResponse,
@@ -115,9 +118,6 @@ function readFeedDone(): boolean {
   }
 }
 
-// A session stable random shuffle of the catalog. Same seed -> the same
-// product order on every page fetch, so the feed never reshuffles while
-// browsing and successive pages are duplicate free slices of one ordering.
 function fetchFeedPage({
   seed,
   page,
@@ -142,7 +142,6 @@ interface DashboardPageProps {
   onDiscover: () => void;
   onSignIn: () => void;
   notify: (message: string) => void;
-  // Accepted for AppRoot compatibility (the page does not use them).
   addValue?: string;
   setAddValue?: (value: string) => void;
   onSubmit?: (event: React.FormEvent) => void;
@@ -169,7 +168,6 @@ export function DashboardPage({
   const [trackError, setTrackError] = useState("");
   const [drops, setDrops] = useState<RecentPriceDrop[]>([]);
 
-  //  recent alerts panel state 
   const [notifications, setNotifications] = useState<NotificationResponse[]>(
     [],
   );
@@ -227,11 +225,11 @@ export function DashboardPage({
     }
   }
 
-  //  discovery feed state 
   const [feedItems, setFeedItems] = useState<ProductFeedItem[]>(readFeedItems);
-  const [feedState, setFeedState] = useState(() =>
-    readFeedItems().length ? (readFeedDone() ? "done" : "ready") : "loading",
-  );
+  const [feedState, setFeedState] = useState(() => {
+    if (readFeedItems().length) return readFeedDone() ? "done" : "ready";
+    return readFeedDone() ? "empty" : "loading";
+  });
   const [feedError, setFeedError] = useState("");
   const feedPageRef = useRef(readFeedPage());
   const seedRef = useRef(sessionSeed());
@@ -295,8 +293,6 @@ export function DashboardPage({
       .finally(() => {
         if (alive) setTrackBusy(false);
       });
-    // Latest notifications for the alerts panel (same route the
-    // notifications page uses,  only unread items can be marked read here).
     apiFetch(`/v1/notifications?Page=0&Size=${ALERTS_PANEL_SIZE}`)
       .then((page) => {
         if (alive) {
@@ -305,7 +301,7 @@ export function DashboardPage({
         }
       })
       .catch(() => {
-        if (alive) setNotificationsError(v.dashAlertsEmpty);
+        if (alive) setNotificationsError(v.dashAlertsLoadError);
       });
     return () => {
       alive = false;
@@ -315,7 +311,7 @@ export function DashboardPage({
     notify,
     displayCurrency,
     v.dashboardTrackingLoadError,
-    v.dashAlertsEmpty,
+    v.dashAlertsLoadError,
   ]);
 
   const atTarget = alerts.filter(
@@ -396,7 +392,6 @@ export function DashboardPage({
     };
   }, [loadFeedPage]);
 
-  // progressive loading: a sentinel below the grid pulls the next page
   useEffect(() => {
     const node = sentinelRef.current;
     if (!node) return;
@@ -450,7 +445,7 @@ export function DashboardPage({
           <div className="feed-skeleton" />
           <div className="feed-skeleton" />
           <div className="feed-skeleton" />
-          <div className="feed-skeleton feed-skeleton--wide" />
+          <div className="feed-skeleton" />
         </div>
       ) : feedState === "error" && !feedItems.length ? (
         <EmptyState
@@ -466,7 +461,11 @@ export function DashboardPage({
         <EmptyState
           title={v.dashFeedEmpty}
           body={v.dashFeedEmptyBody}
-          action={undefined}
+          action={
+            <button className="button button--quiet" onClick={restartFeed}>
+              {v.dashboardTryAgain}
+            </button>
+          }
         />
       ) : (
         <>
@@ -479,6 +478,7 @@ export function DashboardPage({
                 item={item}
                 index={index}
                 single={feedItems.length === 1}
+                total={feedItems.length}
                 onOpen={openProduct}
               />
             ))}
@@ -532,6 +532,11 @@ export function DashboardPage({
           <h1>{v.dashGreetingHeading}</h1>
           <p className="dashboard-greeting-sub">{v.dashGreetingSub}</p>
         </div>
+        <EditorialPhoto
+          className="dashboard-editorial-photo"
+          image="tech-desk"
+          loading="eager"
+        />
         <button className="button button--tonal" onClick={onDiscover}>
           <Icon name="search" />
           {v.dashboardExplore}
@@ -581,16 +586,30 @@ export function DashboardPage({
               </button>
             </div>
             {trackBusy && !alerts.length ? (
-              <SkeletonTable rows={4} />
+              <div className="feed-grid" aria-hidden="true">
+                <div className="feed-skeleton feed-skeleton--feature" />
+                <div className="feed-skeleton" />
+                <div className="feed-skeleton" />
+                <div className="feed-skeleton" />
+                <div className="feed-skeleton" />
+              </div>
             ) : alerts.length ? (
-              <div className="dash-tracked-grid">
-                {alerts.slice(0, 6).map((tracking) => (
+              <div
+                className={`dash-tracked-grid${
+                  Math.min(alerts.length, 6) === 2
+                    ? " dash-tracked-grid--pair"
+                    : ""
+                }`}
+              >
+                {alerts.slice(0, 6).map((tracking, index) => (
                   <TrackedCard
                     key={tracking.trackingId}
                     tracking={tracking}
                     displayCurrency={displayCurrency}
                     busy={false}
                     compared={compareIds.includes(tracking.productId)}
+                    featured={Math.min(alerts.length, 6) > 2 && index === 0}
+                    colorIndex={index}
                     onOpen={() => openProduct(tracking.productId)}
                     onCompare={
                       onCompare
@@ -629,7 +648,6 @@ export function DashboardPage({
           >
             <div className="section-heading">
               <div>
-                <div className="eyebrow">{v.dashAlertsPanelEyebrow}</div>
                 <h2 id="dash-alerts-heading">{v.dashAlertsPanelHeading}</h2>
               </div>
               <button
@@ -705,8 +723,8 @@ export function DashboardPage({
               </ul>
             ) : (
               <EmptyState
-                title={v.dashAlertsPanelHeading}
-                body={notificationsError || v.dashAlertsEmpty}
+                title={notificationsError || v.dashAlertsEmptyTitle}
+                body={v.dashAlertsEmptyBody}
                 action={undefined}
               />
             )}
@@ -735,14 +753,13 @@ export function DashboardPage({
   );
 }
 
-// 
-// Tracked product card
-
 interface TrackedCardProps {
   tracking: TrackingResponse;
   displayCurrency: string;
   busy: boolean;
   compared: boolean;
+  featured?: boolean;
+  colorIndex?: number;
   onOpen: () => void;
   onCompare?: () => void;
   onAction: (
@@ -755,6 +772,8 @@ function TrackedCard({
   tracking: t,
   displayCurrency,
   compared,
+  featured = false,
+  colorIndex = 0,
   onOpen,
   onCompare,
   onAction,
@@ -772,8 +791,6 @@ function TrackedCard({
         ? v.statusPaused
         : v.statusTracking;
 
-  // Progress toward the target, in display currency when the backend already
-  // converted both sides,  falls back to the target currency pair.
   const currentPriceValue =
     t.currentPriceInDisplayCurrency ?? t.currentPriceInTargetCurrency ?? null;
   const targetPriceValue = t.targetPriceInDisplayCurrency ?? t.targetPrice;
@@ -788,7 +805,9 @@ function TrackedCard({
       : null;
 
   return (
-    <article className={`dash-tracked-card dash-tracked-card--${status}`}>
+    <article
+      className={`dash-tracked-card dash-tracked-card--${status} dash-tracked-card--c${colorIndex % 4}${featured ? " dash-tracked-card--featured" : ""}`}
+    >
       <button
         type="button"
         className="dash-tracked-media"
@@ -802,6 +821,7 @@ function TrackedCard({
           alt={t.productName}
           loading="lazy"
           layered
+          fallback={productIllustration(colorIndex)}
         />
       </button>
       <div className="dash-tracked-body">
@@ -858,7 +878,11 @@ function TrackedCard({
       </div>
       <div className="dash-tracked-actions">
         {onCompare ? (
-          <button type="button" className="text-button" onClick={onCompare}>
+          <button
+            type="button"
+            className="text-button compare-text"
+            onClick={onCompare}
+          >
             {compared ? v.discoverRemoveCompare : v.discoverAddCompare}
           </button>
         ) : null}
@@ -885,9 +909,6 @@ function TrackedCard({
   );
 }
 
-// 
-// Discovery feed tiles (session stable random catalog feed)
-
 const FEED_COLOR_COUNT = 4;
 
 function tileColor(item: ProductFeedItem): number {
@@ -898,64 +919,44 @@ function tileColor(item: ProductFeedItem): number {
   return Math.abs(hash) % FEED_COLOR_COUNT;
 }
 
-// Mosaic variant: photos get standard/wide frames, the very first option
-// shown can be promoted to the hero tile, and missing photos collapse into
-// flat horizontal strips (nothing is invented in their place).
-function tileVariant(
-  item: ProductFeedItem,
-  index: number,
-): "standard" | "wide" | "flat" {
-  if (item.primaryImage) {
-    if (index % 4 === 3) return "wide";
-    return "standard";
-  }
-  return "flat";
+function tileVariant(item: ProductFeedItem): "standard" | "flat" {
+  return item.primaryImage ? "standard" : "flat";
 }
 
 function FeedTile({
   item,
   index,
   single,
+  total,
   onOpen,
 }: {
   item: ProductFeedItem;
   index: number;
   single: boolean;
+  total: number;
   onOpen: (item: ProductFeedItem) => void;
 }) {
   const v = useLocale();
   const currency = item.currencyCode || item.currency || "";
-  const featured =
-    index === 0 && !!item.primaryImage && item.lowestPrice != null;
+  const featured = index === 0 && total > 2 && item.lowestPrice != null;
 
-  const variant = featured ? "feature" : tileVariant(item, index);
+  const variant = featured ? "feature" : tileVariant(item);
   const color = tileColor(item) % FEED_COLOR_COUNT;
 
-  // Price movement ,  the signed percentage the backend computed against the
-  // previous observation of the same listing in the same currency.
   const movement = buildMovement(item, v, formatDateOnly);
 
   const media = (
     <div className="feed-media">
       <span className="feed-blob" aria-hidden="true" />
-      {item.primaryImage ? (
-        <ProductImage
-          source={item.primaryImage}
-          baseUrl={undefined}
-          productId={item.productId}
-          alt=""
-          loading={index >= 4 ? "lazy" : "eager"}
-          layered
-        />
-      ) : (
-        /* Flat (imageless) tiles render the media column too ,  skipping it
-           dropped the body into the 88px first grid column, clipping the
-           name to two letters and leaving the tile half empty. The Anton
-           monogram fills the column like the Recent Price Drops tile. */
-        <span className="feed-media-fallback" aria-hidden="true">
-          {(item.brand || item.name || "?").trim().charAt(0).toUpperCase()}
-        </span>
-      )}
+      <ProductImage
+        source={item.primaryImage || undefined}
+        baseUrl={undefined}
+        productId={item.productId}
+        alt=""
+        loading={index >= 4 ? "lazy" : "eager"}
+        layered
+        fallback="/dealio-context/illustrations/product-box.svg"
+      />
     </div>
   );
 
@@ -980,9 +981,6 @@ function FeedTile({
           {item.previousPrice != null ? (
             <span className="feed-was">
               <span className="feed-was-label">{v.dashFeedWas}</span>
-              {/* Through <Price> so the struck value converts to the display
-                  currency like the current price above it ,  a raw AED
-                  amount was being labelled EGP before. */}
               <span className="feed-was-value">
                 <Price
                   amount={item.previousPrice}
