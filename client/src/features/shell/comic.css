@@ -144,7 +144,7 @@
 }
 
 .page-wrap .empty-state .empty-ring {
-  background: var(--surface-container);
+  background: #ffeb00;
 }
 
 .page-wrap[data-page="compare"] .empty-state {
@@ -1170,12 +1170,7 @@ html {
 }
 
 /* The open topbar dropdown is one ticket, not a button stacked on a panel.
-   The hard shadow is cast by the whole open control through a filter, so
-   it wraps the button and the list as a single silhouette. */
-.topbar .custom-dropdown.is-open {
-  filter: drop-shadow(3px 3px 0 var(--text));
-}
-
+   The frame alone carries the union, with no offset shadow line. */
 .topbar .custom-dropdown.is-open .custom-dropdown-btn,
 .topbar .custom-dropdown.is-open .custom-dropdown-menu {
   box-shadow: none !important;
@@ -1190,4 +1185,131 @@ html {
   border-top: 0 !important;
   border-radius: 0 0 10px 10px !important;
   background: var(--surface-container) !important;
+}
+
+/* Custom sidebar icons. The linework follows the nav item colour, the
+   yellow fills keep the cut paper look on the coral active tile. */
+.sidebar .nav-item .nav-glyph {
+  stroke-width: 2.1;
+  overflow: visible;
+}
+
+/* The current page and the auth control read as paper tiles. The active
+   dashboard gets the signature yellow, the auth control stays coral so it
+   still reads as the primary action in the rail. */
+.sidebar .nav-item.is-active,
+:root[data-theme="dark"] .sidebar .nav-item.is-active {
+  background: #ffeb00 !important;
+  color: #202020 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 6px !important;
+  box-shadow: 2px 2px 0 var(--text) !important;
+  font-weight: 800 !important;
+}
+
+.sidebar .nav-item.is-active:hover,
+:root[data-theme="dark"] .sidebar .nav-item.is-active:hover {
+  background: #fff27a !important;
+  color: #202020 !important;
+  border-color: var(--text) !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+  transform: translate(-1px, -1px);
+}
+
+.sidebar .nav-item.is-active .glyph,
+:root[data-theme="dark"] .sidebar .nav-item.is-active .glyph {
+  color: #202020 !important;
+}
+
+/* Yellow accents vanish on the yellow active tile. Swap them for coral so
+   the icon keeps its cut paper detail. */
+.sidebar .nav-item.is-active .nav-glyph [fill="#ffeb00"] {
+  fill: var(--brand) !important;
+}
+
+.sidebar .sidebar-auth-item,
+:root[data-theme="dark"] .sidebar .sidebar-auth-item {
+  background: var(--brand) !important;
+  color: #202020 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 6px !important;
+  box-shadow: 2px 2px 0 var(--text) !important;
+  font-weight: 800 !important;
+}
+
+.sidebar .sidebar-auth-item:hover,
+:root[data-theme="dark"] .sidebar .sidebar-auth-item:hover {
+  background: #ff756b !important;
+  color: #202020 !important;
+  border-color: var(--text) !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+  transform: translate(-1px, -1px);
+}
+
+.sidebar .sidebar-auth-item .glyph,
+:root[data-theme="dark"] .sidebar .sidebar-auth-item .glyph {
+  color: #202020 !important;
+}
+
+/* Yellow paper control for the dashboard calls to action. Same ink frame
+   and hard offset shadow as the filter panels. */
+.button--comic {
+  background: #ffeb00 !important;
+  color: #202020 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease !important;
+}
+
+.button--comic:hover {
+  background: #fff27a !important;
+  box-shadow: 4px 4px 0 var(--text) !important;
+  transform: translate(-1px, -1px);
+}
+
+.button--comic:active {
+  background: #f2dc00 !important;
+  box-shadow: 1px 1px 0 var(--text) !important;
+  transform: translate(2px, 2px);
+}
+
+.button--comic:focus-visible {
+  outline: 2px solid var(--text) !important;
+  outline-offset: 3px !important;
+}
+
+/* Blue paper variant for secondary feed actions. */
+.button--comic-blue {
+  background: #4d91d8 !important;
+  color: #fff !important;
+}
+
+.button--comic-blue:hover {
+  background: #6aa5e3 !important;
+  color: #fff !important;
+}
+
+.button--comic-blue:active {
+  background: #3f80c4 !important;
+  color: #fff !important;
+}
+
+/* White label for the coral add product control. */
+.button--add-product {
+  color: #fff !important;
+}
+
+.button--add-product:hover,
+.button--add-product:focus-visible {
+  color: #fff !important;
+}
+
+.button--add-product .glyph {
+  color: #fff !important;
 }
