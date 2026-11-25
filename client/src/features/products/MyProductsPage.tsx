@@ -154,7 +154,7 @@ export function MyProductsPage({
                 ],
               }),
               jsxs("button", {
-                className: "button button--primary",
+                className: "button button--primary button--add-product",
                 onClick: x,
                 children: [
                   " ",
@@ -573,7 +573,7 @@ export function MyProductsPage({
         eyebrow: S.myProductsEyebrow,
         pageClass: "my-products-heading",
         headerAction: jsxs("button", {
-          className: "button button--primary",
+          className: "button button--primary button--add-product",
           onClick: x,
           children: [jsx(Icon, { name: "plus" }), S.myProductsAddProduct],
         }),

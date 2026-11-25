@@ -852,7 +852,7 @@
 }
 
 .product-detail-page .empty-ring {
-  background: transparent !important;
+  background: #ffeb00 !important;
   border: 1.5px solid var(--line-strong) !important;
   border-radius: 50% !important;
   box-shadow: none !important;
