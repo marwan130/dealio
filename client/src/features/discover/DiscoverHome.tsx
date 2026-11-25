@@ -6,7 +6,7 @@ import {
   PRODUCT_ILLUSTRATION_FALLBACK,
   ProductImage,
 } from "../../components/ui/ProductImage";
-import { EditorialPhoto } from "../../components/ui/EditorialPhoto";
+import { CategoriesArt } from "../../components/ui/CategoriesArt";
 import { ScrollShelf } from "../../components/ui/ScrollShelf";
 import type {
   DiscoveryOverviewResponse,
@@ -134,7 +134,7 @@ export function DiscoverHome({
         className="home-mosaic"
         aria-label={strings.overviewCategoriesHeading}
       >
-        <EditorialPhoto className="home-editorial-photo" image="headphones" />
+        <CategoriesArt className="home-editorial-photo" />
         <div className="home-category-panel">
           <h2>{strings.overviewCategoriesHeading}</h2>
           <div className="home-categories">

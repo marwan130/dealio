@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" fill="none">
+  <defs>
+    <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2" fill="#f6f1e8" opacity="0.13"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="420" fill="#182733"/>
+  <rect width="1200" height="420" fill="url(#dots)"/>
+
+  <circle cx="600" cy="175" r="155" fill="#cd6f63"/>
+  <circle cx="600" cy="175" r="155" fill="url(#dots)"/>
+
+  <path d="M70 316h70l26-24 34 36 36-28 44 16 48-44 46 18" stroke="#f6f1e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.28"/>
+
+  <path d="M220 210c0-90 44-136 105-136s105 46 105 136" stroke="#202020" stroke-width="20" stroke-linecap="round"/>
+  <path d="M220 210c0-90 44-136 105-136s105 46 105 136" stroke="#f6f1e8" stroke-width="8" stroke-linecap="round"/>
+  <rect x="196" y="200" width="46" height="68" rx="16" fill="#ffeb00" stroke="#202020" stroke-width="9"/>
+  <rect x="408" y="200" width="46" height="68" rx="16" fill="#ffeb00" stroke="#202020" stroke-width="9"/>
+
+  <rect x="452" y="86" width="296" height="180" rx="12" fill="#284b60" stroke="#202020" stroke-width="10"/>
+  <rect x="474" y="106" width="252" height="140" rx="6" fill="#182733" stroke="#202020" stroke-width="7"/>
+  <rect x="496" y="126" width="74" height="12" rx="6" fill="#ffeb00"/>
+  <rect x="496" y="150" width="142" height="10" rx="5" fill="#f6f1e8" opacity="0.8"/>
+  <rect x="514" y="174" width="106" height="10" rx="5" fill="#cd6f63"/>
+  <rect x="514" y="198" width="150" height="10" rx="5" fill="#f6f1e8" opacity="0.5"/>
+  <rect x="496" y="222" width="86" height="10" rx="5" fill="#f6f1e8" opacity="0.3"/>
+
+  <path d="M432 266h336l32 44H400l32-44Z" fill="#708188" stroke="#202020" stroke-width="10" stroke-linejoin="round"/>
+  <rect x="574" y="264" width="52" height="8" rx="4" fill="#f6f1e8" opacity="0.55"/>
+  <path d="M464 286h272M478 300h244" stroke="#f6f1e8" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+  <g transform="rotate(8 905 158)">
+    <rect x="858" y="70" width="94" height="176" rx="20" fill="#f6f1e8" stroke="#202020" stroke-width="10"/>
+    <rect x="890" y="78" width="30" height="6" rx="3" fill="#202020"/>
+    <rect x="874" y="92" width="62" height="132" rx="10" fill="#284b60" stroke="#202020" stroke-width="6"/>
+    <rect x="886" y="108" width="16" height="16" rx="4" fill="#ffeb00"/>
+    <rect x="912" y="108" width="16" height="16" rx="4" fill="#cd6f63"/>
+    <rect x="886" y="132" width="16" height="16" rx="4" fill="#cd6f63"/>
+    <rect x="912" y="132" width="16" height="16" rx="4" fill="#ffeb00"/>
+    <rect x="886" y="164" width="40" height="8" rx="4" fill="#f6f1e8" opacity="0.75"/>
+    <rect x="886" y="182" width="26" height="8" rx="4" fill="#f6f1e8" opacity="0.4"/>
+  </g>
+
+  <g transform="rotate(-7 950 274)">
+    <rect x="876" y="244" width="150" height="62" rx="28" fill="#284b60" stroke="#202020" stroke-width="10"/>
+    <path d="M914 262v24M902 274h24" stroke="#f6f1e8" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="988" cy="266" r="7" fill="#ffeb00"/>
+    <circle cx="1006" cy="282" r="7" fill="#cd6f63"/>
+    <circle cx="988" cy="298" r="7" fill="#f6f1e8"/>
+  </g>
+
+  <path d="M824 52c-16 14-16 34 0 48" stroke="#f6f1e8" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+  <path d="M1080 48l8 20 20 8-20 8-8 20-8-20-20-8 20-8 8-20Z" fill="#ffeb00" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M1060 236l7 18 18 7-18 7-7 18-7-18-18-7 18-7 7-18Z" fill="#ffeb00" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
+</svg>
