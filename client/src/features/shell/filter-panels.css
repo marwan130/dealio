@@ -1,0 +1,482 @@
+/* Shared filter panel. The Discover toolbar container carried to the
+   Notifications and My Products toolbars, and to the Compare search.
+   Blue paper, ink frame, 7px corners, 3px offset shadow, cream fields. */
+
+.page-wrap[data-page="products"] .my-products-toolbar,
+.page-wrap[data-page="notifications"] .notifications-toolbar,
+.page-wrap[data-page="compare"] .compare-search {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+  margin: 0 0 18px !important;
+  padding: 16px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 7px !important;
+  background: #4d91d8 !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+  box-sizing: border-box !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+}
+
+/* Five filters, the search field and the switch share one row at 1440.
+   The tighter gap and box widths recover the panel padding. */
+
+.page-wrap[data-page="products"] .my-products-toolbar {
+  gap: 8px !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .sort-control,
+.page-wrap[data-page="notifications"] .notifications-toolbar .sort-control {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 6px !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .sort-control-label,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .sort-control-label,
+.page-wrap[data-page="compare"] .compare-search-label {
+  color: #101820 !important;
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  line-height: 1.2 !important;
+  text-align: start !important;
+  text-transform: uppercase !important;
+}
+
+/* Cream fields. The border shorthand also restores the side edges that
+   the page scoped zero border rules strip from direct toolbar children. */
+
+.page-wrap[data-page="products"] .my-products-toolbar .table-search,
+.page-wrap[data-page="products"] .my-products-toolbar .custom-dropdown-btn,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-btn,
+.page-wrap[data-page="compare"] .compare-search-bar {
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  padding: 0 12px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 5px !important;
+  background: #fffdf8 !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .table-search {
+  width: 168px !important;
+  min-width: 152px !important;
+  max-width: 100% !important;
+  flex: 0 1 168px !important;
+  gap: 6px !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .table-search input {
+  color: var(--text) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .filter-dropdown {
+  width: 136px !important;
+  min-width: 136px !important;
+}
+
+.page-wrap[data-page="products"]
+  .my-products-toolbar
+  .filter-dropdown
+  .custom-dropdown-btn {
+  padding: 0 10px !important;
+  gap: 6px !important;
+  font:
+    750 13px "DM Sans",
+    sans-serif !important;
+}
+
+.page-wrap[data-page="notifications"] .notifications-toolbar .filter-dropdown {
+  width: 150px !important;
+  min-width: 150px !important;
+}
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-btn {
+  font:
+    750 13px "DM Sans",
+    sans-serif !important;
+}
+
+/* The open list and its button read as one framed piece. */
+
+.page-wrap[data-page="products"]
+  .my-products-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-btn,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-btn {
+  border-bottom: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .custom-dropdown-menu,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-menu {
+  padding: 4px !important;
+  border: 2px solid var(--text) !important;
+  border-top: 0 !important;
+  border-radius: 0 0 5px 5px !important;
+  background: #fffdf8 !important;
+  box-shadow: none !important;
+}
+
+.page-wrap[data-page="products"]
+  .my-products-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-menu,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown.is-open
+  .custom-dropdown-menu {
+  border-top: 0 !important;
+  padding-top: 4px !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .custom-dropdown-option,
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-option {
+  border-radius: 3px !important;
+  font-weight: 650 !important;
+}
+
+/* Table and cards switch. One cream frame, yellow on the active half. */
+
+.page-wrap[data-page="products"] .my-products-toolbar .view-mode-control {
+  flex: 0 0 auto !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .view-mode-switch {
+  width: 168px !important;
+  min-width: 168px !important;
+  max-width: 168px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 3px !important;
+  gap: 0 !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 5px !important;
+  background: #fffdf8 !important;
+  box-shadow: none !important;
+  margin-inline-start: 0 !important;
+  align-self: stretch !important;
+}
+
+.page-wrap[data-page="products"] .my-products-toolbar .view-mode-switch button {
+  height: 34px !important;
+  min-height: 34px !important;
+  border-radius: 3px !important;
+  color: var(--text) !important;
+  font:
+    700 13px "DM Sans",
+    sans-serif !important;
+}
+
+.page-wrap[data-page="products"]
+  .my-products-toolbar
+  .view-mode-switch
+  button.is-selected {
+  background: #ffeb00 !important;
+  color: #202020 !important;
+  box-shadow: inset 0 0 0 2px #202020 !important;
+}
+
+.page-wrap[data-page="products"]
+  .my-products-toolbar
+  .view-mode-switch
+  button.is-selected:hover {
+  background: #fff35a !important;
+  color: #202020 !important;
+  box-shadow: inset 0 0 0 2px #202020 !important;
+}
+
+/* Notifications count and mark all read. */
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .notifications-header-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 6px !important;
+  margin-inline-start: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .notifications-unread-count {
+  color: #101820 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  text-align: end !important;
+}
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .button--mark-all-read {
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 5px !important;
+  background: #ffeb00 !important;
+  color: #202020 !important;
+  box-shadow: 2px 2px 0 var(--text) !important;
+  font:
+    800 12px "DM Sans",
+    sans-serif !important;
+}
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .button--mark-all-read:hover:not(:disabled) {
+  background: #fff35a !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 var(--text) !important;
+}
+
+.page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .button--mark-all-read:disabled {
+  opacity: 0.55 !important;
+  box-shadow: 1px 1px 0 var(--text) !important;
+}
+
+/* Compare search. */
+
+.page-wrap[data-page="compare"] .compare-search-bar {
+  width: 100% !important;
+  gap: 10px !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-bar:focus-within {
+  border-color: var(--brand) !important;
+  box-shadow: none !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-clear {
+  width: 30px !important;
+  height: 30px !important;
+  border: 2px solid var(--text) !important;
+  background: #fffdf8 !important;
+  color: var(--text) !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-clear:hover,
+.page-wrap[data-page="compare"] .compare-search-clear:focus-visible {
+  background: #ffeb00 !important;
+  color: #202020 !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-results {
+  padding: 4px 10px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 5px !important;
+  background: #fffdf8 !important;
+  box-shadow: 2px 2px 0 var(--text) !important;
+  text-align: start !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-results li {
+  text-align: start !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-results li:first-child {
+  border-block-start: 0 !important;
+}
+
+.page-wrap[data-page="compare"] .compare-search-empty {
+  margin: 2px 2px 0 !important;
+  color: #101820 !important;
+  font-weight: 700 !important;
+  text-align: start !important;
+}
+
+/* Dark theme keeps the blue panel. Fields drop to the dark surface so the
+   cream theme ink stays readable. */
+
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .table-search,
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .custom-dropdown-btn,
+:root[data-theme="dark"]
+  .page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-btn,
+:root[data-theme="dark"] .page-wrap[data-page="compare"] .compare-search-bar,
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .view-mode-switch {
+  background: var(--surface-container) !important;
+  color: var(--text) !important;
+}
+
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .custom-dropdown-menu,
+:root[data-theme="dark"]
+  .page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-menu,
+:root[data-theme="dark"]
+  .page-wrap[data-page="compare"]
+  .compare-search-results,
+:root[data-theme="dark"] .page-wrap[data-page="compare"] .compare-search-clear {
+  background: var(--surface-container) !important;
+}
+
+/* Labels sit directly on the blue paper. In dark mode they turn white so
+   they read against the panel instead of sinking into it. Field values
+   follow so the whole toolbar reads white on blue. */
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .sort-control-label,
+:root[data-theme="dark"]
+  .page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .sort-control-label,
+:root[data-theme="dark"] .page-wrap[data-page="compare"] .compare-search-label,
+:root[data-theme="dark"]
+  .page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .notifications-unread-count,
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .table-search
+  input,
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .custom-dropdown-text,
+:root[data-theme="dark"]
+  .page-wrap[data-page="notifications"]
+  .notifications-toolbar
+  .custom-dropdown-text,
+:root[data-theme="dark"]
+  .page-wrap[data-page="products"]
+  .my-products-toolbar
+  .view-mode-switch
+  button:not(.is-selected),
+:root[data-theme="dark"]
+  .page-wrap[data-page="compare"]
+  .compare-search-bar
+  input {
+  color: #fff !important;
+}
+
+/* Responsive. */
+
+@media (max-width: 720px) {
+  .page-wrap[data-page="products"] .my-products-toolbar .table-search {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-wrap[data-page="notifications"]
+    .notifications-toolbar
+    .notifications-header-actions {
+    align-items: flex-start !important;
+    margin-inline-start: 0 !important;
+    width: 100% !important;
+  }
+
+  .page-wrap[data-page="notifications"]
+    .notifications-toolbar
+    .notifications-unread-count {
+    text-align: start !important;
+  }
+
+  .page-wrap[data-page="notifications"]
+    .notifications-toolbar
+    .button--mark-all-read {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .page-wrap[data-page="products"] .my-products-toolbar,
+  .page-wrap[data-page="notifications"] .notifications-toolbar,
+  .page-wrap[data-page="compare"] .compare-search {
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .page-wrap[data-page="products"] .my-products-toolbar .sort-control {
+    flex: 1 1 calc(50% - 5px) !important;
+  }
+
+  .page-wrap[data-page="products"] .my-products-toolbar .filter-dropdown,
+  .page-wrap[data-page="notifications"]
+    .notifications-toolbar
+    .filter-dropdown {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page-wrap[data-page="products"]
+    .my-products-toolbar
+    .filter-dropdown
+    .custom-dropdown,
+  .page-wrap[data-page="notifications"]
+    .notifications-toolbar
+    .filter-dropdown
+    .custom-dropdown {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page-wrap[data-page="products"] .my-products-toolbar .view-mode-control {
+    flex: 1 1 100% !important;
+  }
+
+  .page-wrap[data-page="products"] .my-products-toolbar .view-mode-switch {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .page-wrap[data-page="notifications"] .notifications-toolbar .sort-control {
+    flex: 1 1 100% !important;
+  }
+}

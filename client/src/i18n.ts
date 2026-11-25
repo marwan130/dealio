@@ -311,6 +311,7 @@ export interface Strings {
   compareSpecsFailed: string;
   compareBestBadge: string;
   compareSearchLabel: string;
+  compareSearchFieldLabel: string;
   compareSearchPlaceholder: string;
   compareSearching: string;
   compareSearchEmpty: (term: string) => string;
@@ -948,6 +949,7 @@ const en: Strings = {
   compareSpecsFailed: "Could not research specs right now. Try again later.",
   compareBestBadge: "Best price",
   compareSearchLabel: "Search the catalog to add a product",
+  compareSearchFieldLabel: "Add a product",
   compareSearchPlaceholder: "Search products by name or brand",
   compareSearching: "Searching…",
   compareSearchEmpty: (term) => `No products match “${term}”.`,
@@ -1607,6 +1609,7 @@ const ar: Strings = {
   compareSpecsFailed: "تعذّر البحث عن المواصفات الآن. حاول لاحقاً.",
   compareBestBadge: "أفضل سعر",
   compareSearchLabel: "ابحث في الكتالوج لإضافة منتج",
+  compareSearchFieldLabel: "أضف منتجاً",
   compareSearchPlaceholder: "ابحث عن منتج بالاسم أو العلامة التجارية",
   compareSearching: "جارٍ البحث…",
   compareSearchEmpty: (term) => `لا توجد منتجات تطابق «${term}».`,

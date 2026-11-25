@@ -342,6 +342,9 @@ export function ComparePage({
           className="compare-search"
           aria-label={copy.compareSearchLabel}
         >
+          <span className="compare-search-label">
+            {copy.compareSearchFieldLabel}
+          </span>
           <div className="compare-search-bar">
             <Icon name="search" />
             <input
