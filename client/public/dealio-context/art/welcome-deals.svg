@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" fill="none">
+  <defs>
+    <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2" fill="#f6f1e8" opacity="0.13"/>
+    </pattern>
+    <pattern id="wire" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+      <path d="M0 0v30" stroke="#f6f1e8" stroke-width="5" opacity="0.42"/>
+    </pattern>
+    <clipPath id="basket">
+      <path d="M422 314h396l-54 160H476l-54-160Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="560" fill="#182733"/>
+  <rect width="1200" height="560" fill="url(#dots)"/>
+
+  <circle cx="760" cy="246" r="228" fill="#cd6f63"/>
+  <circle cx="760" cy="246" r="228" fill="url(#dots)"/>
+
+  <path d="M470 196l88-44 66 24 96-58" stroke="#f6f1e8" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M700 110l34 8-16 32" stroke="#f6f1e8" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="722" cy="118" r="12" fill="#ffeb00" stroke="#202020" stroke-width="6"/>
+
+  <rect x="330" y="300" width="850" height="20" fill="#284b60" stroke="#202020" stroke-width="9"/>
+  <rect x="370" y="432" width="810" height="20" fill="#284b60" stroke="#202020" stroke-width="9"/>
+
+  <rect x="450" y="188" width="96" height="114" rx="9" fill="#cd6f63" stroke="#202020" stroke-width="9"/>
+  <rect x="468" y="214" width="60" height="40" rx="5" fill="#f6f1e8"/>
+  <path d="M468 278h60" stroke="#182733" stroke-width="8" stroke-linecap="round"/>
+
+  <path d="M560 202h84v100h-84V202Z" fill="#f6f1e8" stroke="#202020" stroke-width="9"/>
+  <path d="M560 202l42-34 42 34" fill="#f6f1e8" stroke="#202020" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M582 248h40" stroke="#cd6f63" stroke-width="9" stroke-linecap="round"/>
+
+  <rect x="656" y="180" width="58" height="122" rx="12" fill="#ffeb00" stroke="#202020" stroke-width="9"/>
+  <rect x="668" y="158" width="34" height="24" rx="5" fill="#f6f1e8" stroke="#202020" stroke-width="7"/>
+  <path d="M670 226h30M670 246h30" stroke="#182733" stroke-width="7" stroke-linecap="round"/>
+
+  <rect x="726" y="214" width="80" height="88" rx="7" fill="#284b60" stroke="#202020" stroke-width="9"/>
+  <path d="M742 240h48M742 262h48" stroke="#f6f1e8" stroke-width="8" stroke-linecap="round"/>
+
+  <path d="M516 300c0-104 208-104 208 0" stroke="#202020" stroke-width="18" stroke-linecap="round"/>
+  <path d="M516 300c0-104 208-104 208 0" stroke="#f6f1e8" stroke-width="8" stroke-linecap="round"/>
+
+  <path d="M422 314h396l-54 160H476l-54-160Z" fill="#708188" stroke="#202020" stroke-width="11" stroke-linejoin="round"/>
+  <path d="M422 314h396l-54 160H476l-54-160Z" fill="url(#wire)" clip-path="url(#basket)"/>
+  <rect x="400" y="286" width="440" height="30" rx="15" fill="#f6f1e8" stroke="#202020" stroke-width="11"/>
+
+  <path d="M900 96v78" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
+  <g transform="rotate(-9 940 214)">
+    <path d="M880 168h96l46 46-46 46h-96a10 10 0 0 1-10-10v-72a10 10 0 0 1 10-10Z" fill="#f6f1e8" stroke="#202020" stroke-width="10" stroke-linejoin="round"/>
+    <circle cx="896" cy="214" r="11" fill="#182733" stroke="#202020" stroke-width="6"/>
+    <path d="M922 214h54" stroke="#cd6f63" stroke-width="12" stroke-linecap="round"/>
+  </g>
+
+  <path d="M356 176l12 30 30 12-30 12-12 30-12-30-30-12 30-12 12-30Z" fill="#ffeb00" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M1060 132c-18 16-18 36 0 52" stroke="#f6f1e8" stroke-width="9" stroke-linecap="round" opacity="0.6"/>
+</svg>

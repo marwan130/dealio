@@ -8,7 +8,7 @@ import {
   ProductImage,
   productIllustration,
 } from "../../components/ui/ProductImage";
-import { EditorialPhoto } from "../../components/ui/EditorialPhoto";
+import { WelcomeArt } from "../../components/ui/WelcomeArt";
 import { RecentDropsSection } from "../discover/RecentDropsSection";
 import { apiFetch } from "../../lib/api";
 import type {
@@ -505,7 +505,10 @@ export function DashboardPage({
           {feedState === "done" ? (
             <div className="feed-status feed-status--end" role="status">
               <span>{v.dashFeedEnd}</span>
-              <button className="button button--tonal" onClick={restartFeed}>
+              <button
+                className="button button--comic button--comic-blue"
+                onClick={restartFeed}
+              >
                 {v.dashFeedReshuffle}
               </button>
             </div>
@@ -532,12 +535,8 @@ export function DashboardPage({
           <h1>{v.dashGreetingHeading}</h1>
           <p className="dashboard-greeting-sub">{v.dashGreetingSub}</p>
         </div>
-        <EditorialPhoto
-          className="dashboard-editorial-photo"
-          image="tech-desk"
-          loading="eager"
-        />
-        <button className="button button--tonal" onClick={onDiscover}>
+        <WelcomeArt className="dashboard-editorial-photo" />
+        <button className="button button--comic" onClick={onDiscover}>
           <Icon name="search" />
           {v.dashboardExplore}
         </button>

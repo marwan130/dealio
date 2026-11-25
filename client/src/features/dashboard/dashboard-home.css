@@ -49,15 +49,7 @@
   inset: 0;
   inline-size: 100%;
   block-size: 100%;
-  object-position: 42% 40%;
-}
-
-.dashboard-greeting:dir(rtl) .dashboard-editorial-photo img {
-  mask-image: linear-gradient(270deg, transparent 0%, #000 24%, #000 100%);
-}
-
-.dashboard-greeting:dir(ltr) .dashboard-editorial-photo img {
-  mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
+  object-position: 50% 50%;
 }
 
 .dashboard-greeting::before {
@@ -125,6 +117,10 @@
       "copy photo"
       "actions photo";
   }
+
+  .dashboard-editorial-photo img {
+    object-position: 64% 50%;
+  }
 }
 
 @media (max-width: 760px) {
@@ -141,20 +137,6 @@
     margin: 0 -18px;
     min-height: 170px;
     border-inline-start: 0;
-  }
-
-  .dashboard-editorial-photo img {
-    mask-image: linear-gradient(180deg, #000 0%, #000 76%, transparent 100%);
-  }
-
-  .dashboard-greeting:dir(rtl) .dashboard-editorial-photo img,
-  .dashboard-greeting:dir(ltr) .dashboard-editorial-photo img {
-    mask-image: linear-gradient(180deg, #000 0%, #000 76%, transparent 100%);
-  }
-
-  .dashboard-greeting:dir(rtl) .dashboard-editorial-photo img,
-  .dashboard-greeting:dir(ltr) .dashboard-editorial-photo img {
-    mask-image: linear-gradient(180deg, #000 0%, #000 76%, transparent 100%);
   }
 }
 
@@ -402,6 +384,7 @@
 .dash-feed .feed-status--end {
   max-width: none !important;
   margin-inline: 0 !important;
+  margin-block-end: 40px !important;
 }
 
 .recent-deals .recent-deal-body .product-link {
