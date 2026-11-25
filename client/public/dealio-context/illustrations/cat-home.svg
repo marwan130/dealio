@@ -1,8 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
   <!-- Category mark: home and kitchen, a kettle on a stove ring. -->
-  <path d="M46 66h62l10 44a8 8 0 0 1-8 10H44a8 8 0 0 1-8-10l10-44Z" fill="#FF6257" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
-  <path d="M108 76c14-2 22 6 20 16-2 8-10 12-20 10" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <path d="M60 66c0-14 10-22 22-22s22 8 22 22" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="82" cy="96" r="9" fill="#FFEB00" stroke="#202020" stroke-width="6"/>
-  <path d="M40 132h78" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <defs>
+    <g id="kettle">
+      <path d="M46 66h64l10 44a8 8 0 0 1-8 10H44a8 8 0 0 1-8-10l10-44Z"/>
+      <path d="M60 66c0-14 10-22 22-22s22 8 22 22Z"/>
+    </g>
+  </defs>
+  <use href="#kettle" fill="#FF6257" transform="translate(7 7)"/>
+  <use href="#kettle" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M38 76l-14-8v24l14-6" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M110 78c14-2 22 6 20 16-2 8-10 12-20 10" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="82" cy="40" r="8" fill="#FFEB00" stroke="#202020" stroke-width="6"/>
+  <path d="M38 134h82" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
 </svg>

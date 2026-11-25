@@ -1,8 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
   <!-- Category mark: sports and outdoors, a bouncing ball with motion. -->
-  <circle cx="76" cy="88" r="42" fill="#FFEB00" stroke="#202020" stroke-width="7"/>
-  <path d="M44 60c14 8 30 8 44-4" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <path d="M46 114c16-10 34-8 48 6" stroke="#FF6257" stroke-width="7" stroke-linecap="round"/>
-  <path d="M118 30c10 8 10 18 0 26" stroke="#FF6257" stroke-width="7" stroke-linecap="round"/>
-  <path d="M20 140c6-6 12-6 18 0" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <defs>
+    <circle id="ball" cx="74" cy="90" r="44"/>
+  </defs>
+  <use href="#ball" fill="#FF6257" transform="translate(7 7)"/>
+  <use href="#ball" fill="#F6F1E8" stroke="#202020" stroke-width="7"/>
+  <path d="M38 62c18 10 38 10 54-6" stroke="#FF6257" stroke-width="8" stroke-linecap="round"/>
+  <path d="M40 120c18-12 40-10 54 6" stroke="#FF6257" stroke-width="8" stroke-linecap="round"/>
+  <path d="M128 28c10 8 10 18 0 26" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+  <path d="M18 148c6-6 12-6 18 0" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
 </svg>

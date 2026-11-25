@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
   <!-- Category mark: toys and games, a rocking duck pull toy. -->
-  <path d="M36 118c22 12 66 12 88 0l8 14c-26 14-78 14-104 0l8-14Z" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
-  <circle cx="66" cy="70" r="30" fill="#FFEB00" stroke="#202020" stroke-width="7"/>
-  <path d="M96 70h20a10 10 0 0 1 10 10v14" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <path d="M94 62l16-8-2 16-14-8Z" fill="#FF6257" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
-  <circle cx="58" cy="62" r="5" fill="#202020"/>
-  <path d="M66 100v18" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <path d="M134 34c8 6 8 14 0 20" stroke="#FF6257" stroke-width="7" stroke-linecap="round"/>
+  <path d="M30 116c24 14 68 14 92 0l9 15c-28 15-82 15-110 0l9-15Z" fill="#FF6257"/>
+  <path d="M30 110c24 14 68 14 92 0l9 15c-28 15-82 15-110 0l9-15Z" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <ellipse cx="82" cy="86" rx="46" ry="27" fill="#FF6257" stroke="#202020" stroke-width="7"/>
+  <path d="M122 76l18-10-3 20-15-10Z" fill="#FF6257" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="52" cy="52" r="27" fill="#FF6257" stroke="#202020" stroke-width="7"/>
+  <path d="M76 46l22-6-4 16-18-10Z" fill="#FFEB00" stroke="#202020" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="44" cy="46" r="4" fill="#202020"/>
+  <path d="M136 34c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
 </svg>

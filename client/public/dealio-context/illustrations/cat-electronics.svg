@@ -1,8 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
   <!-- Category mark: electronics, a television with a signal spark. -->
-  <rect x="22" y="34" width="116" height="76" rx="10" fill="#FF6257" stroke="#202020" stroke-width="7"/>
-  <rect x="36" y="48" width="88" height="48" rx="5" fill="#F6F1E8" stroke="#202020" stroke-width="6"/>
-  <path d="M80 110v16M62 126h36" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <path d="M118 22c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
-  <path d="M42 22c-8 6-8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+  <rect x="28" y="42" width="112" height="72" rx="11" fill="#FF6257"/>
+  <rect x="22" y="36" width="112" height="72" rx="11" fill="#F6F1E8" stroke="#202020" stroke-width="7"/>
+  <rect x="34" y="48" width="88" height="48" rx="5" fill="#FF6257" stroke="#202020" stroke-width="6"/>
+  <path d="M46 62h20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="126" cy="60" r="5" fill="#FFEB00" stroke="#202020" stroke-width="4"/>
+  <circle cx="126" cy="82" r="5" fill="#202020"/>
+  <path d="M78 108v18M56 126h44" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <path d="M42 24c-8 6-8 14 0 20M114 24c8 6 8 14 0 20" stroke="#FFEB00" stroke-width="7" stroke-linecap="round"/>
 </svg>

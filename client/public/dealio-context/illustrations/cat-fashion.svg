@@ -1,5 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
-  <!-- Category mark: fashion, a tee with a chest print. -->
-  <path d="M56 26 32 44l14 22 12-6v66a6 6 0 0 0 6 6h36a6 6 0 0 0 6-6V60l12 6 14-22-24-18a22 22 0 0 1-52 0Z" fill="#FF6257" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
-  <path d="M68 76h24M68 92h24" stroke="#FFEB00" stroke-width="8" stroke-linecap="round"/>
+  <!-- Category mark: fashion, a tee with a bold chest print. -->
+  <defs>
+    <path id="tee" d="M56 26 32 44l14 22 12-6v66a6 6 0 0 0 6 6h36a6 6 0 0 0 6-6V60l12 6 14-22-24-18a22 22 0 0 1-52 0Z"/>
+  </defs>
+  <use href="#tee" fill="#FF6257" transform="translate(7 7)"/>
+  <use href="#tee" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M56 26a22 22 0 0 0 52 0" stroke="#202020" stroke-width="13" fill="none"/>
+  <path d="M56 26a22 22 0 0 0 52 0" stroke="#FF6257" stroke-width="7" fill="none"/>
+  <rect x="64" y="68" width="32" height="32" rx="4" fill="#FF6257" stroke="#202020" stroke-width="6"/>
+  <path d="M72 84h16" stroke="#FFEB00" stroke-width="6" stroke-linecap="round"/>
 </svg>

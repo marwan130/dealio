@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
-  <!-- Category mark: gaming, a controller with a thumb spark. -->
-  <path d="M44 52h72a26 26 0 0 1 26 26v14a24 24 0 0 1-42 16l-6-6H66l-6 6a24 24 0 0 1-42-16V78a26 26 0 0 1 26-26Z" fill="#FF6257" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
-  <path d="M52 72v22M41 83h22" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="110" cy="76" r="7" fill="#FFEB00" stroke="#202020" stroke-width="5"/>
-  <circle cx="126" cy="92" r="7" fill="#FFEB00" stroke="#202020" stroke-width="5"/>
+  <!-- Category mark: gaming, a controller with two action buttons. -->
+  <defs>
+    <path id="pad" d="M44 48h72a26 26 0 0 1 26 26v14a24 24 0 0 1-42 16l-6-6H66l-6 6a24 24 0 0 1-42-16V74a26 26 0 0 1 26-26Z"/>
+  </defs>
+  <use href="#pad" fill="#FF6257" transform="translate(7 7)"/>
+  <use href="#pad" fill="#F6F1E8" stroke="#202020" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M52 70v22M41 81h22" stroke="#202020" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="108" cy="74" r="8" fill="#FF6257" stroke="#202020" stroke-width="5"/>
+  <circle cx="124" cy="92" r="8" fill="#FFEB00" stroke="#202020" stroke-width="5"/>
 </svg>
