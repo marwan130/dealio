@@ -2,6 +2,7 @@
 import { APP_NAME } from "../../lib/brand";
 import "./shell.css";
 import "./comic.css";
+import "./filter-panels.css";
 import { AuthDialog } from "../auth/AuthDialog";
 import { ComparePage } from "../compare/ComparePage";
 import { CompareTray } from "../../components/ui/CompareTray";
@@ -16,6 +17,7 @@ import { Dropdown } from "../../components/ui/Dropdown";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { GlobalSearchDialog } from "../search/GlobalSearchDialog";
 import { Icon } from "../../components/ui/Icon";
+import { NavIcon } from "../../components/ui/NavIcon";
 import { LocaleContext } from "../../lib/i18n-context";
 import { MARKETS } from "../../lib/markets";
 import { MyProductsPage } from "../products/MyProductsPage";
@@ -632,13 +634,13 @@ export function AppRoot() {
                           },
                           title: Cz ? I[V] : void 0,
                           children: [
-                            jsx(Icon, {
+                            jsx(NavIcon, {
                               name: [
-                                "home",
-                                "search",
-                                "list",
+                                "dashboard",
+                                "discover",
+                                "products",
                                 "compare",
-                                "bell",
+                                "notifications",
                               ][fe],
                             }),
                             jsx("span", {
@@ -714,7 +716,7 @@ export function AppRoot() {
                           onClick: () => W("settings"),
                           title: Cz ? H.navSettings : void 0,
                           children: [
-                            jsx(Icon, { name: "settings" }),
+                            jsx(NavIcon, { name: "settings" }),
                             !Cz && jsx("span", { children: H.navSettings }),
                           ],
                         }),
@@ -733,7 +735,7 @@ export function AppRoot() {
                                 ? `${H.signOut} (${v})`
                                 : H.signOut,
                               children: [
-                                jsx(Icon, { name: "sign-out" }),
+                                jsx(NavIcon, { name: "sign-out" }),
                                 jsx("span", {
                                   className: "side-footer-label",
                                   children: H.signOut,
@@ -746,7 +748,7 @@ export function AppRoot() {
                               title: Cz ? H.signIn : void 0,
                               "aria-label": H.signIn,
                               children: [
-                                jsx(Icon, { name: "sign-in" }),
+                                jsx(NavIcon, { name: "sign-in" }),
                                 jsx("span", {
                                   className: "side-footer-label",
                                   children: H.signIn,
@@ -966,11 +968,10 @@ export function AppRoot() {
                               onCompare: de,
                               compareIds: te,
                               onOpen: F,
-                              onBack: () =>
-                                backOrFallback(() => {
-                                  Ue("");
-                                  Ia("");
-                                }),
+                              onBack: () => {
+                                Ue("");
+                                Ia("");
+                              },
                             })
                           : c === "products"
                             ? jsx(MyProductsPage, {
